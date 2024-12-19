@@ -3,7 +3,6 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
-import ClientComponent from "@/components/ClientComponent"
 
 export default function IndexPage() {
   return (
@@ -36,7 +35,6 @@ export default function IndexPage() {
           GitHub
         </Link>
       </div>
-      <ClientComponent />
     </section>
   )
 }
