@@ -34,3 +34,12 @@ yarn-error.log*
 
 .contentlayer
 .env
+/.idea/apixplore.iml
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/modules.xml
+/package-lock.json
+/.idea/prettier.xml
+/.idea/codeStyles/Project.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
