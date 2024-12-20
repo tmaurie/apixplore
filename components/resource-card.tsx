@@ -2,7 +2,14 @@
 
 import React from "react"
 import Link from "next/link"
-import { Check, CircleOff, KeyRound, Lock, LockOpen } from "lucide-react"
+import {
+  Check,
+  CircleOff,
+  ExternalLink,
+  KeyRound,
+  Lock,
+  LockOpen,
+} from "lucide-react"
 
 import { Resource } from "@/types/resource"
 import {
@@ -14,16 +21,17 @@ import {
 } from "@/components/ui/card"
 
 const ResourceCard = ({ resource }: { resource: Resource }) => {
-  console.log(resource)
   return (
     <div>
       <Link href={resource?.Link} target="_blank">
-        <Card className="w-[350px] border border-input p-2 transition-all duration-300 ease-in-out hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground">
-          <CardHeader>
-            <CardTitle className="text-xl font-extrabold leading-tight">
-              {resource?.API}
-            </CardTitle>
-            <CardDescription>{resource?.Description}</CardDescription>
+        <Card className="group w-[400px] border border-input p-2 transition-all duration-300 ease-in-out hover:scale-105 hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-xl font-extrabold leading-tight">
+                {resource?.API}
+              </CardTitle>
+              <CardDescription>{resource?.Description}</CardDescription>
+            </div>
           </CardHeader>
           <CardContent className="flex justify-start gap-3">
             <CardDescription>
