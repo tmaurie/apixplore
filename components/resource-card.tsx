@@ -5,7 +5,6 @@ import Link from "next/link"
 import {
   Check,
   CircleOff,
-  ExternalLink,
   KeyRound,
   Lock,
   LockOpen,
