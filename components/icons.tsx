@@ -6,6 +6,7 @@ import {
   Briefcase,
   CalendarDays,
   Camera,
+  Car,
   Cat,
   Clapperboard,
   Cloud,
@@ -33,6 +34,7 @@ import {
   MapPin,
   Microscope,
   Moon,
+  MousePointer2,
   Music,
   Newspaper,
   Palette,
@@ -44,7 +46,10 @@ import {
   Star,
   SunMedium,
   Terminal,
-  Tv, MousePointer2, Car, Youtube, Train, ThermometerSun,
+  ThermometerSun,
+  Train,
+  Tv,
+  Youtube,
 } from "lucide-react"
 
 export type IconName = keyof typeof icons

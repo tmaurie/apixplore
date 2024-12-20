@@ -1,6 +1,6 @@
 import React from "react"
 
-import ClientComponent from "@/components/ClientComponent"
+import ClientComponent from "@/components/cateogry-card"
 
 export default function Page() {
   return (
