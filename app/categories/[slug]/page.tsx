@@ -4,7 +4,7 @@ import { fetchResources } from "@/lib/fetchResources"
 import ResourceCard from "@/components/resource-card"
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const { slug } = await params
+  const { slug } = params
   const categories = await fetchResources("categories")
   const resources = await fetchResources("resources")
 
