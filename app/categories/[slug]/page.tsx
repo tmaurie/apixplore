@@ -1,9 +1,16 @@
 import React from "react"
+import { GetStaticPropsContext } from 'next';
 
 import { fetchResources } from "@/lib/fetchResources"
 import ResourceCard from "@/components/resource-card"
 
-export default async function Page({ params }: { params: { slug: string } }) {
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
+
+export default async function Page({ params }: PageProps) {
   const { slug } = params
   const categories = await fetchResources("categories")
   const resources = await fetchResources("resources")
