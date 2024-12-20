@@ -16,6 +16,6 @@ export const siteConfig = {
   ],
   links: {
     github: "https://github.com/tmaurie/apixplore",
-    docs: "https://ui.shadcn.com",
+    categories: "/categories",
   },
 }

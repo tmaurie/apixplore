@@ -1,6 +1,6 @@
 import React from "react"
 
-import ClientComponent from "@/components/cateogry-card"
+import CategoryCard from "@/components/cateogry-card"
 
 export default function Page() {
   return (
@@ -9,7 +9,7 @@ export default function Page() {
         Browse categories
       </h1>
       <div>
-        <ClientComponent />
+        <CategoryCard />
       </div>
     </section>
   )
