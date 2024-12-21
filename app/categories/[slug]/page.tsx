@@ -1,17 +1,14 @@
 import React from "react"
-import { GetStaticPropsContext } from 'next';
 
 import { fetchResources } from "@/lib/fetchResources"
 import ResourceCard from "@/components/resource-card"
 
-type PageProps = {
-  params: {
-    slug: string;
-  };
-};
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
 
-export default async function Page({ params }: PageProps) {
-  const { slug } = params
+const Page = async ({ params }: PageProps) => {
+const { slug } = await params
   const categories = await fetchResources("categories")
   const resources = await fetchResources("resources")
 
@@ -37,3 +34,5 @@ export default async function Page({ params }: PageProps) {
     </section>
   )
 }
+
+export default Page

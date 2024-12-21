@@ -2,13 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import {
-  Check,
-  CircleOff,
-  KeyRound,
-  Lock,
-  LockOpen,
-} from "lucide-react"
+import { Check, CircleOff, KeyRound, Lock, LockOpen } from "lucide-react"
 
 import { Resource } from "@/types/resource"
 import {
