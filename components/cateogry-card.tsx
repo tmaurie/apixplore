@@ -52,7 +52,7 @@ const CategoryCard = () => {
           ? data.entries.map((entry: any, index: number) => (
               <div key={index}>
                 <Link href={`/categories/${entry.slug}`}>
-                  <Card className="w-[320px] border border-input transition-all duration-300 ease-in-out hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground">
+                  <Card className="w-[320px] border border-input transition-all duration-300 ease-in-out hover:scale-105 hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground">
                     <CardHeader className="flex flex-row items-center justify-between">
                       <CardTitle className="text-xl font-extrabold leading-tight">
                         {entry.name}
