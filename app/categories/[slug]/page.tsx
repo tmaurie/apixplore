@@ -8,7 +8,7 @@ interface PageProps {
 }
 
 const Page = async ({ params }: PageProps) => {
-const { slug } = await params
+  const { slug } = await params
   const categories = await fetchResources("categories")
   const resources = await fetchResources("resources")
 

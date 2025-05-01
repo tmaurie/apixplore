@@ -1,9 +1,12 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
+import { Grid3x3, List } from "lucide-react"
 
-import { fetchResources } from "@/lib/fetchResources"
+import { useCategoriesWithCount } from "@/lib/hooks/useCategoriesWithCount"
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardDescription,
@@ -11,73 +14,139 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
 import { DynamicIcon } from "@/components/icons"
 
 const CategoryCard = () => {
-  const [categoryCounts, setCategoryCounts] = React.useState<
-    Record<string, number>
-  >({})
-  const [data, setData] = useState<any>(null)
-  useEffect(() => {
-    async function loadCategoriesAndResources() {
-      try {
-        const categories = await fetchResources("categories")
-        const resources = await fetchResources("resources")
-        setData(categories)
-        const resourceCountByCategory = categories.entries.reduce(
-          (acc: Record<string, number>, category: any) => {
-            acc[category.name] = resources.entries.filter(
-              (resource: any) => resource.Category === category.name
-            ).length
-            return acc
-          },
-          {}
-        )
-        setCategoryCounts(resourceCountByCategory)
-      } catch (error) {
-        console.error("Error loading data:", error)
-      }
-    }
+  const { categories, categoryCounts, loading } = useCategoriesWithCount()
 
-    loadCategoriesAndResources()
-      .then(() => {})
-      .catch((error) => console.error("Error loading data:", error))
-  }, [])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+
+  const itemsPerPage = 12
+
+  const filteredCategories = categories?.filter((c) =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const totalPages = filteredCategories
+    ? Math.ceil(filteredCategories.length / itemsPerPage)
+    : 0
+
+  const paginatedCategories = filteredCategories?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
 
   return (
-    <div>
-      <div className="flex flex-wrap gap-2">
-        {data
-          ? data.entries.map((entry: any, index: number) => (
-              <div key={index}>
-                <Link href={`/categories/${entry.slug}`}>
-                  <Card className="w-[320px] border border-input transition-all duration-300 ease-in-out hover:scale-105 hover:border-accent-foreground hover:bg-accent hover:text-accent-foreground">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <Input
+          type="text"
+          placeholder="Search categories..."
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value)
+            setCurrentPage(1)
+          }}
+          className="max-w-sm"
+        />
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant={viewMode === "grid" ? "default" : "ghost"}
+            size="icon"
+            onClick={() => setViewMode("grid")}
+          >
+            <Grid3x3 className="size-4" />
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "ghost"}
+            size="icon"
+            onClick={() => setViewMode("list")}
+          >
+            <List className="size-4" />
+          </Button>
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="flex flex-wrap gap-6">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Skeleton key={i} className="h-28 w-[320px] rounded-2xl" />
+          ))}
+        </div>
+      ) : (
+        <>
+          <div
+            className={cn(
+              "gap-6",
+              viewMode === "grid"
+                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+                : "flex flex-col"
+            )}
+          >
+            {paginatedCategories?.length ? (
+              paginatedCategories.map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href={`/categories/${entry.slug}`}
+                  className={cn("block", viewMode === "grid" ? "" : "w-full")}
+                >
+                  <Card
+                    className={cn(
+                      "h-full rounded-2xl border border-border transition-all duration-300 hover:border-muted-foreground hover:bg-muted hover:text-foreground",
+                      viewMode === "grid" ? "hover:scale-[1.02]" : ""
+                    )}
+                  >
                     <CardHeader className="flex flex-row items-center justify-between">
-                      <CardTitle className="text-xl font-extrabold leading-tight">
+                      <CardTitle className="text-lg font-semibold">
                         {entry.name}
                       </CardTitle>
                       <CardDescription>
-                        <DynamicIcon name={entry.slug} className="size-10" />
+                        <DynamicIcon name={entry.slug} className="size-8" />
                       </CardDescription>
                     </CardHeader>
                     <CardFooter>
                       <p className="text-sm text-muted-foreground">
-                        Browse all {categoryCounts[entry.name]} resources
+                        {categoryCounts[entry.name] || 0} resources
                       </p>
                     </CardFooter>
                   </Card>
                 </Link>
-              </div>
-            ))
-          : Array.from({ length: 40 }).map((_, index) => (
-              <div key={index}>
-                <div className="flex flex-col">
-                  <Skeleton className="h-24 w-[320px] rounded-xl" />
-                </div>
-              </div>
-            ))}
-      </div>
+              ))
+            ) : (
+              <p className="text-muted-foreground">No categories found.</p>
+            )}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 pt-4">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+                disabled={currentPage === 1}
+              >
+                ← Prev
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} / {totalPages}
+              </span>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next →
+              </Button>
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }

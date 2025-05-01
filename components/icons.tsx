@@ -123,8 +123,8 @@ export const icons = {
 export const DynamicIcon = ({
   name,
   ...props
-}: { name: IconName } & LucideProps) => {
-  const IconComponent = icons[name]
+}: { name: string } & LucideProps) => {
+  const IconComponent = icons[name as keyof typeof icons]
   if (!IconComponent) {
     console.warn(`Icon "${name}" does not exist.`)
     return null
