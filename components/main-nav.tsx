@@ -18,7 +18,7 @@ export function MainNav({ items }: MainNavProps) {
         <span className="inline-block font-bold">{siteConfig.name}</span>
       </Link>
       {items?.length ? (
-        <nav className="flex gap-6">
+        <nav className="flex gap-6 items-center ">
           {items?.map(
             (item, index) =>
               item.href && (
@@ -26,7 +26,7 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-accent-foreground",
+                    "flex items-center text-sm font-mono font-bold text-muted-foreground transition-colors hover:text-accent-foreground",
                     item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >

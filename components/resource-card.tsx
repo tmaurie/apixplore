@@ -49,7 +49,7 @@ const ResourceCard = ({
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 font-mono">
             <Badge variant={resource.Auth ? "default" : "outline"}>
               <KeyRound className="mr-1 size-4" />
               {resource.Auth || "No Auth"}
