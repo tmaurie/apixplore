@@ -1,19 +1,18 @@
 import React from "react"
+
 import { fetchResources } from "@/lib/fetchResources"
 import ResourceCard from "@/components/resource-card"
 
-interface PageProps {
-  params: { category: string }
-}
-
-const Page = async ({ params }: PageProps) => {
-  const { category } = params
+export default async function Page({ params }: any) {
+  const { category } = await params
   const categories = await fetchResources("categories")
   const resources = await fetchResources("resources")
 
-  const categoryEntry = categories.entries.find((entry: any) => entry.slug === category)
+  const categoryEntry = categories.entries.find(
+    (entry: any) => entry.id === category
+  )
   if (!categoryEntry) {
-    throw new Error(`Category not found for slug: ${category}`)
+    throw new Error(`Category not found for : ${category}`)
   }
 
   const resourcesByCategory = resources.entries.filter(
@@ -33,11 +32,12 @@ const Page = async ({ params }: PageProps) => {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {resourcesByCategory.map((resource: any) => (
-          <ResourceCard key={resource.API + resource.Link} resource={resource} />
+          <ResourceCard
+            key={resource.API + resource.Link}
+            resource={resource}
+          />
         ))}
       </div>
     </section>
   )
 }
-
-export default Page

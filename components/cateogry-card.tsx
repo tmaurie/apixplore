@@ -91,8 +91,8 @@ const CategoryCard = () => {
             {paginatedCategories?.length ? (
               paginatedCategories.map((entry) => (
                 <Link
-                  key={entry.slug}
-                  href={`/categories/${entry.slug}`}
+                  key={entry.id}
+                  href={`/categories/${entry.id}`}
                   className={cn("block", viewMode === "grid" ? "" : "w-full")}
                 >
                   <Card
@@ -106,7 +106,7 @@ const CategoryCard = () => {
                         {entry.name}
                       </CardTitle>
                       <CardDescription>
-                        <DynamicIcon name={entry.slug} className="size-8" />
+                        <DynamicIcon name={entry.id} className="size-8" />
                       </CardDescription>
                     </CardHeader>
                     <CardFooter>

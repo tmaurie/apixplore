@@ -5,12 +5,15 @@ import Link from "next/link"
 import {
   Check,
   CircleOff,
+  ExternalLink,
   KeyRound,
   Lock,
   LockOpen,
-  ExternalLink,
 } from "lucide-react"
+
 import { Resource } from "@/types/resource"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -18,8 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 
 const ResourceCard = ({ resource }: { resource: Resource }) => {
   return (
@@ -38,11 +39,19 @@ const ResourceCard = ({ resource }: { resource: Resource }) => {
             {resource.Auth || "No Auth"}
           </Badge>
           <Badge variant={resource.HTTPS ? "default" : "outline"}>
-            {resource.HTTPS ? <Lock className="mr-1 size-4" /> : <LockOpen className="mr-1 size-4" />}
+            {resource.HTTPS ? (
+              <Lock className="mr-1 size-4" />
+            ) : (
+              <LockOpen className="mr-1 size-4" />
+            )}
             {resource.HTTPS ? "HTTPS" : "No HTTPS"}
           </Badge>
           <Badge variant={resource.Cors === "yes" ? "default" : "outline"}>
-            {resource.Cors === "yes" ? <Check className="mr-1 size-4" /> : <CircleOff className="mr-1 size-4" />}
+            {resource.Cors === "yes" ? (
+              <Check className="mr-1 size-4" />
+            ) : (
+              <CircleOff className="mr-1 size-4" />
+            )}
             {resource.Cors === "yes" ? "CORS" : "No CORS"}
           </Badge>
         </div>

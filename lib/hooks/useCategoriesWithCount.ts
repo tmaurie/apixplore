@@ -4,7 +4,7 @@ import { fetchResources } from "@/lib/fetchResources"
 
 interface Category {
   name: string
-  slug: string
+  id: string
 }
 
 interface Resource {
