@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon } from "lucide-react"
 
 import { fetchResources } from "@/lib/fetchResources"
 import {
