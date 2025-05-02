@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import CategoryCardItem from "@/components/cateogry-card-item"
+import { CategoryCardItem } from "@/components/cateogry-card-item"
 
 export default function Page() {
   const { categories, categoryCounts, loading } = useCategoriesWithCount()

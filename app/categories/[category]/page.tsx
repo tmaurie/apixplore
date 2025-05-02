@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import ResourceCard from "@/components/resource-card"
+import { ResourceCard } from "@/components/resource-card"
 
 export default function CategoryPage() {
   const params = useParams()

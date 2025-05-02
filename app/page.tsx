@@ -2,10 +2,15 @@ import React from "react"
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
+import { fetchResources } from "@/lib/fetchResources"
 import { buttonVariants } from "@/components/ui/button"
 import { AuroraText } from "@/components/magicui/aurora-text"
+import { NumberTicker } from "@/components/magicui/number-ticker"
 
-export default function IndexPage() {
+export default async function IndexPage() {
+  const resources = await fetchResources("resources")
+  const totalCount = resources.entries.length
+
   return (
     <section className="container space-y-10 py-16">
       {/* Hero */}
@@ -16,6 +21,13 @@ export default function IndexPage() {
         <p className="text-lg text-muted-foreground">
           {siteConfig.description}
         </p>
+        <NumberTicker
+          value={totalCount}
+          className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl"
+        >
+          {totalCount}
+        </NumberTicker>
+        <p className="text-lg text-muted-foreground">APIs listed</p>
         <div className="flex justify-center gap-4 pt-4">
           <Link
             href={siteConfig.links.categories}
