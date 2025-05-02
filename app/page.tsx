@@ -11,7 +11,7 @@ export default function IndexPage() {
       {/* Hero */}
       <div className="mx-auto max-w-2xl space-y-4 text-center">
         <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-         <AuroraText>{siteConfig.name}</AuroraText>
+          <AuroraText>{siteConfig.name}</AuroraText>
         </h1>
         <p className="text-lg text-muted-foreground">
           {siteConfig.description}
