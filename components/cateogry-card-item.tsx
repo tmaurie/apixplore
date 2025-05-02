@@ -40,7 +40,7 @@ const CategoryCardItem = ({
       }}
     >
       <Card
-        className={`h-full rounded-2xl border border-border transition-all duration-300 hover:border-muted-foreground hover:bg-muted hover:shadow-sm ${
+        className={`h-full rounded-2xl border border-border transition-all duration-300 hover:border-muted-foreground hover:bg-muted hover:shadow-xs ${
           viewMode === "grid" ? "hover:scale-[1.02]" : ""
         }`}
       >

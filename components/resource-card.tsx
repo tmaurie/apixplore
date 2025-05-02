@@ -40,7 +40,7 @@ const ResourceCard = ({
         delay: index * 0.04,
       }}
     >
-      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:bg-muted hover:shadow-sm">
+      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:bg-muted hover:shadow-xs">
         <CardHeader className="space-y-2">
           <CardTitle className="text-xl font-bold leading-tight">
             {resource.API}

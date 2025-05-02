@@ -48,7 +48,7 @@ export default function IndexPage() {
             desc: "Contribute to the project by adding or updating APIs.",
           },
         ].map((feature, i) => (
-          <div key={i} className="rounded-2xl border bg-muted/50 p-6 shadow-sm">
+          <div key={i} className="rounded-2xl border bg-muted/50 p-6 shadow-xs">
             <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
             <p className="text-sm text-muted-foreground">{feature.desc}</p>
           </div>
