@@ -52,7 +52,10 @@ export default function CategoryPage() {
 
       setCategoriesName(categories.entries.map((c: any) => c.name))
       const cat = categories.entries.find((c: any) => c.slug === categorySlug)
-      if (!cat) return
+      if (!cat) {
+        setLoading(false)
+        return
+      }
       setCategoryName(cat.name)
 
       const filtered = allResources.entries.filter(
