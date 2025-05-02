@@ -40,7 +40,7 @@ const ResourceCard = ({
         delay: index * 0.04,
       }}
     >
-      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:bg-muted hover:shadow-sm">
+      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:bg-muted hover:shadow-xs">
         <CardHeader className="space-y-2">
           <CardTitle className="text-xl font-bold leading-tight">
             {resource.API}
@@ -49,7 +49,7 @@ const ResourceCard = ({
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 font-mono">
             <Badge variant={resource.Auth ? "default" : "outline"}>
               <KeyRound className="mr-1 size-4" />
               {resource.Auth || "No Auth"}

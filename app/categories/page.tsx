@@ -7,6 +7,13 @@ import { useCategoriesWithCount } from "@/lib/hooks/useCategoriesWithCount"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import CategoryCardItem from "@/components/cateogry-card-item"
 
@@ -16,13 +23,18 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [sortBy, setSortBy] = useState("alpha")
 
   const itemsPerPage = 12
 
-  const filteredCategories = categories?.filter((c) =>
-    c.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
+  const filteredCategories = categories
+    ?.filter((c) => c.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      if (sortBy === "alpha") return a.name.localeCompare(b.name)
+      if (sortBy === "resources")
+        return (categoryCounts[b.name] || 0) - (categoryCounts[a.name] || 0)
+      return 0
+    })
   const totalPages = filteredCategories
     ? Math.ceil(filteredCategories.length / itemsPerPage)
     : 0
@@ -35,16 +47,27 @@ export default function Page() {
   return (
     <section className="container space-y-6 py-10">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Input
-          type="text"
-          placeholder="Search categories..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value)
-            setCurrentPage(1)
-          }}
-          className="max-w-sm"
-        />
+        <div className="flex items-center gap-2">
+          <Input
+            type="text"
+            placeholder="Search categories..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value)
+              setCurrentPage(1)
+            }}
+            className="max-w-sm"
+          />
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-[160px] text-sm">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="alpha">A → Z</SelectItem>
+              <SelectItem value="resources">Most entries</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         <div className="flex items-center gap-2">
           <Button
