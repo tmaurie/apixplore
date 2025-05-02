@@ -1,6 +1,21 @@
 import React from "react"
+import { ChevronDownIcon } from "lucide-react"
 
 import { fetchResources } from "@/lib/fetchResources"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import ResourceCard from "@/components/resource-card"
 
 export default async function Page({ params }: any) {
@@ -20,8 +35,41 @@ export default async function Page({ params }: any) {
   )
 
   return (
-    <section className="container space-y-6 py-10">
-      <div>
+    <section className="container space-y-6 ">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1">
+                Categories
+                <ChevronDownIcon className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-56 max-h-96 overflow-y-auto"
+              >
+                {categories.entries.map((category: any) => (
+                  <DropdownMenuItem key={category.slug}>
+                    <BreadcrumbLink href={`/categories/${category.slug}`}>
+                      {category.name}
+                    </BreadcrumbLink>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{categoryEntry.name}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <div className="pt-10">
         <h1 className="text-3xl font-bold tracking-tight">
           {categoryEntry.name}
         </h1>
