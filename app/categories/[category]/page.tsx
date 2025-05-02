@@ -35,6 +35,7 @@ export default async function Page({ params }: any) {
           <ResourceCard
             key={resource.API + resource.Link}
             resource={resource}
+            index={resourcesByCategory.indexOf(resource)}
           />
         ))}
       </div>

@@ -81,13 +81,14 @@ export default function Page() {
             )}
           >
             {paginatedCategories?.length ? (
-              paginatedCategories.map((entry) => (
+              paginatedCategories.map((entry, i) => (
                 <CategoryCardItem
                   key={entry.slug}
                   name={entry.name}
                   slug={entry.slug}
                   count={categoryCounts[entry.name] || 0}
                   viewMode={viewMode}
+                  index={i}
                 />
               ))
             ) : (

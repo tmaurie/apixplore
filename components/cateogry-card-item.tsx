@@ -1,4 +1,7 @@
 import Link from "next/link"
+import { motion } from "framer-motion"
+
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardDescription,
@@ -6,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { DynamicIcon } from "@/components/icons"
 
 interface Props {
@@ -14,37 +16,54 @@ interface Props {
   slug: string
   count: number
   viewMode: "grid" | "list"
+  index?: number
 }
 
-const CategoryCardItem = ({ name, slug, count, viewMode }: Props) => (
+const CategoryCardItem = ({
+  name,
+  slug,
+  count,
+  viewMode,
+  index = 0,
+}: Props) => (
   <Link
     href={`/categories/${slug}`}
     className={viewMode === "grid" ? "" : "block w-full"}
   >
-    <Card
-      className={`h-full rounded-2xl border border-border transition-all duration-300 hover:border-muted-foreground hover:bg-muted hover:shadow-sm ${
-        viewMode === "grid" ? "hover:scale-[1.02]" : ""
-      }`}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.8,
+        ease: "easeOut",
+        delay: index * 0.05,
+      }}
     >
-      <CardHeader className="space-y-2">
-        <div className="flex items-center gap-2">
-          <DynamicIcon name={slug} className="size-6" />
-          <CardTitle className="text-lg font-bold leading-tight">
-            {name}
-          </CardTitle>
-        </div>
-        <CardDescription className="text-muted-foreground">
-          Discover APIs related to {name.toLowerCase()}.
-        </CardDescription>
-      </CardHeader>
+      <Card
+        className={`h-full rounded-2xl border border-border transition-all duration-300 hover:border-muted-foreground hover:bg-muted hover:shadow-sm ${
+          viewMode === "grid" ? "hover:scale-[1.02]" : ""
+        }`}
+      >
+        <CardHeader className="space-y-2">
+          <div className="flex items-center gap-2">
+            <DynamicIcon name={slug} className="size-6" />
+            <CardTitle className="text-lg font-bold leading-tight">
+              {name}
+            </CardTitle>
+          </div>
+          <CardDescription className="text-muted-foreground">
+            Discover APIs related to {name.toLowerCase()}.
+          </CardDescription>
+        </CardHeader>
 
-      <CardFooter className="flex items-center justify-between">
-        <Badge variant="secondary" className="text-xs">
-          {count} resources
-        </Badge>
-        <span className="text-sm font-medium text-primary">Browse →</span>
-      </CardFooter>
-    </Card>
+        <CardFooter className="flex items-center justify-between">
+          <Badge variant="secondary" className="text-xs">
+            {count} resources
+          </Badge>
+          <span className="text-sm font-medium text-primary">Browse →</span>
+        </CardFooter>
+      </Card>
+    </motion.div>
   </Link>
 )
 
