@@ -9,7 +9,7 @@ export default async function Page({ params }: any) {
   const resources = await fetchResources("resources")
 
   const categoryEntry = categories.entries.find(
-    (entry: any) => entry.id === category
+    (entry: any) => entry.slug === category
   )
   if (!categoryEntry) {
     throw new Error(`Category not found for : ${category}`)
