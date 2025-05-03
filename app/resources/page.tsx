@@ -114,6 +114,7 @@ export default function ResourcesPage() {
               resource={r}
               index={i}
               showCategory
+              showIdeasButton={false}
             />
           ))}
         </div>

@@ -19,18 +19,22 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import IdeaGenerator from "@/components/idea-generator"
 
 export function ResourceCard({
   resource,
   index,
   showCategory,
+  showIdeasButton = false,
 }: {
   resource: Resource
   index: number
   showCategory?: boolean
+  showIdeasButton?: boolean
 }) {
   return (
     <motion.div
@@ -42,7 +46,7 @@ export function ResourceCard({
         delay: index * 0.04,
       }}
     >
-      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:bg-muted hover:shadow-xs">
+      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:shadow-xs">
         <CardHeader className="flex flex-col space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-semibold">
@@ -82,15 +86,15 @@ export function ResourceCard({
               {resource.Cors === "yes" ? "CORS" : "No CORS"}
             </Badge>
           </div>
-
-          <div className="pt-2">
-            <Button variant="link" size="sm" asChild>
-              <Link href={resource.Link} target="_blank">
-                View API <ExternalLink className="ml-1 size-4" />
-              </Link>
-            </Button>
-          </div>
         </CardContent>
+        <CardFooter className="flex justify-between items-center">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={resource.Link} target="_blank">
+              View API <ExternalLink className="ml-1 size-4" />
+            </Link>
+          </Button>
+          {showIdeasButton && <IdeaGenerator seed={resource.API} />}
+        </CardFooter>
       </Card>
     </motion.div>
   )
