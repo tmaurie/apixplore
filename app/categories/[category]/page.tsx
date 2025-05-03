@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Skeleton } from "@/components/ui/skeleton"
 import { ResourceCard } from "@/components/resource-card"
 
 export default function CategoryPage() {
@@ -187,7 +188,14 @@ export default function CategoryPage() {
       </div>
 
       {loading ? (
-        <p className="text-muted-foreground">Loading APIs...</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Skeleton
+              key={i}
+              className="h-[200px] w-full rounded-md bg-muted"
+            />
+          ))}
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {visibleResources.map((r, i) => (

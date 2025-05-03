@@ -11,7 +11,6 @@ import {
   Lock,
   LockOpen,
 } from "lucide-react"
-import { useTheme } from "next-themes"
 
 import { Resource } from "@/types/resource"
 import { Badge } from "@/components/ui/badge"
@@ -23,17 +22,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { MagicCard } from "@/components/magicui/magic-card"
 
 export function ResourceCard({
   resource,
   index,
+  showCategory,
 }: {
   resource: Resource
   index: number
+  showCategory?: boolean
 }) {
-  const { theme } = useTheme()
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -45,50 +43,54 @@ export function ResourceCard({
       }}
     >
       <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:bg-muted hover:shadow-xs">
-        <MagicCard
-          gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"}
-          className="p-0"
-        >
-          <CardHeader className="space-y-2">
-            <CardTitle className="text-xl font-bold leading-tight">
+        <CardHeader className="flex flex-col space-y-1">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg font-semibold">
               {resource.API}
             </CardTitle>
-            <CardDescription>{resource.Description}</CardDescription>
-          </CardHeader>
+            {showCategory && (
+              <Badge variant="outline" className="font-mono">
+                {resource.Category}
+              </Badge>
+            )}
+          </div>
+          <CardDescription className="text-sm text-muted-foreground">
+            {resource.Description}
+          </CardDescription>
+        </CardHeader>
 
-          <CardContent className="space-y-4">
-            <div className="flex flex-wrap gap-2 font-mono">
-              <Badge variant={resource.Auth ? "default" : "outline"}>
-                <KeyRound className="mr-1 size-4" />
-                {resource.Auth || "No Auth"}
-              </Badge>
-              <Badge variant={resource.HTTPS ? "default" : "outline"}>
-                {resource.HTTPS ? (
-                  <Lock className="mr-1 size-4" />
-                ) : (
-                  <LockOpen className="mr-1 size-4" />
-                )}
-                {resource.HTTPS ? "HTTPS" : "No HTTPS"}
-              </Badge>
-              <Badge variant={resource.Cors === "yes" ? "default" : "outline"}>
-                {resource.Cors === "yes" ? (
-                  <Check className="mr-1 size-4" />
-                ) : (
-                  <CircleOff className="mr-1 size-4" />
-                )}
-                {resource.Cors === "yes" ? "CORS" : "No CORS"}
-              </Badge>
-            </div>
+        <CardContent className="space-y-4">
+          <div className="flex flex-wrap gap-2 font-mono">
+            <Badge variant={resource.Auth ? "default" : "outline"}>
+              <KeyRound className="mr-1 size-4" />
+              {resource.Auth || "No Auth"}
+            </Badge>
+            <Badge variant={resource.HTTPS ? "default" : "outline"}>
+              {resource.HTTPS ? (
+                <Lock className="mr-1 size-4" />
+              ) : (
+                <LockOpen className="mr-1 size-4" />
+              )}
+              {resource.HTTPS ? "HTTPS" : "No HTTPS"}
+            </Badge>
+            <Badge variant={resource.Cors === "yes" ? "default" : "outline"}>
+              {resource.Cors === "yes" ? (
+                <Check className="mr-1 size-4" />
+              ) : (
+                <CircleOff className="mr-1 size-4" />
+              )}
+              {resource.Cors === "yes" ? "CORS" : "No CORS"}
+            </Badge>
+          </div>
 
-            <div className="pt-2">
-              <Button variant="link" size="sm" asChild>
-                <Link href={resource.Link} target="_blank">
-                  View API <ExternalLink className="ml-1 size-4" />
-                </Link>
-              </Button>
-            </div>
-          </CardContent>
-        </MagicCard>
+          <div className="pt-2">
+            <Button variant="link" size="sm" asChild>
+              <Link href={resource.Link} target="_blank">
+                View API <ExternalLink className="ml-1 size-4" />
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
       </Card>
     </motion.div>
   )

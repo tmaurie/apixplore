@@ -13,6 +13,10 @@ export const siteConfig = {
       title: "Categories",
       href: "/categories",
     },
+    {
+      title: "Resources",
+      href: "/resources",
+    },
   ],
   links: {
     github: "https://github.com/tmaurie/apixplore",
