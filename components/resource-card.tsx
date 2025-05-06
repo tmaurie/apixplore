@@ -93,7 +93,12 @@ export function ResourceCard({
               View API <ExternalLink className="ml-1 size-4" />
             </Link>
           </Button>
-          {showIdeasButton && <IdeaGenerator seed={resource.API} />}
+          {showIdeasButton && (
+            <IdeaGenerator
+              api={resource.API}
+              description={resource.Description}
+            />
+          )}
         </CardFooter>
       </Card>
     </motion.div>

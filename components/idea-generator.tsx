@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ArrowRightIcon } from "lucide-react"
 
+import { fetchIdeas } from "@/lib/fetchIdeas"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -19,32 +20,29 @@ interface Idea {
   description: string
 }
 
-export default function IdeaGenerator({ seed }: { seed: string }) {
+export default function IdeaGenerator({
+  api,
+  description,
+}: {
+  api: string
+  description: string
+}) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [ideas, setIdeas] = useState<Idea[]>([])
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setLoading(true)
-    setTimeout(() => {
-      setIdeas([
-        {
-          title: `Explore ${seed} stats`,
-          description: "Build a dashboard using charts and data from the API.",
-        },
-        {
-          title: `${seed} Companion App`,
-          description:
-            "Create a mobile app that surfaces the most relevant endpoints.",
-        },
-        {
-          title: `AI + ${seed}`,
-          description:
-            "Use AI to summarize or enrich the data returned by this API.",
-        },
-      ])
+    setIdeas([])
+
+    try {
+      const response = await fetchIdeas(api, description)
+      setIdeas(response.ideas)
+    } catch (err) {
+      console.error("Error generating ideas:", err)
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -65,7 +63,7 @@ export default function IdeaGenerator({ seed }: { seed: string }) {
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Project Ideas for {seed}</DialogTitle>
+          <DialogTitle>Project Ideas for {api}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <Button onClick={handleGenerate} disabled={loading} size="sm">
