@@ -1,9 +1,15 @@
+import { getSession } from "next-auth/react"
+
 export async function fetchIdeas(api: string, description: string) {
+  const session = await getSession()
+
+  console.log("Session:", session)
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ideas`, {
+    const res = await fetch(`${process.env.APIXPLORE_WS_URL}/ideas`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.accessToken}`,
       },
       body: JSON.stringify({
         api: api,

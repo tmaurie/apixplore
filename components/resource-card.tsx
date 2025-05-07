@@ -11,6 +11,7 @@ import {
   Lock,
   LockOpen,
 } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 import { Resource } from "@/types/resource"
 import { Badge } from "@/components/ui/badge"
@@ -29,13 +30,14 @@ export function ResourceCard({
   resource,
   index,
   showCategory,
-  showIdeasButton = false,
 }: {
   resource: Resource
   index: number
   showCategory?: boolean
-  showIdeasButton?: boolean
 }) {
+  const { data: session } = useSession()
+  const isLoggedIn = !!session?.user
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -93,7 +95,7 @@ export function ResourceCard({
               View API <ExternalLink className="ml-1 size-4" />
             </Link>
           </Button>
-          {showIdeasButton && (
+          {isLoggedIn && (
             <IdeaGenerator
               api={resource.API}
               description={resource.Description}

@@ -1,7 +1,10 @@
+"use client"
+
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import AuthButton from "@/components/auth-button"
 import { DynamicIcon } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -13,6 +16,8 @@ export function SiteHeader() {
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
+            <AuthButton />
+            <ThemeToggle />
             <Link
               href={siteConfig.links.github}
               target="_blank"
@@ -28,7 +33,6 @@ export function SiteHeader() {
                 <span className="sr-only">GitHub</span>
               </div>
             </Link>
-            <ThemeToggle />
           </nav>
         </div>
       </div>
