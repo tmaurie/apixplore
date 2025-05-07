@@ -199,12 +199,7 @@ export default function CategoryPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
           {visibleResources.map((r, i) => (
-            <ResourceCard
-              key={r.API + r.Link}
-              resource={r}
-              index={i}
-              showIdeasButton={false}
-            />
+            <ResourceCard key={r.API + r.Link} resource={r} index={i} />
           ))}
         </div>
       )}

@@ -61,7 +61,7 @@ export default function IdeaGenerator({
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" aria-describedby="dialog-description">
         <DialogHeader>
           <DialogTitle>Project Ideas for {api}</DialogTitle>
         </DialogHeader>
