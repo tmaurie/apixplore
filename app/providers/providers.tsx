@@ -19,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           </main>
           <footer className="border-t border-t-muted-foreground/10 py-6 text-center text-sm text-muted-foreground dark:text-muted-foreground/80">
             Built with ❤️ by{" "}
-            <a href="https://github.com/tmaur ie" className="ml-1 underline">
+            <a href="https://github.com/tmaurie" className="ml-1 underline">
               @tmaurie
             </a>
             . Open source on{" "}
