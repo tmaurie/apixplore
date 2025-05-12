@@ -5,17 +5,20 @@ export async function fetchIdeas(api: string, description: string) {
 
   console.log("Session:", session)
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APIXPLORE_WS_URL}/ideas`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.accessToken}`,
-      },
-      body: JSON.stringify({
-        api: api,
-        description: description,
-      }),
-    })
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_APIXPLORE_WS_URL}/ideas`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+        body: JSON.stringify({
+          api: api,
+          description: description,
+        }),
+      }
+    )
 
     return await res.json()
   } catch (error) {

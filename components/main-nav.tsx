@@ -18,7 +18,7 @@ export function MainNav({ items }: MainNavProps) {
         <span className="inline-block font-bold">{siteConfig.name}</span>
       </Link>
       {items?.length ? (
-        <nav className="flex gap-6 items-center ">
+        <nav className="hidden md:flex gap-6 items-center ">
           {items?.map(
             (item, index) =>
               item.href && (
