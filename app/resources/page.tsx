@@ -45,6 +45,7 @@ export default function ResourcesPage() {
       return true
     })
     .filter((r) => r.API.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => a.API.localeCompare(b.API))
 
   const resetFilters = () => {
     setFilters({ https: "any", cors: "any", auth: "any" })
