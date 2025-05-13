@@ -31,7 +31,7 @@ export default function IdeaGenerator({
   const [ideas, setIdeas] = useState<Idea[]>([])
 
   const generateIdeas = async () => {
-    setLoading(true);
+    setLoading(true)
 
     try {
       const response = await fetch("/api/ideas", {
@@ -40,24 +40,23 @@ export default function IdeaGenerator({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ api, description }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
-      console.log("Response data:", data);
       if (!response.ok) {
-        console.error("Error:", data.error || response.statusText);
-        return;
+        const error = data.error || response.statusText
+        console.error("Error:", error)
+        return
       }
 
-      setIdeas(data.ideas);
+      setIdeas(data.ideas)
     } catch (err: any) {
-      console.error("Network error:", err);
+      console.error("Network error:", err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

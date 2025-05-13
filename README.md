@@ -10,7 +10,7 @@
 * 🧼 Fully responsive UI built with Tailwind CSS v4 + Shadcn UI
 * 💫 Smooth appearance animations (Framer Motion)
 * 🌙 Dark mode ready
-* 🧠 *(Coming soon)* AI-generated side project ideas from any API
+* 🧠 AI-generated side project ideas from any API
 
 ## 🛠 Tech Stack
 
@@ -18,7 +18,7 @@
 * [Tailwind CSS v4](https://tailwindcss.com/)
 * [Shadcn UI](https://ui.shadcn.com/)
 * [Framer Motion](https://www.framer.com/motion/)
-* [Spring Boot + Spring AI (planned)](https://spring.io/projects/spring-ai)
+* [OpenAI](https://openai.com/) (for AI project idea generation)
 
 ## 📂 Project structure
 

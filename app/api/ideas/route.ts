@@ -18,9 +18,6 @@ Respond in JSON format of ideas described as: title and description.
 `
 
   try {
-
-    console.log("[/api/ideas] Generating ideas for API:", api)
-    console.log("[/api/ideas] API description:", description)
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
@@ -35,7 +32,6 @@ Respond in JSON format of ideas described as: title and description.
 
     const ideas = JSON.parse(cleaned)
 
-    console.log("[/api/ideas] Generated ideas:", ideas)
     return NextResponse.json({ ideas })
   } catch (error) {
     console.error("[/api/ideas] Error:", error)
