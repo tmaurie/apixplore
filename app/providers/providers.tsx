@@ -4,6 +4,7 @@ import React from "react"
 import { SessionProvider } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
+import { MobileNav } from "@/components/mobile-nav"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -32,6 +33,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             </a>
             .
           </footer>
+          <MobileNav />
         </div>
         <TailwindIndicator />
       </ThemeProvider>
