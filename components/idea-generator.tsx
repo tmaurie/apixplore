@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ArrowRightIcon } from "lucide-react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -45,14 +46,17 @@ export default function IdeaGenerator({
       const data = await response.json()
 
       if (!response.ok) {
-        const error = data.error || response.statusText
-        console.error("Error:", error)
+        toast.error("Error generating ideas: " + data.message)
         return
       }
 
       setIdeas(data.ideas)
+
+      toast.success(
+        "Ideas generated successfully! Click on the cards to copy them."
+      )
     } catch (err: any) {
-      console.error("Network error:", err)
+      toast.error("Network error : " + (err?.message || "Unknown error"))
     } finally {
       setLoading(false)
     }

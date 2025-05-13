@@ -43,7 +43,7 @@ export default function CategoryPage() {
     auth: "any",
   })
 
-  const [categoriesName, setCategoriesName] = useState<any[]>([])
+  const [categories, setCategories] = useState<any[]>([])
 
   useEffect(() => {
     const load = async () => {
@@ -51,7 +51,7 @@ export default function CategoryPage() {
       const categories = await fetchResources("categories")
       const allResources = await fetchResources("resources")
 
-      setCategoriesName(categories.entries.map((c: any) => c.name))
+      setCategories(categories.entries)
       const cat = categories.entries.find((c: any) => c.slug === categorySlug)
       if (!cat) {
         setLoading(false)
@@ -103,13 +103,13 @@ export default function CategoryPage() {
                 align="start"
                 className="w-56 max-h-96 overflow-y-auto"
               >
-                {categoriesName.map((cat) => (
-                  <DropdownMenuItem key={cat}>
+                {categories.map((cat) => (
+                  <DropdownMenuItem key={cat.slug}>
                     <BreadcrumbLink
-                      href={`/categories/${cat.toLowerCase()}`}
+                      href={`/categories/${cat.slug}`}
                       className="w-full"
                     >
-                      {cat}
+                      {cat.name}
                     </BreadcrumbLink>
                   </DropdownMenuItem>
                 ))}
