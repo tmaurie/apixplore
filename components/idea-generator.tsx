@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { ArrowRightIcon } from "lucide-react"
 
-import { fetchIdeas } from "@/lib/fetchIdeas"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -31,19 +30,34 @@ export default function IdeaGenerator({
   const [loading, setLoading] = useState(false)
   const [ideas, setIdeas] = useState<Idea[]>([])
 
-  const handleGenerate = async () => {
-    setLoading(true)
-    setIdeas([])
+  const generateIdeas = async () => {
+    setLoading(true);
 
     try {
-      const response = await fetchIdeas(api, description)
-      setIdeas(response.ideas)
-    } catch (err) {
-      console.error("Error generating ideas:", err)
+      const response = await fetch("/api/ideas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ api, description }),
+      });
+
+      const data = await response.json();
+
+      console.log("Response data:", data);
+      if (!response.ok) {
+        console.error("Error:", data.error || response.statusText);
+        return;
+      }
+
+      setIdeas(data.ideas);
+    } catch (err: any) {
+      console.error("Network error:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -51,7 +65,7 @@ export default function IdeaGenerator({
         <div>
           <Button
             variant="ghost"
-            onClick={handleGenerate}
+            onClick={generateIdeas}
             className="cursor-pointer"
           >
             <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
@@ -66,7 +80,7 @@ export default function IdeaGenerator({
           <DialogTitle>Project Ideas for {api}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <Button onClick={handleGenerate} disabled={loading} size="sm">
+          <Button onClick={generateIdeas} disabled={loading} size="sm">
             {loading ? "Generating..." : "Generate again"}
           </Button>
 
