@@ -4,6 +4,7 @@ import React from "react"
 import { SessionProvider } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
+import { Toaster } from "@/components/ui/sonner"
 import { MobileNav } from "@/components/mobile-nav"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -14,6 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <SessionProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <div className="relative flex min-h-screen flex-col">
+          <Toaster richColors />
           <SiteHeader />
           <main className="container flex-1 px-4 pb-12 pt-6 md:px-6">
             {children}
