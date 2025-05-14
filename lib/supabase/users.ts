@@ -1,7 +1,6 @@
 import { supabaseServer } from "./server"
 
 export async function getOrCreateUser(email: string, name?: string) {
-
   console.log("getOrCreateUser", email, name)
   const { data: user, error } = await supabaseServer
     .from("users")
@@ -19,7 +18,6 @@ export async function getOrCreateUser(email: string, name?: string) {
       .insert({ email, name })
       .select()
       .single()
-
 
     if (insertError) {
       throw new Error("Erreur à l'insertion : " + insertError.message)

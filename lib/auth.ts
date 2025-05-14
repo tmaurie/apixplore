@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth"
 import GitHubProvider from "next-auth/providers/github"
+
 import { getOrCreateUser } from "@/lib/supabase/users"
 
 declare module "next-auth" {
@@ -15,7 +16,6 @@ declare module "next-auth" {
   }
 }
 
-
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
@@ -25,8 +25,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile }) {
       try {
+        console.log("profile", profile)
+        console.log("account", account)
         if (!user.email) return false
 
         await getOrCreateUser(user.email, user.name || "")
