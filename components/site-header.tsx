@@ -7,8 +7,8 @@ import { buttonVariants } from "@/components/ui/button"
 import AuthButton from "@/components/auth-button"
 import { DynamicIcon } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { QuotaBar } from "@/components/quota-bar"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function SiteHeader() {
   return (
@@ -20,7 +20,7 @@ export function SiteHeader() {
             <div className="hidden md:block">
               <AuthButton />
             </div>
-            <div >
+            <div>
               <QuotaBar />
             </div>
             <ThemeToggle />
