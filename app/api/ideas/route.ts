@@ -38,14 +38,16 @@ Respond in JSON format of ideas described as: title and description.
 
     const ideas = JSON.parse(cleaned)
 
-    ideas.forEach((idea: any) => {
-      saveIdea({
-        userId: session.user.id,
-        api: api,
-        description: description,
-        idea: idea,
-      })
-    })
+    await Promise.all(
+      ideas.map((idea: any) =>
+        saveIdea({
+          userId: session.user.id,
+          api: api,
+          description: description,
+          idea: idea,
+        })
+      )
+    )
 
     return NextResponse.json({ ideas })
   } catch (error) {

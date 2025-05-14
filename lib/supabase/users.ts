@@ -9,7 +9,7 @@ export async function getOrCreateUser(
     .from("users")
     .select("*")
     .eq("email", email)
-    .single()
+    .maybeSingle()
 
   if (error && error.code !== "PGRST116") {
     throw new Error("Supabase error: " + error.message)

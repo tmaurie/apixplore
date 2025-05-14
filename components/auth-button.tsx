@@ -32,7 +32,7 @@ export default function AuthButton() {
       <span className="text-sm font-medium">
         {session.user?.name || session.user?.email}
       </span>
-      <Button variant="ghost" size="sm" onClick={() => signOut()}>
+      <Button variant="ghost" size="sm" onClick={() => signOut()} aria-label="Logout">
         <LogOut className="h-4 w-4" />
       </Button>
     </div>
