@@ -1,7 +1,10 @@
 import { supabaseServer } from "./server"
 
-export async function getOrCreateUser(email: string, name?: string) {
-  console.log("getOrCreateUser", email, name)
+export async function getOrCreateUser(
+  email: string,
+  name?: string,
+  github_username?: string
+) {
   const { data: user, error } = await supabaseServer
     .from("users")
     .select("*")
@@ -9,18 +12,18 @@ export async function getOrCreateUser(email: string, name?: string) {
     .single()
 
   if (error && error.code !== "PGRST116") {
-    throw new Error("Erreur Supabase : " + error.message)
+    throw new Error("Supabase error: " + error.message)
   }
 
   if (!user) {
     const { data: newUser, error: insertError } = await supabaseServer
       .from("users")
-      .insert({ email, name })
+      .insert({ email, name, github_username })
       .select()
       .single()
 
     if (insertError) {
-      throw new Error("Erreur à l'insertion : " + insertError.message)
+      throw new Error("Insert error: " + insertError.message)
     }
 
     return newUser

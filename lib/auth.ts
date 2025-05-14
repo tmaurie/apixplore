@@ -4,42 +4,55 @@ import GitHubProvider from "next-auth/providers/github"
 import { getOrCreateUser } from "@/lib/supabase/users"
 
 declare module "next-auth" {
-  interface User {
-    id?: string
-    name?: string
-    email?: string
-    image?: string
-  }
   interface Session {
-    accessToken?: string
-    user?: User
+    user: {
+      id: string
+      githubUsername: string
+      name: string
+      email: string
+      image?: string
+    }
+  }
+
+  interface User {
+    id: string
+    githubUsername: string
+  }
+
+  interface JWT {
+    id: string
+    githubUsername: string
+  }
+
+  interface Profile {
+    login: string
   }
 }
-
 export const authOptions: NextAuthOptions = {
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      authorization: { params: { scope: "read:user user:email" } },
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
-      try {
-        console.log("profile", profile)
-        console.log("account", account)
-        if (!user.email) return false
-
-        await getOrCreateUser(user.email, user.name || "")
-        return true
-      } catch (err) {
-        console.error("Erreur dans signIn callback :", err)
-        return false
-      }
+    async signIn({ user, profile }) {
+      await getOrCreateUser(user.email!, user.name ?? "", profile?.login)
+      return true
     },
-    async session({ session }) {
-      console.log("session callback", session)
+    async jwt({ token, user }) {
+      if (user?.email) {
+        const dbUser = await getOrCreateUser(user.email)
+        token.id = dbUser.id
+        token.githubUsername = dbUser.github_username
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string
+        session.user.githubUsername = token.githubUsername as string
+      }
       return session
     },
   },

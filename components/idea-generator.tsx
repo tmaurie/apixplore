@@ -66,10 +66,7 @@ export default function IdeaGenerator({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div>
-          <Button
-            variant="ghost"
-            onClick={generateIdeas}
-          >
+          <Button variant="ghost" onClick={generateIdeas}>
             <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
               <span>✨ Generate Ideas</span>
               <ArrowRightIcon className="ml-2 h-4 w-4" />
