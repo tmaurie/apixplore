@@ -19,7 +19,7 @@ export function MobileNav() {
     { href: "/resources", icon: <FolderOpen size={20} />, label: "Resources" },
     isLoggedIn
       ? {
-          href: "/dashboard",
+          href: "/history",
           icon: (
             <Avatar className="h-7 w-7">
               <AvatarImage src={session.user?.image} alt="User Avatar" />
