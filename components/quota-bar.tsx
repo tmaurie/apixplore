@@ -14,7 +14,6 @@ export function QuotaBar() {
     fetchQuota()
   }, [])
 
-
   const percentage = ((quota.limit - quota.used) / quota.limit) * 100
 
   return (

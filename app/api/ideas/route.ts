@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
+import { Session, getServerSession } from "next-auth"
 import OpenAI from "openai"
+
+import { authOptions } from "@/lib/auth"
+import { saveIdea } from "@/lib/supabase/ideas"
 
 const openai = new OpenAI()
 
 export async function POST(req: NextRequest) {
+  const session = (await getServerSession(authOptions)) as Session
+
   const { api, description } = await req.json()
 
   const prompt = `
@@ -31,6 +37,17 @@ Respond in JSON format of ideas described as: title and description.
     const cleaned = content.replace(/```json|```/g, "").trim()
 
     const ideas = JSON.parse(cleaned)
+
+    await Promise.all(
+      ideas.map((idea: any) =>
+        saveIdea({
+          userId: session.user.id,
+          api: api,
+          description: description,
+          idea: idea,
+        })
+      )
+    )
 
     return NextResponse.json({ ideas })
   } catch (error) {

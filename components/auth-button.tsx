@@ -5,6 +5,7 @@ import { signIn, signOut, useSession } from "next-auth/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { QuotaBar } from "@/components/quota-bar"
 
 export default function AuthButton() {
   const { data: session, status } = useSession()
@@ -20,7 +21,8 @@ export default function AuthButton() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-4 mr-4">
+      <QuotaBar />
       <Avatar className="h-7 w-7">
         <AvatarImage src={session.user?.image} alt="User Avatar" />
         <AvatarFallback>
@@ -30,8 +32,8 @@ export default function AuthButton() {
       <span className="text-sm font-medium">
         {session.user?.name || session.user?.email}
       </span>
-      <Button variant="ghost" size="sm" onClick={() => signOut()}>
-        <LogOut className="mr-1 h-4 w-4" /> Logout
+      <Button variant="ghost" size="sm" onClick={() => signOut()} aria-label="Logout">
+        <LogOut className="h-4 w-4" />
       </Button>
     </div>
   )
