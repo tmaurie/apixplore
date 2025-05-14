@@ -8,6 +8,7 @@ import AuthButton from "@/components/auth-button"
 import { DynamicIcon } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { QuotaBar } from "@/components/quota-bar"
 
 export function SiteHeader() {
   return (
@@ -19,7 +20,9 @@ export function SiteHeader() {
             <div className="hidden md:block">
               <AuthButton />
             </div>
-
+            <div >
+              <QuotaBar />
+            </div>
             <ThemeToggle />
             <Link
               href={siteConfig.links.github}
