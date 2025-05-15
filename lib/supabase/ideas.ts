@@ -28,3 +28,17 @@ export async function saveIdea({
 
   return data
 }
+
+export async function getUserIdeas(userId: string) {
+  const { data, error } = await supabaseServer
+    .from("ideas")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+
+  if (error) {
+    throw new Error("Error fetching ideas: " + error.message)
+  }
+
+  return data
+}

@@ -3,7 +3,7 @@ import { Session, getServerSession } from "next-auth"
 import OpenAI from "openai"
 
 import { authOptions } from "@/lib/auth"
-import { saveIdea } from "@/lib/supabase/ideas"
+import { getUserIdeas, saveIdea } from "@/lib/supabase/ideas"
 
 const openai = new OpenAI()
 
@@ -56,5 +56,20 @@ Respond in JSON format of ideas described as: title and description.
       { error: "AI generation failed", details: error },
       { status: 500 }
     )
+  }
+}
+
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions)
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  try {
+    const ideas = await getUserIdeas(session.user.id)
+    return NextResponse.json({ ideas })
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
