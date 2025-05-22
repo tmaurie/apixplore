@@ -3,9 +3,10 @@ import { Session, getServerSession } from "next-auth"
 import OpenAI from "openai"
 
 import { authOptions } from "@/lib/auth"
-import { getUserIdeas, saveIdea } from "@/lib/supabase/ideas"
+import { getDailyUsage, getUserIdeas, saveIdea } from "@/lib/supabase/ideas"
 
 const openai = new OpenAI()
+const QUOTA_LIMIT = 30
 
 export async function POST(req: NextRequest) {
   const session = (await getServerSession(authOptions)) as Session
@@ -22,6 +23,17 @@ API Description: ${description || "No description provided"}
 
 Respond in JSON format of ideas described as: title and description.
 `
+
+  const usageToday = await getDailyUsage(session.user.id)
+
+  if (usageToday >= QUOTA_LIMIT) {
+    return NextResponse.json(
+      {
+        error: `Quota exceeded: ${QUOTA_LIMIT} ideas per day`,
+      },
+      { status: 429 }
+    )
+  }
 
   try {
     const chatCompletion = await openai.chat.completions.create({

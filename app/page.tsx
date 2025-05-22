@@ -23,6 +23,7 @@ export default async function IndexPage() {
         </p>
         <NumberTicker
           value={totalCount}
+          startValue={totalCount - 300}
           className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl"
         >
           {totalCount}

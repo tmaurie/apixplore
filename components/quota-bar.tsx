@@ -1,37 +1,39 @@
+"use client"
+
 import { useEffect, useState } from "react"
 
 export function QuotaBar() {
-  const [quota, setQuota] = useState({ used: 0, limit: 10 })
+  const [used, setUsed] = useState(0)
+  const [limit, setLimit] = useState(10)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchQuota = async () => {
       const res = await fetch("/api/quota")
       const data = await res.json()
-      setQuota(data)
+      setUsed(data.used)
+      setLimit(data.limit)
       setLoading(false)
     }
+
     fetchQuota()
   }, [])
 
-  const percentage = ((quota.limit - quota.used) / quota.limit) * 100
+  if (loading) return null
+
+  const remaining = limit - used
+  const percent = Math.round((remaining / limit) * 100)
 
   return (
     <div className="space-y-2">
       <p className="text-xs text-muted-foreground flex items-center gap-2">
-        <span>API Quota</span>
-        {loading ? (
-          <span className="animate-pulse">Loading...</span>
-        ) : (
-          <span>
-            {quota.limit - quota.used} / {quota.limit}
-          </span>
-        )}
+        💡 {remaining} idea{remaining > 1 ? "s" : ""} remaining
+        {remaining > 1 ? "s" : ""} today
       </p>
       <div className="w-full h-1 bg-muted rounded-full overflow-hidden">
         <div
           className="h-full bg-primary transition-all duration-500"
-          style={{ width: `${percentage}%` }}
+          style={{ width: `${percent}%` }}
         />
       </div>
     </div>

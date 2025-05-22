@@ -1,18 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
-import { Session, getServerSession } from "next-auth"
+import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
+import { getDailyUsage } from "@/lib/supabase/ideas"
+
+const QUOTA_LIMIT = 30
 
 export async function GET(req: NextRequest) {
-  const session: Session = (await getServerSession(authOptions)) as Session
+  const session = await getServerSession(authOptions)
 
-  if (!session?.user?.email) {
-    console.log()
+  if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
-  const quotaUsed = 2
-  const quotaLimit = 10
+  const used = await getDailyUsage(session.user.id)
 
-  return NextResponse.json({ used: quotaUsed, limit: quotaLimit })
+  return NextResponse.json({ used, limit: QUOTA_LIMIT })
 }

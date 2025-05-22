@@ -42,3 +42,17 @@ export async function getUserIdeas(userId: string) {
 
   return data
 }
+
+export async function getDailyUsage(userId: string): Promise<number> {
+  const { count, error } = await supabaseServer
+    .from("ideas")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .gte("created_at", new Date().toISOString().split("T")[0])
+
+  if (error) {
+    throw new Error("Erreur quota : " + error.message)
+  }
+
+  return count || 0
+}
