@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon, BookmarkIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,7 @@ export default function IdeaGenerator({
     setLoading(true)
 
     try {
-      const response = await fetch("/api/ideas", {
+      const response = await fetch("/api/ideas/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,6 +59,21 @@ export default function IdeaGenerator({
       toast.error("Network error : " + (err?.message || "Unknown error"))
     } finally {
       setLoading(false)
+    }
+  }
+  const saveIdeaToDb = async (idea: Idea) => {
+    const res = await fetch("/api/ideas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ api, description, idea }),
+    })
+
+    const data = await res.json()
+
+    if (res.ok) {
+      toast.success("Idea saved successfully!")
+    } else {
+      toast.error("Error saving idea: " + data.error)
     }
   }
 
@@ -86,13 +101,20 @@ export default function IdeaGenerator({
           {ideas.length > 0 && (
             <div className="grid gap-4">
               {ideas.map((idea, i) => (
-                <Card key={i} className="bg-muted">
+                <Card key={i} className="bg-muted relative">
                   <CardHeader>
                     <CardTitle className="text-base">{idea.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-muted-foreground">
                     {idea.description}
                   </CardContent>
+                  <button
+                    onClick={() => saveIdeaToDb(idea)}
+                    className="absolute top-2 right-2 text-muted-foreground hover:text-primary"
+                    title="Sauvegarder"
+                  >
+                    <BookmarkIcon className="h-5 w-5 cursor-pointer" />
+                  </button>
                 </Card>
               ))}
             </div>

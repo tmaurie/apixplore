@@ -68,7 +68,10 @@ export default function AuthButton() {
               Dashboard
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => signOut()}>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => signOut()}
+          >
             <span className="w-full flex items-center justify-between text-sm font-medium">
               Logout <LogOut className="ml-2 h-4 w-4" />
             </span>
