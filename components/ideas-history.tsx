@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
+
+import { Skeleton } from "@/components/ui/skeleton"
 
 type Idea = {
   id: string
@@ -28,7 +30,17 @@ export function IdeasHistory() {
     fetchIdeas()
   }, [])
 
-  if (loading) return <p>Chargement des idées...</p>
+  if (loading)
+    return (
+      <div className="grid gap-4">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            className="h-[200px] w-full rounded-md bg-muted"
+          />
+        ))}
+      </div>
+    )
 
   return (
     <div className="grid gap-4">

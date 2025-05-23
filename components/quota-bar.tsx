@@ -1,25 +1,16 @@
 "use client"
 
-import { useEffect, useState } from "react"
-
-export function QuotaBar() {
-  const [used, setUsed] = useState(0)
-  const [limit, setLimit] = useState(10)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchQuota = async () => {
-      const res = await fetch("/api/quota")
-      const data = await res.json()
-      setUsed(data.used)
-      setLimit(data.limit)
-      setLoading(false)
-    }
-
-    fetchQuota()
-  }, [])
-
-  if (loading) return null
+export function QuotaBar(
+  props: {
+    limit?: number
+    used?: number
+  } = {
+    limit: 10,
+    used: 0,
+  }
+) {
+  const limit = props.limit || 10
+  const used = props.used || 0
 
   const remaining = limit - used
   const percent = Math.round((remaining / limit) * 100)
