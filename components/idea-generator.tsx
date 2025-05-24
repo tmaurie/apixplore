@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRightIcon, BookmarkIcon } from "lucide-react"
+import { ArrowRightIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { BookmarkToggle } from "@/components/bookmark-toggle"
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text"
 
 interface Idea {
@@ -69,26 +70,25 @@ export default function IdeaGenerator({
     }
   }
 
-  const handleToggleSave = async (idea: IdeaWithStatus, index: number) => {
-    if (idea.isSaved && idea.id) {
-      const res = await fetch(`/api/ideas/${idea.id}`, {
-        method: "DELETE",
-      })
+  const handleDeleteIdea = async (idea: IdeaWithStatus, index: number) => {
+    const res = await fetch(`/api/ideas/${idea.id}`, {
+      method: "DELETE",
+    })
 
-      if (res.ok) {
-        const updated = [...ideas]
-        updated[index].isSaved = false
-        delete updated[index].id
-        setIdeas(updated)
-        toast.info("Idea removed 💨")
-      } else {
-        toast.error("Error removing idea: " + (await res.text()))
-      }
-
-      return
+    if (res.ok) {
+      const updated = [...ideas]
+      updated[index].isSaved = false
+      delete updated[index].id
+      setIdeas(updated)
+      toast.info("Idea removed 💨")
+    } else {
+      toast.error("Error removing idea: " + (await res.text()))
     }
 
+    return
+  }
 
+  const handleSaveIdea = async (idea: IdeaWithStatus, index: number) => {
     const res = await fetch("/api/ideas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -142,19 +142,13 @@ export default function IdeaGenerator({
                   <CardContent className="text-sm text-muted-foreground">
                     {idea.description}
                   </CardContent>
-                  <button
-                    onClick={() => handleToggleSave(idea, i)}
-                    className={`cursor-pointer absolute top-2 right-2 transition-all duration-200 ${
-                      idea.isSaved ? "scale-110 text-primary" : "hover:scale-110"
-                    }`}
-                    title={idea.isSaved ? "Remove from saved" : "Save idea"}
-                  >
-                    <BookmarkIcon
-                      className={`h-5 w-5 ${
-                        idea.isSaved ? "fill-current text-primary drop-shadow-[0_0_4px_rgba(0,160,255,0.6)]" : ""
-                      }`}
-                    />
-                  </button>
+                  <BookmarkToggle
+                    isSaved={idea.isSaved}
+                    idea={idea}
+                    index={i}
+                    onSave={() => handleSaveIdea(idea, i)}
+                    onRemove={() => handleDeleteIdea(idea, i)}
+                  />
                 </Card>
               ))}
             </div>
