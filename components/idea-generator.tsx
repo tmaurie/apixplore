@@ -18,10 +18,9 @@ import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text"
 interface Idea {
   title: string
   description: string
-  isSaved?: boolean
 }
 
-type IdeaWithStatus = Idea & { isSaved?: boolean }
+type IdeaWithStatus = Idea & { isSaved: boolean }
 
 export default function IdeaGenerator({
   api,
@@ -70,7 +69,7 @@ export default function IdeaGenerator({
     }
   }
 
-  const handleToggleSave = async (idea: Idea, index: number) => {
+  const handleToggleSave = async (idea: IdeaWithStatus, index: number) => {
     if (idea.isSaved) {
       toast.info("Suppression à venir 😄")
       return
@@ -86,11 +85,11 @@ export default function IdeaGenerator({
 
     if (res.ok) {
       const updated = [...ideas]
-      updated[index].isSaved = true
+      updated[index] = { ...updated[index], isSaved: true }
       setIdeas(updated)
       toast.success("Idea saved successfully ! 🧠💾")
     } else {
-      toast.error("Error : " + (data.error || "Failed to save idea"))
+      toast.error("Error: " + (data.error || "Failed to save idea"))
     }
   }
 
