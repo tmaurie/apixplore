@@ -18,7 +18,10 @@ import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text"
 interface Idea {
   title: string
   description: string
+  isSaved?: boolean
 }
+
+type IdeaWithStatus = Idea & { isSaved?: boolean }
 
 export default function IdeaGenerator({
   api,
@@ -29,7 +32,7 @@ export default function IdeaGenerator({
 }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [ideas, setIdeas] = useState<Idea[]>([])
+  const [ideas, setIdeas] = useState<IdeaWithStatus[]>([])
 
   const generateIdeas = async () => {
     setLoading(true)
@@ -50,7 +53,12 @@ export default function IdeaGenerator({
         return
       }
 
-      setIdeas(data.ideas)
+      setIdeas(
+        data.ideas.map((idea: Idea) => ({
+          ...idea,
+          isSaved: false,
+        }))
+      )
 
       toast.success(
         "Ideas generated successfully! Click on the cards to copy them."
@@ -61,7 +69,13 @@ export default function IdeaGenerator({
       setLoading(false)
     }
   }
-  const saveIdeaToDb = async (idea: Idea) => {
+
+  const handleToggleSave = async (idea: Idea, index: number) => {
+    if (idea.isSaved) {
+      toast.info("Suppression à venir 😄")
+      return
+    }
+
     const res = await fetch("/api/ideas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -71,9 +85,12 @@ export default function IdeaGenerator({
     const data = await res.json()
 
     if (res.ok) {
-      toast.success("Idea saved successfully!")
+      const updated = [...ideas]
+      updated[index].isSaved = true
+      setIdeas(updated)
+      toast.success("Idea saved successfully ! 🧠💾")
     } else {
-      toast.error("Error saving idea: " + data.error)
+      toast.error("Error : " + (data.error || "Failed to save idea"))
     }
   }
 
@@ -109,11 +126,15 @@ export default function IdeaGenerator({
                     {idea.description}
                   </CardContent>
                   <button
-                    onClick={() => saveIdeaToDb(idea)}
-                    className="absolute top-2 right-2 text-muted-foreground hover:text-primary"
-                    title="Sauvegarder"
+                    onClick={() => handleToggleSave(idea, i)}
+                    className="absolute top-2 right-2 text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer"
+                    title={idea.isSaved ? "Retirer" : "Sauvegarder"}
                   >
-                    <BookmarkIcon className="h-5 w-5 cursor-pointer" />
+                    {idea.isSaved ? (
+                      <BookmarkIcon className="h-5 w-5 fill-current" />
+                    ) : (
+                      <BookmarkIcon className="h-5 w-5" />
+                    )}
                   </button>
                 </Card>
               ))}
