@@ -1,6 +1,7 @@
 import "@/app/globals.css"
 import React from "react"
 import { Metadata } from "next"
+import NextTopLoader from "nextjs-toploader"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontSans.variable
         )}
       >
+        <NextTopLoader color="#fff" height={2} showSpinner={false} />
         <Providers>{children}</Providers>
       </body>
     </html>
