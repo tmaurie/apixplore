@@ -20,7 +20,7 @@ interface Idea {
   description: string
 }
 
-type IdeaWithStatus = Idea & { isSaved: boolean }
+type IdeaWithStatus = Idea & { isSaved: boolean; id?: string }
 
 export default function IdeaGenerator({
   api,
@@ -70,10 +70,24 @@ export default function IdeaGenerator({
   }
 
   const handleToggleSave = async (idea: IdeaWithStatus, index: number) => {
-    if (idea.isSaved) {
-      toast.info("Suppression à venir 😄")
+    if (idea.isSaved && idea.id) {
+      const res = await fetch(`/api/ideas/${idea.id}`, {
+        method: "DELETE",
+      })
+
+      if (res.ok) {
+        const updated = [...ideas]
+        updated[index].isSaved = false
+        delete updated[index].id
+        setIdeas(updated)
+        toast.info("Idea removed 💨")
+      } else {
+        toast.error("Error removing idea: " + (await res.text()))
+      }
+
       return
     }
+
 
     const res = await fetch("/api/ideas", {
       method: "POST",
@@ -85,7 +99,11 @@ export default function IdeaGenerator({
 
     if (res.ok) {
       const updated = [...ideas]
-      updated[index] = { ...updated[index], isSaved: true }
+      updated[index] = {
+        ...updated[index],
+        isSaved: true,
+        id: data.idea.id,
+      }
       setIdeas(updated)
       toast.success("Idea saved successfully ! 🧠💾")
     } else {
@@ -126,14 +144,16 @@ export default function IdeaGenerator({
                   </CardContent>
                   <button
                     onClick={() => handleToggleSave(idea, i)}
-                    className="absolute top-2 right-2 text-muted-foreground hover:text-primary transition-colors duration-200 cursor-pointer"
-                    title={idea.isSaved ? "Retirer" : "Sauvegarder"}
+                    className={`cursor-pointer absolute top-2 right-2 transition-all duration-200 ${
+                      idea.isSaved ? "scale-110 text-primary" : "hover:scale-110"
+                    }`}
+                    title={idea.isSaved ? "Remove from saved" : "Save idea"}
                   >
-                    {idea.isSaved ? (
-                      <BookmarkIcon className="h-5 w-5 fill-current" />
-                    ) : (
-                      <BookmarkIcon className="h-5 w-5" />
-                    )}
+                    <BookmarkIcon
+                      className={`h-5 w-5 ${
+                        idea.isSaved ? "fill-current text-primary drop-shadow-[0_0_4px_rgba(0,160,255,0.6)]" : ""
+                      }`}
+                    />
                   </button>
                 </Card>
               ))}
