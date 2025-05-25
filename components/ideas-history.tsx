@@ -23,7 +23,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {Skeleton} from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton"
 
 type Idea = {
   id: string
@@ -55,14 +55,14 @@ export function IdeasHistory() {
 
   if (loading)
     return (
-        <div className="grid gap-4">
-          {Array.from({ length: 3 }).map((_, index) => (
-              <Skeleton
-                  key={index}
-                  className="h-[200px] w-full rounded-md bg-muted"
-              />
-          ))}
-        </div>
+      <div className="grid gap-4">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            className="h-[200px] w-full rounded-md bg-muted"
+          />
+        ))}
+      </div>
     )
 
   const handleDelete = async () => {
