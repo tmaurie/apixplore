@@ -1,8 +1,29 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
+import { GlobeIcon, LockIcon, TrashIcon } from "lucide-react"
+import { toast } from "sonner"
 
-import { Skeleton } from "@/components/ui/skeleton"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import {Skeleton} from "@/components/ui/skeleton";
 
 type Idea = {
   id: string
@@ -18,6 +39,8 @@ type Idea = {
 export function IdeasHistory() {
   const [ideas, setIdeas] = useState<Idea[]>([])
   const [loading, setLoading] = useState(true)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -32,28 +55,103 @@ export function IdeasHistory() {
 
   if (loading)
     return (
-      <div className="grid gap-4">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Skeleton
-            key={index}
-            className="h-[200px] w-full rounded-md bg-muted"
-          />
-        ))}
-      </div>
+        <div className="grid gap-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+              <Skeleton
+                  key={index}
+                  className="h-[200px] w-full rounded-md bg-muted"
+              />
+          ))}
+        </div>
     )
+
+  const handleDelete = async () => {
+    if (!confirmDeleteId) return
+    setDeletingId(confirmDeleteId)
+
+    const res = await fetch(`/api/ideas/${confirmDeleteId}`, {
+      method: "DELETE",
+    })
+
+    if (res.ok) {
+      setIdeas((prev) => prev.filter((idea) => idea.id !== confirmDeleteId))
+      toast.success("Idea deleted successfully. 🗑️")
+    } else {
+      toast.error("Error deleting idea. Please try again.")
+    }
+
+    setDeletingId(null)
+    setConfirmDeleteId(null)
+  }
 
   return (
     <div className="grid gap-4">
       {ideas.map((idea) => (
-        <div key={idea.id} className="p-4 border rounded-xl bg-card shadow-sm">
-          <p className="text-xs text-muted-foreground mb-1">
-            {new Date(idea.created_at).toLocaleString()} – via {idea.api_name}
-          </p>
-          <h3 className="text-lg font-bold">{idea.generated_idea.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {idea.generated_idea.description}
-          </p>
-        </div>
+        <Card key={idea.id}>
+          <CardHeader>
+            <CardTitle className="text-base">
+              {idea.generated_idea.title}
+            </CardTitle>
+            <div className="text-xs text-muted-foreground">
+              {new Date(idea.created_at).toLocaleString()} – via{" "}
+              <Badge variant="outline" className="font-medium">
+                {idea.api_name}
+              </Badge>
+            </div>
+          </CardHeader>
+
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              {idea.generated_idea.description}
+            </p>
+          </CardContent>
+
+          <CardFooter className="flex gap-2 justify-between">
+            <Button variant="ghost" disabled title="Bientôt ! Rendre publique">
+              <LockIcon className="h-4 w-4 mr-2" /> Private
+            </Button>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="destructive"
+                  onClick={() => setConfirmDeleteId(idea.id)}
+                  disabled={deletingId === idea.id}
+                >
+                  <TrashIcon className="h-4 w-4 mr-2" />
+                  Delete
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Delete Idea</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete this idea? This action
+                    cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button
+                      variant="outline"
+                      disabled={deletingId === confirmDeleteId}
+                      onClick={() => setConfirmDeleteId(null)}
+                    >
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    variant="destructive"
+                    onClick={handleDelete}
+                    disabled={deletingId === confirmDeleteId}
+                  >
+                    Yes, delete permanently
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </CardFooter>
+        </Card>
       ))}
     </div>
   )
