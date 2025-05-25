@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { AuroraText } from "@/components/magicui/aurora-text"
 
-import "@/styles/aurora.css"
 import { fetchResources } from "@/lib/fetchResources"
 import { NumberTicker } from "@/components/magicui/number-ticker"
 
