@@ -1,19 +1,71 @@
 import Link from "next/link"
 import {
+  BookTextIcon,
+  CalendarCheckIcon,
   Clapperboard,
+  CodeIcon,
+  GlobeIcon,
+  LightbulbIcon,
   MessageCircleQuestion,
+  MusicIcon,
   RocketIcon,
   Settings2Icon,
   SparklesIcon,
   SunSnow,
 } from "lucide-react"
 
+import { fetchResources } from "@/lib/fetchResources"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { AuroraText } from "@/components/magicui/aurora-text"
-
-import { fetchResources } from "@/lib/fetchResources"
+import { Marquee } from "@/components/magicui/marquee"
 import { NumberTicker } from "@/components/magicui/number-ticker"
+
+const ideaItems = [
+  {
+    icon: <LightbulbIcon className="h-5 w-5" />,
+    text: "Voice weather assistant (OpenWeather)",
+  },
+  {
+    icon: <CodeIcon className="h-5 w-5" />,
+    text: "Fun avatar generator (DiceBear)",
+  },
+  {
+    icon: <GlobeIcon className="h-5 w-5" />,
+    text: "World culture quiz (REST Countries)",
+  },
+  {
+    icon: <MusicIcon className="h-5 w-5" />,
+    text: "Mood-based playlist (Spotify API)",
+  },
+  {
+    icon: <CalendarCheckIcon className="h-5 w-5" />,
+    text: "Smart scheduler (Google Calendar)",
+  },
+  {
+    icon: <BookTextIcon className="h-5 w-5" />,
+    text: "Article summarizer (New York Times)",
+  },
+  {
+    icon: <Clapperboard className="h-5 w-5" />,
+    text: "Movie recommendation engine (OMDb API)",
+  },
+  {
+    icon: <MessageCircleQuestion className="h-5 w-5" />,
+    text: "Interactive FAQ bot (Dialogflow)",
+  },
+  {
+    icon: <SunSnow className="h-5 w-5" />,
+    text: "Climate change visualizer (NASA APIs)",
+  },
+  {
+    icon: <Settings2Icon className="h-5 w-5" />,
+    text: "Personal finance tracker (Plaid API)",
+  },
+]
+
+const firstRow = ideaItems.slice(0, ideaItems.length / 2)
+const secondRow = ideaItems.slice(ideaItems.length / 2)
 
 export default async function LandingPage() {
   const resources = await fetchResources("resources")
@@ -104,38 +156,41 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
-      <section className="relative z-10 px-6 py-24">
+      <section className="relative flex w-full flex-col items-center justify-center overflow-hidden">
         <div className="max-w-4xl mx-auto text-center mb-12">
-          <h2 className="text-3xl font-semibold mb-4">
-            API Ideas to Get You Started
+          <h2 className="text-3xl font-semibold  mb-4">
+            What you can create with APIxplore
           </h2>
           <p className="text-slate-600">
-            Here are some fun and creative project ideas using public APIs to
-            inspire your next app development journey.
+            Real-world ideas, ready to build, for every type of API.
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <div className="rounded-2xl border bg-muted/50 p-6 shadow-xs">
-            <Clapperboard className="h-6 w-6 text-yellow-500 mb-3" />
-            <p className="text-sm font-medium">
-              An application to track your favorite movies with The Movie
-              Database (TMDB)
-            </p>
+        <Marquee className="[--duration:30s]" reverse>
+          <div className="flex gap-6">
+            {firstRow.map((item, index) => (
+              <IdeaItem key={index} icon={item.icon} text={item.text} />
+            ))}
           </div>
-          <div className="rounded-2xl border bg-muted/50 p-6 shadow-xs">
-            <SunSnow className="h-6 w-6 text-green-500 mb-3" />
-            <p className="text-sm font-medium">
-              A weather dashboard using OpenWeatherMap API
-            </p>
+        </Marquee>
+        <Marquee className="[--duration:30s]">
+          <div className="flex gap-6">
+            {secondRow.map((item, index) => (
+              <IdeaItem key={index} icon={item.icon} text={item.text} />
+            ))}
           </div>
-          <div className="rounded-2xl border bg-muted/50 p-6 shadow-xs">
-            <MessageCircleQuestion className="h-6 w-6 text-blue-500 mb-3" />
-            <p className="text-sm font-medium">
-              A trivia quiz app using the Open Trivia Database API
-            </p>
-          </div>
-        </div>
+        </Marquee>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background"></div>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background"></div>
       </section>
+    </div>
+  )
+}
+
+function IdeaItem({ icon, text }: { icon: React.ReactNode; text: string }) {
+  return (
+    <div className="flex items-center gap-2 bg-muted border rounded-full px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm">
+      {icon}
+      <span>{text}</span>
     </div>
   )
 }
