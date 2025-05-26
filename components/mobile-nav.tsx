@@ -2,16 +2,36 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { FolderOpen, Grid3x3, Home, LogIn } from "lucide-react"
-import { signIn, useSession } from "next-auth/react"
+import { FolderOpen, Grid3x3, Home, LogIn, LogOut } from "lucide-react"
+import { signIn, signOut, useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useEffect, useState } from "react"
 
 export function MobileNav() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
+
+  const [quota, setQuota] = useState<{ used: number; limit: number }>({ used: 0, limit: 30 })
+
+  useEffect(() => {
+    const fetchQuota = async () => {
+      const res = await fetch("/api/quota")
+      const data = await res.json()
+      setQuota(data)
+    }
+    if (session) fetchQuota()
+  }, [session])
 
   const navItems = [
     { href: "/", icon: <Home size={20} />, label: "Home" },
@@ -19,14 +39,39 @@ export function MobileNav() {
     { href: "/resources", icon: <FolderOpen size={20} />, label: "Resources" },
     isLoggedIn
       ? {
-          href: "/history",
+          href: "#",
           icon: (
-            <Avatar className="h-7 w-7">
-              <AvatarImage src={session.user?.image} alt="User Avatar" />
-              <AvatarFallback>
-                {session.user?.name?.charAt(0).toUpperCase() ?? "U"}
-              </AvatarFallback>
-            </Avatar>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="h-7 w-7">
+                  <AvatarImage src={session.user?.image} alt="User Avatar" />
+                  <AvatarFallback>
+                    {session.user?.name?.charAt(0).toUpperCase() ?? "U"}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuLabel className="text-xs">
+                  {session.user?.name ?? "User"}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/history">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem disabled>
+                  Remaining: {quota.limit - quota.used}/{quota.limit}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => signOut()}
+                >
+            <span className="w-full flex items-center justify-between text-sm font-medium">
+              Logout <LogOut className="ml-2 h-4 w-4" />
+            </span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ),
           label: "Profile",
         }

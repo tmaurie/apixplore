@@ -45,7 +45,7 @@ export default function AuthButton() {
   }
 
   return (
-    <div className="flex items-center gap-4 mr-4">
+    <div className="flex items-center gap-4 md:px-4">
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2 cursor-pointer">
           <Avatar className="h-7 w-7">
@@ -54,7 +54,7 @@ export default function AuthButton() {
               {session.user?.name?.charAt(0).toUpperCase() ?? "U"}
             </AvatarFallback>
           </Avatar>
-          <span className="text-sm font-medium">
+          <span className="text-sm font-medium hidden md:inline-flex">
             {session.user?.name || session.user?.email}
           </span>
         </DropdownMenuTrigger>
