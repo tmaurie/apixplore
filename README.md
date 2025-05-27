@@ -1,16 +1,19 @@
 # 🌐 APIxplore
 
-**APIxplore** is a clean and modern web app for discovering public APIs, organized by categories and filterable by core features.
+**APIxplore** is a clean and elegant web app for discovering public APIs, generating side project ideas with AI, and saving your favorite inspirations.
 
 ## ✨ Features
 
-* 🔍 Browse APIs by category
-* 🎛 Filter by:
-`HTTPS support` `CORS support` `Required authentication`
-* 🧼 Fully responsive UI built with Tailwind CSS v4 + Shadcn UI
-* 💫 Smooth appearance animations (Framer Motion)
+* 🔍 Browse APIs by category and filter core features
+* 🧠 Generate AI-powered project ideas from any public API
+* 💾 Save the ideas you like to your personal history
+* 🧼 Clean UI built with Tailwind CSS v4 + Shadcn UI
+* 💫 Smooth animations with Framer Motion
+* 📱 Fully responsive with mobile bottom navigation
 * 🌙 Dark mode ready
-* 🧠 AI-generated side project ideas from any API
+* 📊 Daily quota system with progress tracking
+* 👤 GitHub authentication (NextAuth)
+* 🧾 Pagination for large datasets (1500+ APIs)
 
 ## 🛠 Tech Stack
 
@@ -18,18 +21,26 @@
 * [Tailwind CSS v4](https://tailwindcss.com/)
 * [Shadcn UI](https://ui.shadcn.com/)
 * [Framer Motion](https://www.framer.com/motion/)
-* [OpenAI](https://openai.com/) (for AI project idea generation)
+* [OpenAI](https://openai.com/) – AI idea generation
+* [Supabase](https://supabase.com/) – user & data storage
+* [NextAuth](https://next-auth.js.org/) – GitHub OAuth
 
 ## 📂 Project structure
 
 ```txt
 app/
-  categories/[category]/page.tsx   # Category-specific resource page
+  api/ideas/                   # Idea generation + persistence API
+  api/quota/                  # Quota tracking
+  resources/page.tsx          # Paginated resources list
+  dashboard/page.tsx          # User's saved ideas
 components/
-  category-card-item.tsx           # Individual category UI
-  enhanced-resource-card.tsx      # Resource UI card
+  idea-generator.tsx          # Idea generation UI
+  ideas-history.tsx           # Saved ideas display
+  mobile-nav.tsx              # Bottom navigation with dropdown menu
+  landing-page.tsx            # Elegant animated hero section
 lib/
-  fetchResources.ts                # Data fetching abstraction
+  supabase/                   # DB interaction helpers
+  auth.ts                     # Auth configuration (NextAuth)
 ```
 
 ## 🚀 Getting started
@@ -39,15 +50,15 @@ pnpm install
 pnpm dev
 ```
 
+## 🔮 Upcoming
 
-## 🧩 Upcoming
-
-* AI project idea generator (based on Spring AI)
-* Global search bar for all APIs
-* API detail pages
-* CSV / JSON export of filtered results
+* 🧩 Public/private toggle for saved ideas
+* 🌍 Public idea sharing page `/idea/[id]`
+* 🔎 Global fuzzy search for all APIs
+* 📁 Export filtered APIs to CSV / JSON
+* 💬 Community library of shared ideas
 
 ---
 
-
-Feel free to contribute or fork the project. Open source on [GitHub](https://github.com/tmaurie/apixplore).
+Feel free to contribute or fork the project.
+💜 Open source on [GitHub](https://github.com/tmaurie/apixplore)
