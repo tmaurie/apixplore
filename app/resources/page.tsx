@@ -24,6 +24,8 @@ export default function ResourcesPage() {
     cors: "any",
     auth: "any",
   })
+  const [page, setPage] = useState(1)
+  const pageSize = 30
 
   useEffect(() => {
     const load = async () => {
@@ -33,6 +35,14 @@ export default function ResourcesPage() {
     }
     load()
   }, [])
+
+  useEffect(() => {
+    setPage(1)
+  }, [filters, search])
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [page])
 
   const visibleResources = resources
     .filter((r) => {
@@ -51,6 +61,11 @@ export default function ResourcesPage() {
     setFilters({ https: "any", cors: "any", auth: "any" })
     setSearch("")
   }
+
+  const paginatedResources = visibleResources.slice(
+    (page - 1) * pageSize,
+    page * pageSize
+  )
 
   return (
     <section className="space-y-6">
@@ -108,16 +123,43 @@ export default function ResourcesPage() {
           No APIs match your search or filters.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-          {visibleResources.map((r, i) => (
-            <ResourceCard
-              key={r.API + r.Link}
-              resource={r}
-              index={i}
-              showCategory
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {paginatedResources.map((r, i) => (
+              <ResourceCard
+                key={r.API + r.Link}
+                resource={r}
+                index={i}
+                showCategory
+              />
+            ))}
+          </div>
+          <div className="flex justify-center items-center gap-2 mt-8">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+            >
+              ← Prev
+            </Button>
+            <span className="text-sm text-muted-foreground px-2">
+              Page {page} / {Math.ceil(visibleResources.length / pageSize)}
+            </span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() =>
+                setPage((p) =>
+                  p < Math.ceil(visibleResources.length / pageSize) ? p + 1 : p
+                )
+              }
+              disabled={page === Math.ceil(visibleResources.length / pageSize)}
+            >
+              Next →
+            </Button>
+          </div>
+        </>
       )}
     </section>
   )

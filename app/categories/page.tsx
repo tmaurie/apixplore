@@ -21,12 +21,9 @@ export default function Page() {
   const { categories, categoryCounts, loading } = useCategoriesWithCount()
 
   const [searchTerm, setSearchTerm] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
+  const [, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortBy, setSortBy] = useState("alpha")
-
-  const itemsPerPage = 12
-
   const filteredCategories = categories
     ?.filter((c) => c.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
@@ -35,14 +32,6 @@ export default function Page() {
         return (categoryCounts[b.name] || 0) - (categoryCounts[a.name] || 0)
       return 0
     })
-  const totalPages = filteredCategories
-    ? Math.ceil(filteredCategories.length / itemsPerPage)
-    : 0
-
-  const paginatedCategories = filteredCategories?.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  )
 
   return (
     <section className="container space-y-6 py-10">
@@ -103,8 +92,8 @@ export default function Page() {
                 : "flex flex-col"
             )}
           >
-            {paginatedCategories?.length ? (
-              paginatedCategories.map((entry, i) => (
+            {filteredCategories?.length ? (
+              filteredCategories.map((entry, i) => (
                 <CategoryCardItem
                   key={entry.slug}
                   name={entry.name}
@@ -118,30 +107,6 @@ export default function Page() {
               <p className="text-muted-foreground">No categories found.</p>
             )}
           </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-4 pt-4">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-                disabled={currentPage === 1}
-              >
-                ← Prev
-              </Button>
-              <span className="text-sm text-muted-foreground">
-                Page {currentPage} / {totalPages}
-              </span>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next →
-              </Button>
-            </div>
-          )}
         </>
       )}
     </section>

@@ -141,7 +141,10 @@ export default function IdeaGenerator({
                     <CardTitle className="text-base">{idea.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-muted-foreground">
-                    <TypingAnimation duration={20} className=" animate-fade-in transition-all duration-500 text-base font-normal">
+                    <TypingAnimation
+                      duration={20}
+                      className=" animate-fade-in transition-all duration-500 text-base font-normal"
+                    >
                       {idea.description}
                     </TypingAnimation>
                   </CardContent>
