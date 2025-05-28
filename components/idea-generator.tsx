@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog"
 import { BookmarkToggle } from "@/components/bookmark-toggle"
 import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text"
+import { TypingAnimation } from "@/components/magicui/typing-animation"
 
 interface Idea {
   title: string
@@ -61,7 +62,7 @@ export default function IdeaGenerator({
       )
 
       toast.success(
-        "Ideas generated successfully! Click on the cards to copy them."
+        "Ideas generated successfully! Click on the bookmark icon to save them."
       )
     } catch (err: any) {
       toast.error("Network error : " + (err?.message || "Unknown error"))
@@ -140,7 +141,9 @@ export default function IdeaGenerator({
                     <CardTitle className="text-base">{idea.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm text-muted-foreground">
-                    {idea.description}
+                    <TypingAnimation duration={20} className=" animate-fade-in transition-all duration-500 text-base font-normal">
+                      {idea.description}
+                    </TypingAnimation>
                   </CardContent>
                   <BookmarkToggle
                     isSaved={idea.isSaved}
