@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { FolderOpen, Grid3x3, Home, LogIn, LogOut } from "lucide-react"
@@ -15,14 +16,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useEffect, useState } from "react"
 
 export function MobileNav() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const isLoggedIn = !!session?.user
 
-  const [quota, setQuota] = useState<{ used: number; limit: number }>({ used: 0, limit: 30 })
+  const [quota, setQuota] = useState<{ used: number; limit: number }>({
+    used: 0,
+    limit: 30,
+  })
 
   useEffect(() => {
     const fetchQuota = async () => {
@@ -66,9 +69,9 @@ export function MobileNav() {
                   className="cursor-pointer"
                   onClick={() => signOut()}
                 >
-            <span className="w-full flex items-center justify-between text-sm font-medium">
-              Logout <LogOut className="ml-2 h-4 w-4" />
-            </span>
+                  <span className="w-full flex items-center justify-between text-sm font-medium">
+                    Logout <LogOut className="ml-2 h-4 w-4" />
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

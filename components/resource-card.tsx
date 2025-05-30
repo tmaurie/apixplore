@@ -48,7 +48,7 @@ export function ResourceCard({
         delay: index * 0.04,
       }}
     >
-      <Card className="w-full rounded-2xl border border-border transition-all hover:border-muted-foreground hover:shadow-xs">
+      <Card className="w-full rounded-2xl border border-border transition-all bg-muted/50  hover:border-muted-foreground hover:shadow-xs">
         <CardHeader className="flex flex-col space-y-1">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg font-semibold">
