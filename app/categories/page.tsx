@@ -21,7 +21,6 @@ export default function Page() {
   const { categories, categoryCounts, loading } = useCategoriesWithCount()
 
   const [searchTerm, setSearchTerm] = useState("")
-  const [, setCurrentPage] = useState(1)
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [sortBy, setSortBy] = useState("alpha")
   const filteredCategories = categories
@@ -43,7 +42,6 @@ export default function Page() {
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value)
-              setCurrentPage(1)
             }}
             className="max-w-sm"
           />
