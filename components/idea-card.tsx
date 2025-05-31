@@ -3,8 +3,9 @@ import { Heart } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Idea } from "@/types/idea"
 
-export function IdeaCard({ idea }: any) {
+export function IdeaCard( {idea}: { idea: Idea }) {
 
   return (
     <Card className="w-full mb-4 bg-muted/50 border border-border rounded-2xl transition-all hover:border-muted-foreground hover:shadow-xs">
