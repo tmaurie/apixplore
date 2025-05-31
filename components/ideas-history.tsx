@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { GlobeIcon, LockIcon, TrashIcon } from "lucide-react"
 import { toast } from "sonner"
 
+import { Idea } from "@/types/idea"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,17 +25,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Skeleton } from "@/components/ui/skeleton"
-
-type Idea = {
-  id: string
-  api_name: string
-  description?: string
-  generated_idea: {
-    title: string
-    description: string
-  }
-  created_at: string
-}
 
 export function IdeasHistory() {
   const [ideas, setIdeas] = useState<Idea[]>([])

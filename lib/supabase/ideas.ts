@@ -56,3 +56,24 @@ export async function getDailyUsage(userId: string): Promise<number> {
 
   return count || 0
 }
+
+export async function getPublicIdeas({
+  limit = 20,
+  offset = 0,
+}: {
+  limit?: number
+  offset?: number
+}) {
+  const { data, error } = await supabaseServer
+    .from("ideas")
+    .select("id, api_name, generated_idea, created_at")
+    .eq("is_public", true)
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit - 1)
+
+  if (error) {
+    throw new Error("Error fetching public ideas: " + error.message)
+  }
+
+  return data
+}
