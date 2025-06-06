@@ -6,6 +6,7 @@ export interface Idea {
     title: string
     description: string
   }
-  created_at: string
-  likes?: number
+  created_at: string,
+  likeCount?: number
+  likedByUser?: boolean
 }

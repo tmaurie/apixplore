@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { LogIn, LogOut } from "lucide-react"
+import {Heart, LayoutDashboard, LogIn, LogOut} from "lucide-react"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -64,8 +64,13 @@ export default function AuthButton() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Link href="/history" className="w-full">
-              Dashboard
+            <Link href="/history" className="w-full flex items-center justify-between text-sm font-medium">
+              Dashboard <LayoutDashboard className="ml-2 h-4 w-4" />
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href="/likes" className="w-full flex items-center justify-between text-sm font-medium">
+              Liked Ideas <Heart className="ml-2 h-4 w-4" />
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem

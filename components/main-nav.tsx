@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import { Home } from "lucide-react"
 
 import { NavItem } from "@/types/nav"
 import { siteConfig } from "@/config/site"
@@ -16,6 +17,9 @@ export function MainNav({ items }: MainNavProps) {
       <Link href="/" className="flex items-center space-x-2">
         <DynamicIcon name={"logo"} className="size-6" />
         <span className="inline-block font-bold">{siteConfig.name}</span>
+      </Link>
+      <Link href="/" className="flex items-center space-x-2">
+        <Home className="size-5 text-muted-foreground" />
       </Link>
       {items?.length ? (
         <nav className="hidden md:flex gap-6 items-center ">
