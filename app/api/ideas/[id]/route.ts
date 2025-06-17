@@ -29,11 +29,12 @@ export async function DELETE(req: NextRequest) {
   return NextResponse.json({ success: true })
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest) {
   const session = await getServerSession(authOptions)
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
-  const ideaId = params.id
+  const ideaId = req.nextUrl.pathname.split("/").pop()
+
   const userId = session.user.id
 
   const body = await req.json()
