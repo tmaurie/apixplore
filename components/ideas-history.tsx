@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { GlobeIcon, LockIcon, TrashIcon } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
@@ -25,12 +25,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Skeleton } from "@/components/ui/skeleton"
+import { PublicToggle } from "@/components/public-toggle"
 
 export function IdeasHistory() {
   const [ideas, setIdeas] = useState<Idea[]>([])
   const [loading, setLoading] = useState(true)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -97,9 +99,8 @@ export function IdeasHistory() {
           </CardContent>
 
           <CardFooter className="flex gap-2 justify-between">
-            <Button variant="ghost" disabled title="Bientôt ! Rendre publique">
-              <LockIcon className="h-4 w-4 mr-2" /> Private
-            </Button>
+            <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
+
 
             <Dialog>
               <DialogTrigger asChild>

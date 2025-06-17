@@ -9,4 +9,5 @@ export interface Idea {
   created_at: string,
   likeCount?: number
   likedByUser?: boolean
+  is_public: boolean
 }
