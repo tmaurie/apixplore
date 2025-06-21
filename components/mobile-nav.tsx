@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { FolderOpen, Grid3x3, Home, LogIn, LogOut } from "lucide-react"
+import { Compass, FolderOpen, Grid3x3, Heart, LayoutDashboard, LogIn, LogOut } from "lucide-react"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
@@ -37,7 +37,7 @@ export function MobileNav() {
   }, [session])
 
   const navItems = [
-    { href: "/", icon: <Home size={20} />, label: "Home" },
+    { href: "/public", icon: <Compass size={20} />, label: "Explore" },
     { href: "/categories", icon: <Grid3x3 size={20} />, label: "Categories" },
     { href: "/resources", icon: <FolderOpen size={20} />, label: "Resources" },
     isLoggedIn
@@ -58,11 +58,16 @@ export function MobileNav() {
                   {session.user?.name ?? "User"}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href="/history">Dashboard</Link>
+                <DropdownMenuItem asChild className="cursor-pointer w-full flex items-center justify-between text-sm font-medium">
+                  <Link href="/history">Dashboard <LayoutDashboard className="ml-2 h-4 w-4" /></Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled>
                   Remaining: {quota.limit - quota.used}/{quota.limit}
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/likes" className="w-full flex items-center justify-between text-sm font-medium">
+                    Liked Ideas <Heart className="ml-2 h-4 w-4" />
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
