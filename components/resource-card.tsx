@@ -98,6 +98,7 @@ export function ResourceCard({
           {isLoggedIn && (
             <IdeaGenerator
               api={resource.API}
+              apiLink={resource.Link}
               description={resource.Description}
             />
           )}

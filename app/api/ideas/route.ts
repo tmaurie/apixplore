@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json()
-  const { api, description, idea } = body
+  const { api, apiLink, description, idea } = body
 
   if (!api || !idea?.title || !idea?.description) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 })
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     const saved = await saveIdea({
       userId: session.user.id,
       api,
+      apiLink,
       description,
       idea,
     })

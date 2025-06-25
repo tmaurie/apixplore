@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { Idea } from "@/types/idea"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -8,12 +10,18 @@ export function IdeaCard({ idea }: { idea: Idea }) {
     <Card className="w-full mb-4 bg-muted/50 border border-border rounded-2xl transition-all hover:border-muted-foreground hover:shadow-xs">
       <CardHeader className="flex flex-row justify-between items-start space-y-0">
         <h2 className="text-lg font-semibold">{idea.generated_idea.title}</h2>
-        <Badge
-          className="text-sm font-mono text-muted-foreground"
-          variant="secondary"
+        <Link
+          href={idea.api_link || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          {idea.api_name}
-        </Badge>
+          <Badge
+            className="text-sm font-mono text-muted-foreground"
+            variant="secondary"
+          >
+            {idea.api_name}
+          </Badge>
+        </Link>
       </CardHeader>
       <CardContent className="py-4">
         <p className="text-base text-muted-foreground whitespace-pre-wrap">

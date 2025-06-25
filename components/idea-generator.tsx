@@ -26,9 +26,11 @@ type IdeaWithStatus = Idea & { isSaved: boolean; id?: string }
 
 export default function IdeaGenerator({
   api,
+  apiLink,
   description,
 }: {
   api: string
+  apiLink?: string
   description: string
 }) {
   const [open, setOpen] = useState(false)
@@ -93,7 +95,7 @@ export default function IdeaGenerator({
     const res = await fetch("/api/ideas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ api, description, idea }),
+      body: JSON.stringify({ api, apiLink, description, idea }),
     })
 
     const data = await res.json()

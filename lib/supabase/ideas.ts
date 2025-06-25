@@ -3,11 +3,13 @@ import { supabaseServer } from "./server"
 export async function saveIdea({
   userId,
   api,
+  apiLink,
   description,
   idea,
 }: {
   userId: string
   api: string
+  apiLink?: string
   description?: string
   idea: string
 }) {
@@ -16,6 +18,7 @@ export async function saveIdea({
     .insert({
       user_id: userId,
       api_name: api,
+      api_link: apiLink,
       description: description,
       generated_idea: idea,
     })
@@ -66,7 +69,9 @@ export async function getPublicIdeas({
 }) {
   const { data, error } = await supabaseServer
     .from("ideas")
-    .select(`id, api_name, generated_idea, created_at, idea_like (idea_id, user_id)`)
+    .select(
+      `id, api_name, api_link, generated_idea, created_at, idea_like (idea_id, user_id)`
+    )
     .eq("is_public", true)
     .order("created_at", { ascending: false })
     .range(offset, offset + limit - 1)
