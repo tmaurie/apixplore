@@ -33,7 +33,6 @@ export function IdeasHistory() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
-
   useEffect(() => {
     const fetchIdeas = async () => {
       const res = await fetch("/api/ideas")
@@ -79,7 +78,10 @@ export function IdeasHistory() {
   return (
     <div className="grid gap-4">
       {ideas.map((idea) => (
-        <Card key={idea.id}>
+        <Card
+          key={idea.id}
+          className="w-full mb-4 bg-muted/50 border border-border rounded-2xl transition-all hover:border-muted-foreground hover:shadow-xs"
+        >
           <CardHeader>
             <CardTitle className="text-base">
               {idea.generated_idea.title}
@@ -100,7 +102,6 @@ export function IdeasHistory() {
 
           <CardFooter className="flex gap-2 justify-between">
             <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
-
 
             <Dialog>
               <DialogTrigger asChild>
