@@ -20,6 +20,8 @@ import { TypingAnimation } from "@/components/magicui/typing-animation"
 interface Idea {
   title: string
   description: string
+  feasibilityScore: number
+  originalityScore: number
 }
 
 type IdeaWithStatus = Idea & { isSaved: boolean; id?: string }
@@ -56,12 +58,18 @@ export default function IdeaGenerator({
         return
       }
 
-      setIdeas(
-        data.ideas.map((idea: Idea) => ({
+      const ideasWithStatus: IdeaWithStatus[] = data.ideas
+        .map((idea: Idea) => ({
           ...idea,
           isSaved: false,
         }))
-      )
+        .sort((a: Idea, b: Idea) => {
+          const aScore = (a.feasibilityScore + a.originalityScore) / 2
+          const bScore = (b.feasibilityScore + b.originalityScore) / 2
+          return bScore - aScore
+        })
+
+      setIdeas(ideasWithStatus)
 
       toast.success(
         "Ideas generated successfully! Click on the bookmark icon to save them."
@@ -141,6 +149,10 @@ export default function IdeaGenerator({
                 <Card key={i} className="bg-muted relative">
                   <CardHeader>
                     <CardTitle className="text-base">{idea.title}</CardTitle>
+                    <div className="text-xs text-muted-foreground">
+                      Feasibility {idea.feasibilityScore}/10 · Originality{" "}
+                      {idea.originalityScore}/10
+                    </div>
                   </CardHeader>
                   <CardContent className="text-sm text-muted-foreground">
                     <TypingAnimation

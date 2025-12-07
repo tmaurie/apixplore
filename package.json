@@ -33,7 +33,7 @@
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^3.8.16",
     "octokit": "^4.0.2",
-    "openai": "^4.98.0",
+    "openai": "^6.10.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-intersection-observer": "^9.16.0",
