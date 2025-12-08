@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ResourceCard } from "@/components/resource-card"
+import { PageSurface } from "@/components/page-surface"
 
 export default function ResourcesPage() {
   const [resources, setResources] = useState<any[]>([])
@@ -73,7 +74,7 @@ export default function ResourcesPage() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] border border-white/10 bg-white/5 p-6 text-white shadow-[0_25px_60px_rgba(8,7,45,0.35)] backdrop-blur sm:p-8">
+      <PageSurface>
         <div className="space-y-4">
           <div className="space-y-3">
             <p className="text-xs uppercase tracking-[0.3em] text-white/60">
@@ -155,9 +156,9 @@ export default function ResourcesPage() {
             </span>
           </div>
         </div>
-      </section>
+      </PageSurface>
 
-      <section className="rounded-[32px] border border-white/10 bg-white/5 p-6 text-white shadow-[0_25px_60px_rgba(8,7,45,0.35)] backdrop-blur sm:p-8">
+      <PageSurface>
         {loading ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 12 }, (_, i) => (
@@ -212,7 +213,7 @@ export default function ResourcesPage() {
             </div>
           </>
         )}
-      </section>
+      </PageSurface>
     </div>
   )
 }

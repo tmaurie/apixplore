@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
+
+import { PageSurface } from "@/components/page-surface"
+import { IdeaCard } from "@/components/idea-card"
 import { Idea } from "@/types/idea"
-import {IdeaCard} from "@/components/idea-card";
 
 export default function LikedIdeasPage() {
   const [ideas, setIdeas] = useState<Idea[]>([])
@@ -25,19 +27,27 @@ export default function LikedIdeasPage() {
   }, [])
 
   return (
-    <div className="max-w-2xl mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">My Liked Ideas ❤️</h1>
+    <PageSurface className="space-y-6">
+      <div className="space-y-2">
+        <p className="text-xs uppercase tracking-[0.35em] text-white/60">
+          Favorites
+        </p>
+        <h1 className="text-3xl font-semibold text-white">My Liked Ideas</h1>
+        <p className="text-white/70">
+          Save the sparks you want to build later and revisit them anytime.
+        </p>
+      </div>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p className="text-white/60">Loading...</p>}
       {!loading && ideas.length === 0 && (
-        <p className="text-muted-foreground">You haven&apos;t liked any ideas yet.</p>
+        <p className="text-white/70">You haven&apos;t liked any ideas yet.</p>
       )}
 
       <div className="space-y-6">
         {ideas.map((idea) => (
-         <IdeaCard idea={idea} key={idea.id} />
+          <IdeaCard idea={idea} key={idea.id} />
         ))}
       </div>
-    </div>
+    </PageSurface>
   )
 }

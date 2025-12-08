@@ -14,6 +14,7 @@ import {
 import { useSession } from "next-auth/react"
 
 import { Resource } from "@/types/resource"
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -48,30 +49,43 @@ export function ResourceCard({
         delay: index * 0.04,
       }}
     >
-      <Card className="w-full rounded-2xl border border-border transition-all bg-muted/50  hover:border-muted-foreground hover:shadow-xs">
+      <Card className="w-full rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_20px_60px_rgba(9,10,44,0.35)] transition hover:border-white/40">
         <CardHeader className="flex flex-col space-y-1">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold">
+            <CardTitle className="text-lg font-semibold text-white">
               {resource.API}
             </CardTitle>
             {showCategory && (
-              <Badge variant="outline" className="font-mono">
+              <Badge
+                variant="outline"
+                className="font-mono border-white/30 text-white/80"
+              >
                 {resource.Category}
               </Badge>
             )}
           </div>
-          <CardDescription className="text-sm text-muted-foreground">
+          <CardDescription className="text-sm text-white/70">
             {resource.Description}
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2 font-mono">
-            <Badge variant={resource.Auth ? "default" : "outline"}>
+          <div className="flex flex-wrap gap-2 font-mono text-xs">
+            <Badge
+              variant={resource.Auth ? "default" : "outline"}
+              className={cn(
+                resource.Auth ? "bg-white/20 text-white" : "border-white/40 text-white/80"
+              )}
+            >
               <KeyRound className="mr-1 size-4" />
               {resource.Auth || "No Auth"}
             </Badge>
-            <Badge variant={resource.HTTPS ? "default" : "outline"}>
+            <Badge
+              variant={resource.HTTPS ? "default" : "outline"}
+              className={cn(
+                resource.HTTPS ? "bg-white/20 text-white" : "border-white/40 text-white/80"
+              )}
+            >
               {resource.HTTPS ? (
                 <Lock className="mr-1 size-4" />
               ) : (
@@ -79,7 +93,14 @@ export function ResourceCard({
               )}
               {resource.HTTPS ? "HTTPS" : "No HTTPS"}
             </Badge>
-            <Badge variant={resource.Cors === "yes" ? "default" : "outline"}>
+            <Badge
+              variant={resource.Cors === "yes" ? "default" : "outline"}
+              className={cn(
+                resource.Cors === "yes"
+                  ? "bg-white/20 text-white"
+                  : "border-white/40 text-white/80"
+              )}
+            >
               {resource.Cors === "yes" ? (
                 <Check className="mr-1 size-4" />
               ) : (
@@ -89,8 +110,14 @@ export function ResourceCard({
             </Badge>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between items-center">
-          <Button variant="ghost" size="sm" asChild>
+
+        <CardFooter className="flex items-center justify-between">
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="text-white/80 hover:text-white"
+          >
             <Link href={resource.Link} target="_blank">
               View API <ExternalLink className="ml-1 size-4" />
             </Link>

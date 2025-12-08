@@ -50,7 +50,7 @@ export function IdeasHistory() {
         {Array.from({ length: 3 }).map((_, index) => (
           <Skeleton
             key={index}
-            className="h-[200px] w-full rounded-md bg-muted"
+            className="h-[200px] w-full rounded-3xl border border-white/10 bg-white/10"
           />
         ))}
       </div>
@@ -66,7 +66,7 @@ export function IdeasHistory() {
 
     if (res.ok) {
       setIdeas((prev) => prev.filter((idea) => idea.id !== confirmDeleteId))
-      toast.success("Idea deleted successfully. 🗑️")
+      toast.success("Idea deleted successfully.")
     } else {
       toast.error("Error deleting idea. Please try again.")
     }
@@ -80,27 +80,27 @@ export function IdeasHistory() {
       {ideas.map((idea) => (
         <Card
           key={idea.id}
-          className="w-full mb-4 bg-muted/50 border border-border rounded-2xl transition-all hover:border-muted-foreground hover:shadow-xs"
+          className="w-full rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_20px_60px_rgba(9,10,44,0.35)] transition hover:border-white/40"
         >
           <CardHeader>
-            <CardTitle className="text-base">
+            <CardTitle className="text-base font-semibold text-white">
               {idea.generated_idea.title}
             </CardTitle>
-            <div className="text-xs text-muted-foreground">
-              {new Date(idea.created_at).toLocaleString()} – via{" "}
-              <Badge variant="outline" className="font-medium">
+            <div className="text-xs text-white/60">
+              {new Date(idea.created_at).toLocaleString()} via {" "}
+              <Badge variant="outline" className="font-medium text-white">
                 {idea.api_name}
               </Badge>
             </div>
           </CardHeader>
 
           <CardContent>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/80">
               {idea.generated_idea.description}
             </p>
           </CardContent>
 
-          <CardFooter className="flex gap-2 justify-between">
+          <CardFooter className="flex items-center justify-between gap-2">
             <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
 
             <Dialog>
@@ -110,7 +110,7 @@ export function IdeasHistory() {
                   onClick={() => setConfirmDeleteId(idea.id)}
                   disabled={deletingId === idea.id}
                 >
-                  <TrashIcon className="h-4 w-4 mr-2" />
+                  <TrashIcon className="mr-2 h-4 w-4" />
                   Delete
                 </Button>
               </DialogTrigger>

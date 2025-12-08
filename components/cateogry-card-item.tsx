@@ -41,7 +41,7 @@ export function CategoryCardItem({
         }}
       >
         <Card
-          className={`h-full rounded-2xl border border-border transition-all duration-300 hover:border-muted-foreground hover:bg-muted hover:shadow-xs ${
+          className={`h-full rounded-3xl border border-white/10 bg-white/5 text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:shadow-[0_25px_60px_rgba(8,7,45,0.35)] ${
             viewMode === "grid" ? "hover:scale-[1.02]" : ""
           }`}
         >
@@ -52,16 +52,18 @@ export function CategoryCardItem({
                 {name}
               </CardTitle>
             </div>
-            <CardDescription className="text-muted-foreground">
+            <CardDescription className="text-white/70">
               Discover APIs related to {name.toLowerCase()}.
             </CardDescription>
           </CardHeader>
 
           <CardFooter className="flex items-center justify-between">
-            <Badge variant="secondary" className="text-xs">
+            <Badge className="border-white/15 bg-white/10 text-xs text-white">
               {count} resources
             </Badge>
-            <span className="text-sm font-medium text-primary">Browse →</span>
+            <span className="text-sm font-semibold text-white/70">
+              Browse {"->"}
+            </span>
           </CardFooter>
         </Card>
       </motion.div>
