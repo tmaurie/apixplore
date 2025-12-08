@@ -33,80 +33,108 @@ export default function Page() {
     })
 
   return (
-    <section className="container space-y-6 py-10">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2">
-          <Input
-            type="text"
-            placeholder="Search categories..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value)
-            }}
-            className="max-w-sm"
-          />
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[160px] text-sm">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="alpha">A → Z</SelectItem>
-              <SelectItem value="resources">Most entries</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant={viewMode === "grid" ? "default" : "ghost"}
-            size="icon"
-            onClick={() => setViewMode("grid")}
-          >
-            <Grid3x3 className="size-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "ghost"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-          >
-            <List className="size-4" />
-          </Button>
-        </div>
-      </div>
-
-      {loading ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 w-full rounded-2xl" />
-          ))}
-        </div>
-      ) : (
-        <>
-          <div
-            className={cn(
-              "gap-6",
-              viewMode === "grid"
-                ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
-                : "flex flex-col"
-            )}
-          >
-            {filteredCategories?.length ? (
-              filteredCategories.map((entry, i) => (
-                <CategoryCardItem
-                  key={entry.slug}
-                  name={entry.name}
-                  slug={entry.slug}
-                  count={categoryCounts[entry.name] || 0}
-                  viewMode={viewMode}
-                  index={i}
-                />
-              ))
-            ) : (
-              <p className="text-muted-foreground">No categories found.</p>
-            )}
+    <div className="space-y-8">
+      <section className="rounded-[32px] border border-white/10 bg-white/5 p-6 text-white shadow-[0_25px_60px_rgba(8,7,45,0.35)] backdrop-blur sm:p-8">
+        <div className="space-y-4">
+          <div className="space-y-3">
+            <p className="text-xs uppercase tracking-[0.3em] text-white/60">
+              Catalog
+            </p>
+            <h1 className="text-3xl font-semibold md:text-4xl">
+              Explore by Category
+            </h1>
+            <p className="text-white/70">
+              Scan the entire API universe, sort by popularity, and jump into
+              the collections that excite you.
+            </p>
           </div>
-        </>
-      )}
-    </section>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-3">
+              <Input
+                type="text"
+                placeholder="Search categories..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="max-w-sm border-white/20 bg-black/30 text-white placeholder:text-white/50"
+              />
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[170px] border-white/20 bg-transparent text-white/80">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#050816] text-white">
+                  <SelectItem value="alpha">A - Z</SelectItem>
+                  <SelectItem value="resources">Most entries</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={viewMode === "grid" ? "default" : "ghost"}
+                size="icon"
+                onClick={() => setViewMode("grid")}
+                className={cn(
+                  viewMode === "grid"
+                    ? "bg-white text-slate-900"
+                    : "text-white/70 hover:text-white"
+                )}
+              >
+                <Grid3x3 className="size-4" />
+              </Button>
+              <Button
+                variant={viewMode === "list" ? "default" : "ghost"}
+                size="icon"
+                onClick={() => setViewMode("list")}
+                className={cn(
+                  viewMode === "list"
+                    ? "bg-white text-slate-900"
+                    : "text-white/70 hover:text-white"
+                )}
+              >
+                <List className="size-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-[32px] border border-white/10 bg-white/5 p-6 text-white shadow-[0_25px_60px_rgba(8,7,45,0.35)] backdrop-blur sm:p-8">
+        {loading ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <Skeleton
+                key={i}
+                className="h-28 w-full rounded-3xl border border-white/10 bg-white/10"
+              />
+            ))}
+          </div>
+        ) : (
+          <>
+            <div
+              className={cn(
+                "gap-6",
+                viewMode === "grid"
+                  ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"
+                  : "flex flex-col"
+              )}
+            >
+              {filteredCategories?.length ? (
+                filteredCategories.map((entry, i) => (
+                  <CategoryCardItem
+                    key={entry.slug}
+                    name={entry.name}
+                    slug={entry.slug}
+                    count={categoryCounts[entry.name] || 0}
+                    viewMode={viewMode}
+                    index={i}
+                  />
+                ))
+              ) : (
+                <p className="text-white/70">No categories found.</p>
+              )}
+            </div>
+          </>
+        )}
+      </section>
+    </div>
   )
 }
