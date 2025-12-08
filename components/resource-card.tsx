@@ -10,6 +10,7 @@ import {
   KeyRound,
   Lock,
   LockOpen,
+  Sparkles,
 } from "lucide-react"
 import { useSession } from "next-auth/react"
 
@@ -25,6 +26,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import IdeaGenerator from "@/components/idea-generator"
+
+
+
+
 
 export function ResourceCard({
   resource,
@@ -48,51 +53,89 @@ export function ResourceCard({
         delay: index * 0.04,
       }}
     >
-      <Card className="w-full rounded-2xl border border-border transition-all bg-muted/50  hover:border-muted-foreground hover:shadow-xs">
-        <CardHeader className="flex flex-col space-y-1">
+      <Card className="group relative w-full overflow-hidden rounded-[32px] border border-white/10 bg-black/40 text-white shadow-[0_35px_80px_rgba(5,5,35,0.65)] backdrop-blur transition hover:-translate-y-1 hover:border-white/40">
+        <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
+          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/20 via-transparent to-purple-500/20" />
+        </div>
+        <CardHeader className="relative flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-semibold">
-              {resource.API}
-            </CardTitle>
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-white/50">
+                <Sparkles className="h-3 w-3" />
+                API
+              </span>
+              <CardTitle className="mt-3 text-xl font-semibold text-white">
+                {resource.API}
+              </CardTitle>
+            </div>
             {showCategory && (
-              <Badge variant="outline" className="font-mono">
+              <Badge
+                variant="outline"
+                className="font-mono border-white/30 bg-white/5 text-white/80"
+              >
                 {resource.Category}
               </Badge>
             )}
           </div>
-          <CardDescription className="text-sm text-muted-foreground">
+          <CardDescription className="text-sm text-white/70">
             {resource.Description}
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2 font-mono">
-            <Badge variant={resource.Auth ? "default" : "outline"}>
-              <KeyRound className="mr-1 size-4" />
+        <CardContent className="relative space-y-4">
+          <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-xs uppercase tracking-[0.2em] text-white/60 sm:grid-cols-3">
+            <div className="space-y-1">
+              <p>Auth</p>
+              <span className="text-sm font-semibold text-white">
+                {resource.Auth || "None"}
+              </span>
+            </div>
+            <div className="space-y-1">
+              <p>HTTPS</p>
+              <span className="text-sm font-semibold text-white">
+                {resource.HTTPS ? "Supported" : "Not supported"}
+              </span>
+            </div>
+            <div className="space-y-1">
+              <p>CORS</p>
+              <span className="text-sm font-semibold text-white">
+                {resource.Cors}
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 font-mono text-[11px]">
+            <Badge className="border-white/15 bg-white/10 text-white">
+              <KeyRound className="mr-1 h-3 w-3" />
               {resource.Auth || "No Auth"}
             </Badge>
-            <Badge variant={resource.HTTPS ? "default" : "outline"}>
+            <Badge className="border-white/15 bg-white/10 text-white">
               {resource.HTTPS ? (
-                <Lock className="mr-1 size-4" />
+                <Lock className="mr-1 h-3 w-3" />
               ) : (
-                <LockOpen className="mr-1 size-4" />
+                <LockOpen className="mr-1 h-3 w-3" />
               )}
               {resource.HTTPS ? "HTTPS" : "No HTTPS"}
             </Badge>
-            <Badge variant={resource.Cors === "yes" ? "default" : "outline"}>
+            <Badge className="border-white/15 bg-white/10 text-white">
               {resource.Cors === "yes" ? (
-                <Check className="mr-1 size-4" />
+                <Check className="mr-1 h-3 w-3" />
               ) : (
-                <CircleOff className="mr-1 size-4" />
+                <CircleOff className="mr-1 h-3 w-3" />
               )}
               {resource.Cors === "yes" ? "CORS" : "No CORS"}
             </Badge>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between items-center">
-          <Button variant="ghost" size="sm" asChild>
+
+        <CardFooter className="relative flex items-center justify-between border-t border-white/10 pt-4">
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="text-white/80 hover:text-white"
+          >
             <Link href={resource.Link} target="_blank">
-              View API <ExternalLink className="ml-1 size-4" />
+              View API <ExternalLink className="ml-1 h-4 w-4" />
             </Link>
           </Button>
           {isLoggedIn && (

@@ -7,34 +7,34 @@ import { LikeButton } from "@/components/like-button"
 
 export function IdeaCard({ idea }: { idea: Idea }) {
   return (
-    <Card className="w-full mb-4 bg-muted/50 border border-border rounded-2xl transition-all hover:border-muted-foreground hover:shadow-xs">
-      <CardHeader className="flex flex-row justify-between items-start space-y-0">
-        <h2 className="text-lg font-semibold">{idea.generated_idea.title}</h2>
+    <Card className="w-full rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_20px_60px_rgba(9,10,44,0.35)] transition hover:border-white/40">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0">
+        <h2 className="text-lg font-semibold text-white">
+          {idea.generated_idea.title}
+        </h2>
         <Link
           href={idea.api_link || "#"}
           target="_blank"
           rel="noopener noreferrer"
         >
           <Badge
-            className="text-sm font-mono text-muted-foreground"
-            variant="secondary"
+            className="text-xs font-mono uppercase tracking-[0.2em] text-white/70"
+            variant="outline"
           >
             {idea.api_name}
           </Badge>
         </Link>
       </CardHeader>
       <CardContent className="py-4">
-        <p className="text-base text-muted-foreground whitespace-pre-wrap">
+        <p className="text-base text-white/80 whitespace-pre-wrap">
           {idea.generated_idea.description}
         </p>
       </CardContent>
-      <CardFooter className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground font-mono">
-            Created {new Date(idea.created_at).toLocaleDateString()} at{" "}
-            {new Date(idea.created_at).toLocaleTimeString()}
-          </span>
-        </div>
+      <CardFooter className="flex items-center justify-between text-white/70">
+        <span className="text-xs font-mono">
+          Created {new Date(idea.created_at).toLocaleDateString()} at{" "}
+          {new Date(idea.created_at).toLocaleTimeString()}
+        </span>
         <LikeButton
           ideaId={idea.id}
           initialLiked={idea.likedByUser ?? false}
