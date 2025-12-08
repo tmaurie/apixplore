@@ -30,7 +30,7 @@ export default function LikedIdeasPage() {
 
       {loading && <p>Loading...</p>}
       {!loading && ideas.length === 0 && (
-        <p className="text-muted-foreground">You haven't liked any ideas yet.</p>
+        <p className="text-muted-foreground">You haven&apos;t liked any ideas yet.</p>
       )}
 
       <div className="space-y-6">
