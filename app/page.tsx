@@ -114,11 +114,8 @@ export default async function LandingPage() {
   const totalCount = resources.entries.length
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(99,102,241,0.18),_transparent_50%)]" />
-      </div>
+    <div className="relative min-h-screen overflow-hidden  text-slate-100">
+
       <main className="relative z-10 flex flex-col gap-20 pb-20 pt-16 lg:gap-28 lg:pb-32 lg:pt-24">
         <section className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 lg:flex-row lg:items-center">
           <div className="flex-1 space-y-8">
