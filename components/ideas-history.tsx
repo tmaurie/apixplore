@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { TrashIcon } from "lucide-react"
+import { Sparkles, TrashIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
@@ -44,18 +44,6 @@ export function IdeasHistory() {
     fetchIdeas()
   }, [])
 
-  if (loading)
-    return (
-      <div className="grid gap-4">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <Skeleton
-            key={index}
-            className="h-[200px] w-full rounded-3xl border border-white/10 bg-white/10"
-          />
-        ))}
-      </div>
-    )
-
   const handleDelete = async () => {
     if (!confirmDeleteId) return
     setDeletingId(confirmDeleteId)
@@ -75,76 +63,141 @@ export function IdeasHistory() {
     setConfirmDeleteId(null)
   }
 
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <div>
+            <p className="text-lg font-semibold text-white">Idea history</p>
+            <p className="text-sm text-white/60">Loading your saved sparks…</p>
+          </div>
+          <Badge variant="outline" className="border-white/20 text-white/80">
+            ...
+          </Badge>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <Skeleton
+              key={index}
+              className="h-[180px] w-full rounded-2xl border border-white/10 bg-white/10"
+            />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="grid gap-4">
-      {ideas.map((idea) => (
-        <Card
-          key={idea.id}
-          className="w-full rounded-3xl border border-white/10 bg-white/5 text-white shadow-[0_20px_60px_rgba(9,10,44,0.35)] transition hover:border-white/40"
-        >
-          <CardHeader>
-            <CardTitle className="text-base font-semibold text-white">
-              {idea.generated_idea.title}
-            </CardTitle>
-            <div className="text-xs text-white/60">
-              {new Date(idea.created_at).toLocaleString()} via {" "}
-              <Badge variant="outline" className="font-medium text-white">
-                {idea.api_name}
-              </Badge>
-            </div>
-          </CardHeader>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div>
+          <p className="text-lg font-semibold text-white">Idea history</p>
+          <p className="text-sm text-white/60">
+            Everything you generated, ready to refine or publish.
+          </p>
+        </div>
+        <Badge variant="outline" className="border-white/20 text-white/80">
+          {ideas.length} idea{ideas.length === 1 ? "" : "s"}
+        </Badge>
+      </div>
 
-          <CardContent>
-            <p className="text-sm text-white/80">
-              {idea.generated_idea.description}
+      {ideas.length === 0 ? (
+        <div className="flex items-center gap-3 rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-6 text-white/70">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white">
+            <Sparkles className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-white">No ideas yet</p>
+            <p className="text-sm text-white/60">
+              Generate new ideas to see them appear here.
             </p>
-          </CardContent>
-
-          <CardFooter className="flex items-center justify-between gap-2">
-            <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
-
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant="destructive"
-                  onClick={() => setConfirmDeleteId(idea.id)}
-                  disabled={deletingId === idea.id}
-                >
-                  <TrashIcon className="mr-2 h-4 w-4" />
-                  Delete
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Delete Idea</DialogTitle>
-                  <DialogDescription>
-                    Are you sure you want to delete this idea? This action
-                    cannot be undone.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button
-                      variant="outline"
-                      disabled={deletingId === confirmDeleteId}
-                      onClick={() => setConfirmDeleteId(null)}
-                    >
-                      Cancel
-                    </Button>
-                  </DialogClose>
-                  <Button
-                    variant="destructive"
-                    onClick={handleDelete}
-                    disabled={deletingId === confirmDeleteId}
+          </div>
+        </div>
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {ideas.map((idea) => (
+            <Card
+              key={idea.id}
+              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f25] text-white shadow-[0_18px_48px_rgba(5,6,34,0.45)] transition hover:-translate-y-1 hover:border-white/30"
+            >
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-sky-500/10 opacity-80" />
+              <CardHeader className="relative space-y-3 pb-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-1">
+                    <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
+                      {idea.generated_idea.title}
+                    </CardTitle>
+                    <p className="text-xs text-white/60">
+                      {new Date(idea.created_at).toLocaleDateString()} ·{" "}
+                      {new Date(idea.created_at).toLocaleTimeString()} via{" "}
+                      <span className="font-medium text-white">
+                        {idea.api_name}
+                      </span>
+                    </p>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="border-white/30 bg-white/5 text-[11px] uppercase tracking-[0.25em] text-white/80"
                   >
-                    Yes, delete permanently
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </CardFooter>
-        </Card>
-      ))}
+                    Saved
+                  </Badge>
+                </div>
+              </CardHeader>
+
+              <CardContent className="relative pb-3">
+                <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/80">
+                  {idea.generated_idea.description}
+                </div>
+              </CardContent>
+
+              <CardFooter className="relative flex items-center justify-between gap-2 border-t border-white/5 pt-3">
+                <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
+
+                <Dialog onOpenChange={(open) => !open && setConfirmDeleteId(null)}>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-300 hover:text-red-100"
+                      onClick={() => setConfirmDeleteId(idea.id)}
+                      disabled={deletingId === idea.id}
+                    >
+                      <TrashIcon className="mr-2 h-4 w-4" />
+                      Delete
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[420px]">
+                    <DialogHeader>
+                      <DialogTitle>Delete idea</DialogTitle>
+                      <DialogDescription>
+                        This will remove the idea permanently. You can&apos;t undo this action.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                      <DialogClose asChild>
+                        <Button
+                          variant="outline"
+                          disabled={deletingId === confirmDeleteId}
+                          onClick={() => setConfirmDeleteId(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </DialogClose>
+                      <Button
+                        variant="destructive"
+                        onClick={handleDelete}
+                        disabled={deletingId === confirmDeleteId}
+                      >
+                        Yes, delete permanently
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
