@@ -187,12 +187,13 @@ export default function IdeaGenerator({
         className="max-w-[95vw] sm:max-w-3xl border-white/10 bg-[#050816] text-white p-4 sm:p-6 max-h-[90vh] flex flex-col overflow-hidden"
         aria-describedby="dialog-description"
       >
-      <DialogHeader className="space-y-2 text-center sm:text-left">
+        <DialogHeader className="space-y-2 text-center sm:text-left">
           <DialogTitle className="text-xl font-semibold sm:text-2xl">
             Project ideas fueled by {api}
           </DialogTitle>
           <p className="text-sm text-white/60">
-            Generate polished sparks, compare feasibility and originality, then save favorites.
+            Generate polished sparks, compare feasibility and originality, then
+            save favorites.
           </p>
         </DialogHeader>
         <div className="space-y-3">
@@ -257,7 +258,10 @@ export default function IdeaGenerator({
                           </div>
                         </CardHeader>
                         <CardContent className="relative flex-1 overflow-y-auto text-sm text-white/80">
-                          <TypingAnimation duration={20} className="text-sm leading-relaxed sm:text-base">
+                          <TypingAnimation
+                            duration={20}
+                            className="text-sm leading-relaxed sm:text-base"
+                          >
                             {idea.description}
                           </TypingAnimation>
                         </CardContent>
@@ -314,7 +318,8 @@ export default function IdeaGenerator({
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-sm text-white/70 sm:px-6">
-              Generate to see curated ideas. We'll rank them by feasibility and originality and keep them in this carousel for quick scanning.
+              Generate to see curated ideas. We'll rank them by feasibility and
+              originality and keep them in this carousel for quick scanning.
             </div>
           )}
         </div>

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-
-import { getPublicIdeas } from "@/lib/supabase/ideas"
 import { getServerSession } from "next-auth"
+
 import { authOptions } from "@/lib/auth"
+import { getPublicIdeas } from "@/lib/supabase/ideas"
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)

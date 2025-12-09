@@ -1,14 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 
-import { PageSurface } from "@/components/page-surface"
-import { IdeaCard } from "@/components/idea-card"
 import { Idea } from "@/types/idea"
+import { IdeaCard } from "@/components/idea-card"
+import { PageSurface } from "@/components/page-surface"
 
 export default function LikedIdeasPage() {
   const [ideas, setIdeas] = useState<Idea[]>([])
   const [loading, setLoading] = useState(true)
+  const [removingId, setRemovingId] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchLikes = async () => {
@@ -25,6 +27,23 @@ export default function LikedIdeasPage() {
 
     fetchLikes()
   }, [])
+
+  const handleUnlike = async (ideaId: string) => {
+    if (removingId) return
+    setRemovingId(ideaId)
+    try {
+      const res = await fetch(`/api/ideas/${ideaId}/like`, { method: "DELETE" })
+      if (!res.ok) {
+        throw new Error("Failed to remove like")
+      }
+      setIdeas((prev) => prev.filter((idea) => idea.id !== ideaId))
+      toast.success("Removed from likes")
+    } catch (err: any) {
+      toast.error(err?.message || "Unable to remove like")
+    } finally {
+      setRemovingId(null)
+    }
+  }
 
   return (
     <PageSurface className="space-y-6">
@@ -45,7 +64,12 @@ export default function LikedIdeasPage() {
 
       <div className="space-y-6">
         {ideas.map((idea) => (
-          <IdeaCard idea={idea} key={idea.id} />
+          <IdeaCard
+            idea={idea}
+            key={idea.id}
+            onUnlike={() => handleUnlike(idea.id)}
+            isRemoving={removingId === idea.id}
+          />
         ))}
       </div>
     </PageSurface>

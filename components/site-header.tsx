@@ -14,7 +14,6 @@ export function SiteHeader() {
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
         <MainNav items={siteConfig.mainNav} />
         <div className="flex items-center gap-2">
-
           <div className="hidden md:block">
             <AuthButton />
           </div>

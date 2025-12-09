@@ -6,11 +6,11 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { SessionProvider } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
+import { Toaster } from "@/components/ui/sonner"
 import { MobileNav } from "@/components/mobile-nav"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/sonner"
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
@@ -34,7 +34,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
               <footer className="px-4 pb-10 pt-6 text-sm text-slate-200 sm:px-6 lg:px-10">
                 <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 rounded-[32px] border border-white/10 bg-white/5 p-6 text-center shadow-[0_25px_60px_rgba(10,10,45,0.45)] backdrop-blur md:flex-row md:items-center md:justify-between md:text-left">
                   <p>
-                    Built with ❤️ by {" "}
+                    Built with ❤️ by{" "}
                     <a
                       href="https://github.com/tmaurie"
                       target="_blank"
@@ -46,7 +46,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     .
                   </p>
                   <p>
-                    Explore the code on {" "}
+                    Explore the code on{" "}
                     <a
                       href={siteConfig.links.github}
                       target="_blank"

@@ -5,7 +5,6 @@ import { useParams } from "next/navigation"
 import { ChevronDownIcon } from "lucide-react"
 
 import { fetchResources } from "@/lib/fetchResources"
-import { PageSurface } from "@/components/page-surface"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -29,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import { PageSurface } from "@/components/page-surface"
 import { ResourceCard } from "@/components/resource-card"
 
 export default function CategoryPage() {

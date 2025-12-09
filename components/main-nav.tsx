@@ -31,9 +31,7 @@ export function MainNav({ items }: MainNavProps) {
         href="/"
         className={cn(
           baseLinkStyle,
-          pathname === "/"
-            ? "text-white"
-            : "text-white/60 hover:text-white"
+          pathname === "/" ? "text-white" : "text-white/60 hover:text-white"
         )}
       >
         <Home className="size-4" />

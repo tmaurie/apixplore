@@ -65,7 +65,10 @@ API description: "${apiDescription}"
     const chatCompletion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
-        { role: "system", content: "You are a concise product ideation assistant." },
+        {
+          role: "system",
+          content: "You are a concise product ideation assistant.",
+        },
         { role: "user", content: prompt },
       ],
       temperature: 0.7,
@@ -76,7 +79,11 @@ API description: "${apiDescription}"
 
     const ideas = JSON.parse(cleaned)
 
-    if (!Array.isArray(ideas) || ideas.length !== 3 || !ideas.every(isValidIdea)) {
+    if (
+      !Array.isArray(ideas) ||
+      ideas.length !== 3 ||
+      !ideas.every(isValidIdea)
+    ) {
       return NextResponse.json(
         { error: "Invalid AI response format" },
         { status: 502 }

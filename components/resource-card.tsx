@@ -27,10 +27,6 @@ import {
 } from "@/components/ui/card"
 import IdeaGenerator from "@/components/idea-generator"
 
-
-
-
-
 export function ResourceCard({
   resource,
   index,

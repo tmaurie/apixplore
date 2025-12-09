@@ -31,7 +31,8 @@ export async function DELETE(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  if (!session?.user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const ideaId = req.nextUrl.pathname.split("/").pop()
 
@@ -41,7 +42,10 @@ export async function PATCH(req: NextRequest) {
   const { is_public } = body
 
   if (typeof is_public !== "boolean") {
-    return NextResponse.json({ error: "Missing or invalid is_public" }, { status: 400 })
+    return NextResponse.json(
+      { error: "Missing or invalid is_public" },
+      { status: 400 }
+    )
   }
 
   const { error } = await supabaseServer

@@ -153,7 +153,9 @@ export function IdeasHistory() {
               <CardFooter className="relative flex items-center justify-between gap-2 border-t border-white/5 pt-3">
                 <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
 
-                <Dialog onOpenChange={(open) => !open && setConfirmDeleteId(null)}>
+                <Dialog
+                  onOpenChange={(open) => !open && setConfirmDeleteId(null)}
+                >
                   <DialogTrigger asChild>
                     <Button
                       variant="ghost"
@@ -170,7 +172,8 @@ export function IdeasHistory() {
                     <DialogHeader>
                       <DialogTitle>Delete idea</DialogTitle>
                       <DialogDescription>
-                        This will remove the idea permanently. You can&apos;t undo this action.
+                        This will remove the idea permanently. You can&apos;t
+                        undo this action.
                       </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="gap-2 sm:gap-0">
