@@ -83,7 +83,7 @@ export function ResourceCard({
         </CardHeader>
 
         <CardContent className="relative space-y-4">
-          <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-xs uppercase tracking-[0.2em] text-white/60 sm:grid-cols-3">
+          <div className="grid gap-3 rounded-2xl border border-dashed border-white/10 bg-white/5 p-4 text-xs uppercase tracking-[0.2em] text-white/60 sm:grid-cols-3">
             <div className="space-y-1">
               <p>Auth</p>
               <span className="text-sm font-semibold text-white">
@@ -93,37 +93,15 @@ export function ResourceCard({
             <div className="space-y-1">
               <p>HTTPS</p>
               <span className="text-sm font-semibold text-white">
-                {resource.HTTPS ? "Supported" : "Not supported"}
+                {resource.HTTPS ? "Yes" : "No"}
               </span>
             </div>
             <div className="space-y-1">
               <p>CORS</p>
               <span className="text-sm font-semibold text-white">
-                {resource.Cors}
+                {resource.Cors === "yes" ? "Yes" : "No"}
               </span>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-2 font-mono text-[11px]">
-            <Badge className="border-white/15 bg-white/10 text-white">
-              <KeyRound className="mr-1 h-3 w-3" />
-              {resource.Auth || "No Auth"}
-            </Badge>
-            <Badge className="border-white/15 bg-white/10 text-white">
-              {resource.HTTPS ? (
-                <Lock className="mr-1 h-3 w-3" />
-              ) : (
-                <LockOpen className="mr-1 h-3 w-3" />
-              )}
-              {resource.HTTPS ? "HTTPS" : "No HTTPS"}
-            </Badge>
-            <Badge className="border-white/15 bg-white/10 text-white">
-              {resource.Cors === "yes" ? (
-                <Check className="mr-1 h-3 w-3" />
-              ) : (
-                <CircleOff className="mr-1 h-3 w-3" />
-              )}
-              {resource.Cors === "yes" ? "CORS" : "No CORS"}
-            </Badge>
           </div>
         </CardContent>
 
