@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { Heart } from "lucide-react"
+
 import { cn } from "@/lib/utils"
 
 interface LikeButtonProps {
@@ -10,7 +11,11 @@ interface LikeButtonProps {
   initialCount: number
 }
 
-export function LikeButton({ ideaId, initialLiked, initialCount }: LikeButtonProps) {
+export function LikeButton({
+  ideaId,
+  initialLiked,
+  initialCount,
+}: LikeButtonProps) {
   const [liked, setLiked] = useState(initialLiked)
   const [count, setCount] = useState(initialCount)
   const [isPending, startTransition] = useTransition()
@@ -26,7 +31,6 @@ export function LikeButton({ ideaId, initialLiked, initialCount }: LikeButtonPro
       }
     })
   }
-
 
   return (
     <button

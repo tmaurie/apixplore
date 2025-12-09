@@ -13,8 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ResourceCard } from "@/components/resource-card"
 import { PageSurface } from "@/components/page-surface"
+import { ResourceCard } from "@/components/resource-card"
 
 export default function ResourcesPage() {
   const [resources, setResources] = useState<any[]>([])
@@ -169,9 +169,7 @@ export default function ResourcesPage() {
             ))}
           </div>
         ) : visibleResources.length === 0 ? (
-          <p className="text-white/70">
-            No APIs match your search or filters.
-          </p>
+          <p className="text-white/70">No APIs match your search or filters.</p>
         ) : (
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -202,10 +200,14 @@ export default function ResourcesPage() {
                 variant="outline"
                 onClick={() =>
                   setPage((p) =>
-                    p < Math.ceil(visibleResources.length / pageSize) ? p + 1 : p
+                    p < Math.ceil(visibleResources.length / pageSize)
+                      ? p + 1
+                      : p
                   )
                 }
-                disabled={page === Math.ceil(visibleResources.length / pageSize)}
+                disabled={
+                  page === Math.ceil(visibleResources.length / pageSize)
+                }
                 className="border-white/20 text-white/90 hover:text-white"
               >
                 Next {"->"}
@@ -217,4 +219,3 @@ export default function ResourcesPage() {
     </div>
   )
 }
-

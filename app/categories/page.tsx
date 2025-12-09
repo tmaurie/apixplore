@@ -5,8 +5,6 @@ import { Grid3x3, List } from "lucide-react"
 
 import { useCategoriesWithCount } from "@/lib/hooks/useCategoriesWithCount"
 import { cn } from "@/lib/utils"
-import { PageSurface } from "@/components/page-surface"
-import { CategoryCardItem } from "@/components/cateogry-card-item"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -17,6 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
+import { CategoryCardItem } from "@/components/cateogry-card-item"
+import { PageSurface } from "@/components/page-surface"
 
 export default function Page() {
   const { categories, categoryCounts, loading } = useCategoriesWithCount()

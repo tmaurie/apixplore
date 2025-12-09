@@ -3,7 +3,15 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Compass, FolderOpen, Grid3x3, Heart, LayoutDashboard, LogIn, LogOut } from "lucide-react"
+import {
+  Compass,
+  FolderOpen,
+  Grid3x3,
+  Heart,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+} from "lucide-react"
 import { signIn, signOut, useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
@@ -58,14 +66,22 @@ export function MobileNav() {
                   {session.user?.name ?? "User"}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="cursor-pointer w-full flex items-center justify-between text-sm font-medium">
-                  <Link href="/history">Dashboard <LayoutDashboard className="ml-2 h-4 w-4" /></Link>
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer w-full flex items-center justify-between text-sm font-medium"
+                >
+                  <Link href="/history">
+                    Dashboard <LayoutDashboard className="ml-2 h-4 w-4" />
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled>
                   Remaining: {quota.limit - quota.used}/{quota.limit}
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="/likes" className="w-full flex items-center justify-between text-sm font-medium">
+                  <Link
+                    href="/likes"
+                    className="w-full flex items-center justify-between text-sm font-medium"
+                  >
                     Liked Ideas <Heart className="ml-2 h-4 w-4" />
                   </Link>
                 </DropdownMenuItem>

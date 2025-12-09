@@ -3,7 +3,6 @@
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
 import AuthButton from "@/components/auth-button"
 import { DynamicIcon } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
@@ -11,31 +10,13 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 w-full bg-opacity-90 backdrop-blur-lg transition-colors duration-500">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#040615cc] backdrop-blur-3xl">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
         <MainNav items={siteConfig.mainNav} />
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-1">
-            <div className="hidden md:block">
-              <AuthButton />
-            </div>
-            <ThemeToggle />
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={buttonVariants({
-                  size: "icon",
-                  variant: "ghost",
-                })}
-              >
-                <DynamicIcon name={"gitHub"} className="size-5" />
-                <span className="sr-only">GitHub</span>
-              </div>
-            </Link>
-          </nav>
+        <div className="flex items-center gap-2">
+          <div className="hidden md:block">
+            <AuthButton />
+          </div>
         </div>
       </div>
     </header>

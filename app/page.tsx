@@ -115,7 +115,6 @@ export default async function LandingPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden  text-slate-100">
-
       <main className="relative z-10 flex flex-col gap-20 pb-20 pt-16 lg:gap-28 lg:pb-32 lg:pt-24">
         <section className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 lg:flex-row lg:items-center">
           <div className="flex-1 space-y-8">

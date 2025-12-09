@@ -2,8 +2,9 @@
 
 import { useState, useTransition } from "react"
 import { GlobeIcon, LockIcon } from "lucide-react"
-import { Switch } from "@/components/ui/switch"
 import { toast } from "sonner"
+
+import { Switch } from "@/components/ui/switch"
 
 interface PublicToggleProps {
   ideaId: string
@@ -45,7 +46,11 @@ export function PublicToggle({ ideaId, initialValue }: PublicToggleProps) {
           <LockIcon className="h-4 w-4" /> Private
         </>
       )}
-      <Switch checked={isPublic} onCheckedChange={toggle} disabled={isPending} />
+      <Switch
+        checked={isPublic}
+        onCheckedChange={toggle}
+        disabled={isPending}
+      />
     </div>
   )
 }
