@@ -57,7 +57,7 @@
     "eslint-plugin-react": "^7.32.2",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
-    "shadcn": "^3.5.1",
+    "shadcn": "^3.6.0",
     "tailwindcss": "^4.1.5",
     "tw-animate-css": "^1.2.5",
     "typescript": "^4.9.5"
