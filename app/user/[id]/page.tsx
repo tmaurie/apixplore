@@ -1,17 +1,13 @@
 "use server"
 
-import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth"
 
+import { authOptions } from "@/lib/auth"
 import { PageSurface } from "@/components/page-surface"
 import { UserHub } from "@/components/user-hub"
-import { authOptions } from "@/lib/auth"
 
-export default async function UserPage({
-  params,
-}: {
-  params: { id: string }
-}) {
+export default async function UserPage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {

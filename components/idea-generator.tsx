@@ -318,8 +318,8 @@ export default function IdeaGenerator({
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-sm text-white/70 sm:px-6">
-              Generate to see curated ideas. We&#39;ll rank them by feasibility and
-              originality and keep them in this carousel for quick scanning.
+              Generate to see curated ideas. We&#39;ll rank them by feasibility
+              and originality and keep them in this carousel for quick scanning.
             </div>
           )}
         </div>
