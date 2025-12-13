@@ -7,14 +7,19 @@ import { authOptions } from "@/lib/auth"
 import { PageSurface } from "@/components/page-surface"
 import { UserHub } from "@/components/user-hub"
 
-export default async function UserPage({ params }: { params: { id: string } }) {
+export default async function UserPage({
+  params,
+}: {
+  params: Promise<{ id?: string }>
+}) {
+  const resolvedParams = await params
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
     redirect("/api/auth/signin")
   }
 
-  if (session.user.id !== params.id) {
+  if (session.user.id !== resolvedParams?.id) {
     redirect("/")
   }
 
