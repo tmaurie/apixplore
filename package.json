@@ -30,7 +30,7 @@
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^0.468.0",
     "motion": "^12.14.0",
-    "next": "15.4.10",
+    "next": "16.1.5",
     "next-auth": "^4.24.11",
     "next-themes": "^0.2.1",
     "nextjs-toploader": "^3.8.16",
