@@ -29,6 +29,10 @@ declare module "next-auth" {
   }
 }
 export const authOptions: NextAuthOptions = {
+  secret:
+    process.env.NEXTAUTH_SECRET ||
+    process.env.AUTH_SECRET ||
+    process.env.NEXT_AUTH_SECRET,
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,

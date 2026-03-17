@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card"
 import { IdeaCard } from "@/components/idea-card"
 import { PublicToggle } from "@/components/public-toggle"
+import { ShareIdeaButton } from "@/components/share-idea-button"
 
 type UserSummary = {
   name?: string | null
@@ -102,6 +103,12 @@ export function UserHub({ user }: { user: UserSummary }) {
     }
   }
 
+  const handleVisibilityChange = (ideaId: string, isPublic: boolean) => {
+    setIdeas((prev) =>
+      prev.map((idea) => (idea.id === ideaId ? { ...idea, is_public: isPublic } : idea))
+    )
+  }
+
   const stats = [
     {
       label: "Quota",
@@ -125,7 +132,7 @@ export function UserHub({ user }: { user: UserSummary }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-4 rounded-3xl border border-white/10 bg-gradient-to-br from-[#0b1533] via-[#0f1c3f] to-[#142654] p-6 text-white shadow-[0_30px_80px_rgba(6,8,36,0.6)] sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-4 rounded-3xl border border-white/10 bg-linear-to-br from-[#0b1533] via-[#0f1c3f] to-[#142654] p-6 text-white shadow-[0_30px_80px_rgba(6,8,36,0.6)] sm:p-8">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white">
             <Avatar className="h-8 w-8 ring-2 ring-white/20">
@@ -154,7 +161,7 @@ export function UserHub({ user }: { user: UserSummary }) {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="min-w-[96px] rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-left"
+              className="min-w-24 rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-left"
             >
               <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
                 {stat.label}
@@ -240,7 +247,7 @@ export function UserHub({ user }: { user: UserSummary }) {
                     key={idea.id}
                     className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f25] text-white shadow-[0_18px_48px_rgba(5,6,34,0.45)]"
                   >
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-purple-500/10" />
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/5 via-transparent to-purple-500/10" />
                     <CardHeader className="relative space-y-2 pb-2">
                       <div className="flex items-start justify-between gap-2">
                         <CardTitle className="text-base font-semibold leading-tight">
@@ -264,10 +271,23 @@ export function UserHub({ user }: { user: UserSummary }) {
                       </p>
                     </CardContent>
                     <CardFooter className="relative flex items-center justify-between gap-2 border-t border-white/5 pt-3">
-                      <PublicToggle
-                        ideaId={idea.id}
-                        initialValue={idea.is_public}
-                      />
+                      <div className="flex flex-wrap items-center gap-2">
+                        <PublicToggle
+                          ideaId={idea.id}
+                          initialValue={idea.is_public}
+                          onVisibilityChange={(value) =>
+                            handleVisibilityChange(idea.id, value)
+                          }
+                        />
+                        {idea.is_public ? (
+                          <ShareIdeaButton
+                            ideaId={idea.id}
+                            title={idea.generated_idea.title}
+                            source="user_hub"
+                            className="border-white/20 text-white hover:bg-white/10"
+                          />
+                        ) : null}
+                      </div>
                       <Button
                         size="sm"
                         variant="ghost"

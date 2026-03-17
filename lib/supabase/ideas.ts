@@ -82,3 +82,20 @@ export async function getPublicIdeas({
 
   return data
 }
+
+export async function getPublicIdeaById(ideaId: string) {
+  const { data, error } = await supabaseServer
+    .from("ideas")
+    .select(
+      `id, api_name, api_link, generated_idea, created_at, description, is_public, idea_like (idea_id, user_id)`
+    )
+    .eq("id", ideaId)
+    .eq("is_public", true)
+    .single()
+
+  if (error) {
+    throw new Error("Error fetching public idea: " + error.message)
+  }
+
+  return data
+}

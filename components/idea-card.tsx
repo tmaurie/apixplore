@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { LikeButton } from "@/components/like-button"
+import { ShareIdeaButton } from "@/components/share-idea-button"
 
 interface IdeaCardProps {
   idea: Idea
@@ -75,11 +76,28 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
             {isRemoving ? "Removing..." : "Remove from likes"}
           </Button>
         ) : (
-          <LikeButton
-            ideaId={idea.id}
-            initialLiked={idea.likedByUser ?? false}
-            initialCount={idea.likeCount ?? 0}
-          />
+          <div className="flex items-center gap-2">
+            <Button
+              asChild
+              size="sm"
+              variant="ghost"
+              className="text-white/80 hover:text-white"
+            >
+              <Link href={`/idea/${idea.id}`}>Open idea</Link>
+            </Button>
+            <ShareIdeaButton
+              ideaId={idea.id}
+              title={idea.generated_idea.title}
+              source="public_feed"
+              variant="ghost"
+              className="text-white/80 hover:text-white"
+            />
+            <LikeButton
+              ideaId={idea.id}
+              initialLiked={idea.likedByUser ?? false}
+              initialCount={idea.likeCount ?? 0}
+            />
+          </div>
         )}
       </CardFooter>
     </Card>

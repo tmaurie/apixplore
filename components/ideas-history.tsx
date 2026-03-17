@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/dialog"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PublicToggle } from "@/components/public-toggle"
+import { ShareIdeaButton } from "@/components/share-idea-button"
 
 export function IdeasHistory() {
   const [ideas, setIdeas] = useState<Idea[]>([])
@@ -61,6 +62,12 @@ export function IdeasHistory() {
 
     setDeletingId(null)
     setConfirmDeleteId(null)
+  }
+
+  const handleVisibilityChange = (ideaId: string, isPublic: boolean) => {
+    setIdeas((prev) =>
+      prev.map((idea) => (idea.id === ideaId ? { ...idea, is_public: isPublic } : idea))
+    )
   }
 
   if (loading) {
@@ -151,7 +158,23 @@ export function IdeasHistory() {
               </CardContent>
 
               <CardFooter className="relative flex items-center justify-between gap-2 border-t border-white/5 pt-3">
-                <PublicToggle ideaId={idea.id} initialValue={idea.is_public} />
+                <div className="flex flex-wrap items-center gap-2">
+                  <PublicToggle
+                    ideaId={idea.id}
+                    initialValue={idea.is_public}
+                    onVisibilityChange={(value) =>
+                      handleVisibilityChange(idea.id, value)
+                    }
+                  />
+                  {idea.is_public ? (
+                    <ShareIdeaButton
+                      ideaId={idea.id}
+                      title={idea.generated_idea.title}
+                      source="history"
+                      className="border-white/20 text-white hover:bg-white/10"
+                    />
+                  ) : null}
+                </div>
 
                 <Dialog
                   onOpenChange={(open) => !open && setConfirmDeleteId(null)}

@@ -9,9 +9,14 @@ import { Switch } from "@/components/ui/switch"
 interface PublicToggleProps {
   ideaId: string
   initialValue: boolean
+  onVisibilityChange?: (value: boolean) => void
 }
 
-export function PublicToggle({ ideaId, initialValue }: PublicToggleProps) {
+export function PublicToggle({
+  ideaId,
+  initialValue,
+  onVisibilityChange,
+}: PublicToggleProps) {
   const [isPublic, setIsPublic] = useState(initialValue)
   const [isPending, startTransition] = useTransition()
 
@@ -30,6 +35,7 @@ export function PublicToggle({ ideaId, initialValue }: PublicToggleProps) {
         setIsPublic(!newValue)
         toast.error("Error updating visibility")
       } else {
+        onVisibilityChange?.(newValue)
         toast.success(`Idea is now ${newValue ? "Public 🌍" : "Private 🔒"}`)
       }
     })
