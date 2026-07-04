@@ -82,7 +82,11 @@ const isValidIdea = (idea: any) =>
   idea.originalityScore <= 10
 
 export async function POST(req: NextRequest) {
-  const session = (await getServerSession(authOptions)) as Session
+  const session = (await getServerSession(authOptions)) as Session | null
+
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
 
   const { api, description, filters } = (await req.json()) as {
     api?: unknown
