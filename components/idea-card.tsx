@@ -1,9 +1,7 @@
 import Link from "next/link"
 
 import { Idea } from "@/types/idea"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { LikeButton } from "@/components/like-button"
 import { ShareIdeaButton } from "@/components/share-idea-button"
 
@@ -15,61 +13,50 @@ interface IdeaCardProps {
 
 export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
   const createdDate = new Date(idea.created_at)
-  const formattedDate = createdDate.toLocaleDateString()
-  const formattedTime = createdDate.toLocaleTimeString()
 
   return (
-    <Card className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0f25] text-white shadow-[0_20px_60px_rgba(9,10,44,0.4)] transition hover:-translate-y-1 hover:border-white/40">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-sky-500/10 opacity-80 transition duration-300 group-hover:opacity-100" />
-      <CardHeader className="relative space-y-3 pb-3">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            <Badge
-              variant="outline"
-              className="border-white/25 bg-white/5 text-[11px] uppercase tracking-[0.25em] text-white/70"
-            >
-              {idea.api_name}
-            </Badge>
-            <h2 className="text-lg font-semibold leading-tight sm:text-xl">
-              {idea.generated_idea.title}
-            </h2>
-          </div>
-          {idea.api_link && (
-            <Link
-              href={idea.api_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-white/70 underline-offset-4 hover:text-white hover:underline"
-            >
-              API docs
-            </Link>
-          )}
-        </div>
-        <div className="flex items-center gap-3 text-xs text-white/60">
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono">
-            {formattedDate} {formattedTime}
+    <div className="rounded-md border border-ink bg-paper p-5">
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div className="space-y-1.5">
+          <span className="inline-block rounded-full border border-ink/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
+            {idea.api_name}
           </span>
+          <h2 className="text-lg font-bold leading-tight sm:text-xl">
+            {idea.generated_idea.title}
+          </h2>
         </div>
-      </CardHeader>
+        {idea.api_link && (
+          <Link
+            href={idea.api_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whitespace-nowrap font-mono text-xs text-ink-soft underline-offset-4 hover:text-amber hover:underline"
+          >
+            API docs
+          </Link>
+        )}
+      </div>
 
-      <CardContent className="relative pb-3">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-white/80">
-          {idea.generated_idea.description}
-        </div>
-      </CardContent>
+      <p className="mb-3 font-mono text-xs text-ink-soft">
+        {createdDate.toLocaleDateString()} {createdDate.toLocaleTimeString()}
+      </p>
 
-      <CardFooter className="relative flex items-center justify-between gap-3 border-t border-white/5 pt-3 text-white/80">
-        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em]">
-          <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-white/70">
+      <div className="mb-4 rounded-md border border-dashed border-ink/30 p-3 text-sm text-ink-soft">
+        {idea.generated_idea.description}
+      </div>
+
+      <div className="flex items-center justify-between gap-3 border-t border-ink/15 pt-3.5">
+        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-soft">
+          <span className="rounded-full border border-ink/30 px-2 py-1">
             Public
           </span>
-          <span className="text-white/60">by community</span>
+          by community
         </div>
         {onUnlike ? (
           <Button
             size="sm"
             variant="ghost"
-            className="text-white/80 hover:text-white"
+            className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
             onClick={onUnlike}
             disabled={isRemoving}
           >
@@ -81,7 +68,7 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
               asChild
               size="sm"
               variant="ghost"
-              className="text-white/80 hover:text-white"
+              className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
             >
               <Link href={`/idea/${idea.id}`}>Open idea</Link>
             </Button>
@@ -90,7 +77,7 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
               title={idea.generated_idea.title}
               source="public_feed"
               variant="ghost"
-              className="text-white/80 hover:text-white"
+              className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
             />
             <LikeButton
               ideaId={idea.id}
@@ -99,7 +86,7 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
             />
           </div>
         )}
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }

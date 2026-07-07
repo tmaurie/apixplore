@@ -2,29 +2,11 @@
 
 import React from "react"
 import Link from "next/link"
-import { motion } from "framer-motion"
-import {
-  Check,
-  CircleOff,
-  ExternalLink,
-  KeyRound,
-  Lock,
-  LockOpen,
-  Sparkles,
-} from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 import { Resource } from "@/types/resource"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import IdeaGenerator from "@/components/idea-generator"
 
 export function ResourceCard({
@@ -40,87 +22,70 @@ export function ResourceCard({
   const isLoggedIn = !!session?.user
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.3,
-        ease: "easeOut",
-        delay: index * 0.04,
-      }}
-    >
-      <Card className="group relative w-full overflow-hidden rounded-[32px] border border-white/10 bg-black/40 text-white shadow-[0_35px_80px_rgba(5,5,35,0.65)] backdrop-blur transition hover:-translate-y-1 hover:border-white/40">
-        <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
-          <div className="absolute inset-0 bg-gradient-to-br from-sky-500/20 via-transparent to-purple-500/20" />
-        </div>
-        <CardHeader className="relative flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.3em] text-white/50">
-                <Sparkles className="h-3 w-3" />
-                API
-              </span>
-              <CardTitle className="mt-3 text-xl font-semibold text-white">
-                {resource.API}
-              </CardTitle>
-            </div>
-            {showCategory && (
-              <Badge
-                variant="outline"
-                className="font-mono border-white/30 bg-white/5 text-white/80"
-              >
-                {resource.Category}
-              </Badge>
-            )}
-          </div>
-          <CardDescription className="text-sm text-white/70">
-            {resource.Description}
-          </CardDescription>
-        </CardHeader>
+    <div className="relative rounded-lg border border-ink bg-paper px-[22px] pb-[22px] pt-[26px]">
+      <span className="absolute -top-px left-[22px] rounded-b-[5px] bg-amber px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-[0.1em] text-paper">
+        №{String(index + 1).padStart(3, "0")}
+      </span>
 
-        <CardContent className="relative space-y-4">
-          <div className="grid gap-3 rounded-2xl border border-dashed border-white/10 bg-white/5 p-4 text-xs uppercase tracking-[0.2em] text-white/60 sm:grid-cols-3">
-            <div className="space-y-1">
-              <p>Auth</p>
-              <span className="text-sm font-semibold text-white">
-                {resource.Auth || "None"}
-              </span>
-            </div>
-            <div className="space-y-1">
-              <p>HTTPS</p>
-              <span className="text-sm font-semibold text-white">
-                {resource.HTTPS ? "Yes" : "No"}
-              </span>
-            </div>
-            <div className="space-y-1">
-              <p>CORS</p>
-              <span className="text-sm font-semibold text-white">
-                {resource.Cors === "yes" ? "Yes" : "No"}
-              </span>
-            </div>
-          </div>
-        </CardContent>
-
-        <CardFooter className="relative flex items-center justify-between border-t border-white/10 pt-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-            className="text-white/80 hover:text-white"
+      <div className="mb-1.5 mt-2.5 flex items-start justify-between gap-2">
+        <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-soft">
+          {resource.Category}
+        </p>
+        {showCategory && (
+          <Badge
+            variant="outline"
+            className="rounded-full border-ink/30 font-mono text-[11px] font-normal text-ink-soft"
           >
-            <Link href={resource.Link} target="_blank">
-              View API <ExternalLink className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
-          {isLoggedIn && (
-            <IdeaGenerator
-              api={resource.API}
-              apiLink={resource.Link}
-              description={resource.Description}
-            />
-          )}
-        </CardFooter>
-      </Card>
-    </motion.div>
+            {resource.Category}
+          </Badge>
+        )}
+      </div>
+      <h3 className="mb-2.5 text-xl font-bold">{resource.API}</h3>
+      <p className="mb-[18px] min-h-[42px] text-sm leading-[1.55] text-ink-soft">
+        {resource.Description}
+      </p>
+
+      <div className="mb-[18px] grid grid-cols-3 gap-2 rounded-md border border-dashed border-ink/30 p-3.5 font-mono">
+        <div>
+          <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+            Auth
+          </p>
+          <p className="text-[13px] font-semibold">{resource.Auth || "None"}</p>
+        </div>
+        <div>
+          <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+            HTTPS
+          </p>
+          <p className="text-[13px] font-semibold">
+            {resource.HTTPS ? "Yes" : "No"}
+          </p>
+        </div>
+        <div>
+          <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+            CORS
+          </p>
+          <p className="text-[13px] font-semibold">
+            {resource.Cors === "yes" ? "Yes" : "No"}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-ink/15 pt-3.5">
+        <Link
+          href={resource.Link}
+          target="_blank"
+          className="inline-flex items-center gap-1 font-mono text-[13px] font-semibold hover:text-amber"
+        >
+          View API <ExternalLink className="h-3.5 w-3.5" />
+        </Link>
+        {isLoggedIn && (
+          <IdeaGenerator
+            api={resource.API}
+            apiLink={resource.Link}
+            description={resource.Description}
+          />
+        )}
+      </div>
+    </div>
   )
 }

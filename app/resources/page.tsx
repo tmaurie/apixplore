@@ -58,164 +58,115 @@ export default function ResourcesPage() {
     .filter((r) => r.API.toLowerCase().includes(search.toLowerCase()))
     .sort((a, b) => a.API.localeCompare(b.API))
 
-  const resetFilters = () => {
-    setFilters({ https: "any", cors: "any", auth: "any" })
-    setSearch("")
-  }
-
   const paginatedResources = visibleResources.slice(
     (page - 1) * pageSize,
     page * pageSize
   )
 
-  const activeFilterCount = Object.values(filters).filter(
-    (value) => value !== "any"
-  ).length
+  const pageCount = Math.max(1, Math.ceil(visibleResources.length / pageSize))
 
   return (
-    <div className="space-y-8">
-      <PageSurface>
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-              Library
+    <div className="rounded-lg border-2 border-ink bg-paper-dim px-6 py-12 sm:px-10 sm:py-16">
+      <p className="mb-4 font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
+        Catalog Drawer 02
+      </p>
+      <div className="mb-9 flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <h1 className="mb-3 text-[38px] font-bold">All Public APIs</h1>
+          <p className="max-w-[50ch] text-ink-soft">
+            Search, filter, and bookmark without breaking your flow.
+          </p>
+        </div>
+        <div className="flex gap-5 font-mono">
+          <div>
+            <p className="mb-1 text-[11px] uppercase tracking-[0.15em] text-ink-soft">
+              Total
             </p>
-            <h1 className="text-3xl font-semibold md:text-4xl">
-              All Public APIs
-            </h1>
-            <p className="text-white/70">
-              Filter, search, and bookmark APIs without breaking your creative
-              flow.
-            </p>
+            <p className="text-[26px] font-bold">{resources.length || "-"}</p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-[minmax(0,280px)_1fr]">
-            <Input
-              placeholder="Search by name..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="border-white/20 bg-black/30 text-white placeholder:text-white/50"
-            />
-            <div className="grid gap-3 text-xs uppercase tracking-[0.25em] text-white/50 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                <p className="text-white/60">Catalog size</p>
-                <p className="text-2xl font-semibold text-white">
-                  {resources.length || "-"}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                <p className="text-white/60">Filters applied</p>
-                <p className="text-2xl font-semibold text-white">
-                  {activeFilterCount}
-                </p>
-              </div>
-              <div className="hidden rounded-2xl border border-white/5 bg-white/5 p-3 lg:block">
-                <p className="text-white/60">Showing</p>
-                <p className="text-2xl font-semibold text-white">
-                  {visibleResources.length}
-                </p>
-              </div>
-            </div>
+          <div>
+            <p className="mb-1 text-[11px] uppercase tracking-[0.15em] text-ink-soft">
+              Showing
+            </p>
+            <p className="text-[26px] font-bold">{visibleResources.length}</p>
           </div>
         </div>
+      </div>
 
-        <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-white/10 bg-black/30 p-4 text-white/80 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap items-center gap-4">
-            {(["https", "cors", "auth"] as const).map((key) => (
-              <div className="flex items-center gap-2" key={key}>
-                <span className="text-xs uppercase tracking-[0.3em] text-white/60">
-                  {key}
-                </span>
-                <Select
-                  value={filters[key]}
-                  onValueChange={(v) => setFilters((f) => ({ ...f, [key]: v }))}
-                >
-                  <SelectTrigger className="w-[110px] border-white/15 bg-transparent text-white">
-                    <SelectValue placeholder="Any" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-[#050816] text-white">
-                    <SelectItem value="any">Any</SelectItem>
-                    <SelectItem value="yes">Yes</SelectItem>
-                    <SelectItem value="no">No</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={resetFilters}
-              className="text-white/80 hover:text-white"
+      <div className="mb-10 flex flex-wrap items-center gap-3 border-b border-ink/25 pb-6">
+        <Input
+          placeholder="Search by name…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="min-w-[220px] flex-1 rounded-md border-ink bg-paper font-mono text-sm"
+        />
+        <div className="flex gap-2 font-mono text-xs uppercase tracking-[0.08em]">
+          {(["auth", "https", "cors"] as const).map((key) => (
+            <Select
+              key={key}
+              value={filters[key]}
+              onValueChange={(v) => setFilters((f) => ({ ...f, [key]: v }))}
             >
-              Reset filters
-            </Button>
-            <span className="text-sm text-white/60">
-              {visibleResources.length} API
-              {visibleResources.length !== 1 && "s"} ready
-            </span>
-          </div>
+              <SelectTrigger
+                className="h-auto rounded-md border-ink/40 bg-paper px-4 py-2.5 font-mono text-xs uppercase tracking-[0.08em] data-[state=open]:border-ink"
+              >
+                <SelectValue placeholder={`${key}: Any`}>
+                  {key}: {filters[key] === "any" ? "Any" : filters[key] === "yes" ? "Yes" : "No"}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent className="border-ink bg-paper font-mono text-xs">
+                <SelectItem value="any">Any</SelectItem>
+                <SelectItem value="yes">Yes</SelectItem>
+                <SelectItem value="no">No</SelectItem>
+              </SelectContent>
+            </Select>
+          ))}
         </div>
-      </PageSurface>
+      </div>
 
-      <PageSurface>
-        {loading ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 12 }, (_, i) => (
-              <Skeleton
-                key={i}
-                className="h-[220px] rounded-3xl border border-white/10 bg-white/10"
+      {loading ? (
+        <div className="mb-10 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          {Array.from({ length: 6 }, (_, i) => (
+            <Skeleton key={i} className="h-[280px] rounded-lg border border-ink/20" />
+          ))}
+        </div>
+      ) : visibleResources.length === 0 ? (
+        <p className="mb-10 text-ink-soft">No APIs match your search or filters.</p>
+      ) : (
+        <>
+          <div className="mb-10 grid grid-cols-1 gap-6 [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))]">
+            {paginatedResources.map((r, i) => (
+              <ResourceCard
+                key={r.API + r.Link}
+                resource={r}
+                index={(page - 1) * pageSize + i}
+                showCategory
               />
             ))}
           </div>
-        ) : visibleResources.length === 0 ? (
-          <p className="text-white/70">No APIs match your search or filters.</p>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              {paginatedResources.map((r, i) => (
-                <ResourceCard
-                  key={r.API + r.Link}
-                  resource={r}
-                  index={(page - 1) * pageSize + i}
-                  showCategory
-                />
-              ))}
-            </div>
-            <div className="mt-8 flex items-center justify-center gap-2 text-white">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="border-white/20 text-white/90 hover:text-white"
-              >
-                {"<-"} Prev
-              </Button>
-              <span className="px-2 text-sm text-white/70">
-                Page {page} / {Math.ceil(visibleResources.length / pageSize)}
-              </span>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() =>
-                  setPage((p) =>
-                    p < Math.ceil(visibleResources.length / pageSize)
-                      ? p + 1
-                      : p
-                  )
-                }
-                disabled={
-                  page === Math.ceil(visibleResources.length / pageSize)
-                }
-                className="border-white/20 text-white/90 hover:text-white"
-              >
-                Next {"->"}
-              </Button>
-            </div>
-          </>
-        )}
-      </PageSurface>
+          <div className="flex items-center justify-center gap-4 font-mono text-[13px] uppercase tracking-[0.08em]">
+            <Button
+              variant="outline"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="rounded-md border-ink px-4 py-2.5 font-mono text-[13px] uppercase tracking-[0.08em] hover:bg-ink hover:text-paper"
+            >
+              ← Prev
+            </Button>
+            <span className="text-ink-soft">
+              Page {String(page).padStart(2, "0")} / {pageCount}
+            </span>
+            <Button
+              variant="outline"
+              onClick={() => setPage((p) => (p < pageCount ? p + 1 : p))}
+              disabled={page === pageCount}
+              className="rounded-md border-ink px-4 py-2.5 font-mono text-[13px] uppercase tracking-[0.08em] hover:bg-ink hover:text-paper"
+            >
+              Next →
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   )
 }

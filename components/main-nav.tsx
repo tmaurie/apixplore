@@ -1,68 +1,58 @@
+"use client"
+
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home } from "lucide-react"
 
 import { NavItem } from "@/types/nav"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { DynamicIcon } from "@/components/icons"
 
 interface MainNavProps {
   items?: NavItem[]
 }
 
-const baseLinkStyle =
-  "relative flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] transition-all"
-
 export function MainNav({ items }: MainNavProps) {
   const pathname = usePathname()
 
   return (
-    <div className="flex items-center gap-6 md:gap-10">
+    <>
       <Link
         href="/"
-        className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(5,5,35,0.4)] backdrop-blur"
+        className="mr-1 flex shrink-0 items-center gap-2.5 py-3"
       >
-        <DynamicIcon name="logo" className="size-5" />
-        <span className="tracking-[0.25em]">{siteConfig.name}</span>
+        <span className="inline-flex h-[30px] w-[30px] items-center justify-center rounded border-2 border-ink bg-amber font-mono text-[13px] font-bold text-paper">
+          {"{ }"}
+        </span>
+        <span className="whitespace-nowrap font-mono text-[15px] font-bold tracking-[0.15em]">
+          {siteConfig.name.toUpperCase()}
+        </span>
       </Link>
-      <Link
-        href="/"
-        className={cn(
-          baseLinkStyle,
-          pathname === "/" ? "text-white" : "text-white/60 hover:text-white"
-        )}
-      >
-        <Home className="size-4" />
-        Home
-      </Link>
+
       {items?.length ? (
-        <nav className="hidden items-center gap-3 md:flex">
-          {items.map((item) => {
+        <nav className="flex min-w-0 flex-1 items-end gap-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {items.map((item, index) => {
             if (!item.href) return null
             const isActive = pathname === item.href
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  baseLinkStyle,
+                  "relative top-px shrink-0 whitespace-nowrap rounded-t-md border border-b-0 border-transparent px-4.5 py-3 font-mono text-xs font-semibold tracking-[0.12em] uppercase transition-colors",
                   isActive
-                    ? "text-white shadow-[0_8px_25px_rgba(8,7,45,0.4)]"
-                    : "text-white/60 hover:text-white",
-                  item.disabled && "cursor-not-allowed opacity-50"
+                    ? "border-ink/20 bg-paper text-ink"
+                    : "text-ink-soft hover:text-ink",
+                  item.disabled && "pointer-events-none opacity-50"
                 )}
               >
-                <span>{item.title}</span>
-                {isActive && (
-                  <span className="absolute inset-0 rounded-full border border-white/30" />
-                )}
+                {String(index + 1).padStart(2, "0")} · {item.title}
               </Link>
             )
           })}
         </nav>
       ) : null}
-    </div>
+    </>
   )
 }

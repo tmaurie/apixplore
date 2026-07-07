@@ -7,24 +7,9 @@ import { signIn, signOut, useSession } from "next-auth/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { QuotaBar } from "@/components/quota-bar"
 
 export default function AuthButton() {
   const { data: session, status } = useSession()
-
-  const [used, setUsed] = useState(0)
-  const [limit, setLimit] = useState(10)
-
-  useEffect(() => {
-    const fetchQuota = async () => {
-      const res = await fetch("/api/quota")
-      const data = await res.json()
-      setUsed(data.used)
-      setLimit(data.limit)
-    }
-
-    fetchQuota()
-  }, [])
 
   if (status === "loading") return null
 
@@ -34,9 +19,9 @@ export default function AuthButton() {
         variant="ghost"
         size="sm"
         onClick={() => signIn("github")}
-        className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/80 transition hover:text-white"
+        className="rounded-md border border-ink px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink hover:bg-ink hover:text-paper"
       >
-        <LogIn className="mr-2 h-4 w-4" /> Login
+        Sign in <LogIn className="ml-2 h-3.5 w-3.5" />
       </Button>
     )
   }
@@ -46,11 +31,11 @@ export default function AuthButton() {
       <Button
         asChild
         variant="ghost"
-        className="flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-left shadow-[0_10px_25px_rgba(6,7,45,0.45)] backdrop-blur transition hover:border-white/40"
+        className="flex items-center gap-3 rounded-md border border-ink/20 px-3 py-2 text-left hover:border-ink"
       >
         <Link href={`/user/${session.user?.id ?? ""}`}>
           <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8 ring-2 ring-white/20">
+            <Avatar className="h-8 w-8 ring-2 ring-amber/30">
               <AvatarImage src={session.user?.image ?? ""} alt="User Avatar" />
               <AvatarFallback>
                 {session.user?.name?.charAt(0).toUpperCase() ?? (
@@ -58,9 +43,11 @@ export default function AuthButton() {
                 )}
               </AvatarFallback>
             </Avatar>
-            <div className="hidden text-left text-xs uppercase tracking-[0.25em] text-white/70 sm:block">
-              <p>{session.user?.name || session.user?.email}</p>
-              <p className="text-white/50">@{session.user?.githubUsername}</p>
+            <div className="hidden text-left font-mono text-xs uppercase tracking-[0.2em] text-ink-soft sm:block">
+              <p className="text-ink">
+                {session.user?.name || session.user?.email}
+              </p>
+              <p>@{session.user?.githubUsername}</p>
             </div>
           </div>
         </Link>
@@ -68,7 +55,7 @@ export default function AuthButton() {
       <Button
         variant="ghost"
         size="icon"
-        className="rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/10"
+        className="rounded-md border border-ink/20 text-ink hover:border-ink hover:bg-transparent"
         onClick={() => signOut()}
         title="Logout"
       >

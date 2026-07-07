@@ -26,7 +26,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { BookmarkToggle } from "@/components/bookmark-toggle"
-import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text"
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -271,51 +270,51 @@ export default function IdeaGenerator({
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="rounded-full border border-white/20 bg-white/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.4em] text-white/80 shadow-[0_10px_25px_rgba(6,7,45,0.45)] backdrop-blur transition hover:text-white"
+          className="rounded-md bg-ink px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-paper transition hover:bg-ink/90 hover:text-paper"
         >
-          <AnimatedShinyText className="inline-flex items-center gap-2">
+          <span className="inline-flex items-center gap-2">
             <Sparkles className="h-3 w-3" />
             Ideate
             <ArrowRightIcon className="h-4 w-4" />
-          </AnimatedShinyText>
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent
-        className="max-w-[95vw] sm:max-w-3xl border-white/10 bg-[#050816] text-white p-4 sm:p-6 max-h-[90vh] flex flex-col overflow-hidden"
+        className="flex max-h-[90vh] max-w-[95vw] flex-col overflow-hidden border-ink bg-paper p-4 text-ink sm:max-w-3xl sm:p-6"
         aria-describedby="dialog-description"
       >
         <DialogHeader className="space-y-2 text-center sm:text-left">
-          <DialogTitle className="text-xl font-semibold sm:text-2xl">
+          <DialogTitle className="text-xl font-bold sm:text-2xl">
             Project ideas fueled by {api}
           </DialogTitle>
-          <p className="text-sm text-white/60">
+          <p className="text-sm text-ink-soft">
             Set the brief first, then generate sparks that match scope, tone,
             and stack focus. You can reopen filters anytime.
           </p>
         </DialogHeader>
         <ScrollArea className="h-[70vh]">
           <div className="space-y-4 pr-1 sm:pr-2">
-            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5">
+            <div className="space-y-4 rounded-2xl border border-ink/15 bg-paper-dim p-4 sm:p-5">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.3em] text-white/60">
+                  <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">
                     Filters before generation
                 </p>
-                <p className="text-sm text-white/70">
+                <p className="text-sm text-ink-soft">
                   Choose experience level, stack focus, tone, and AI stance to
                   steer the ideas.
                 </p>
-                <div className="mt-2 flex flex-wrap gap-2 text-xs text-white/80">
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">
+                <div className="mt-2 flex flex-wrap gap-2 text-xs text-ink">
+                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
                     {filters.skillLevel} · level
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">
+                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
                     {filters.stackFocus} · focus
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">
+                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
                     {filters.tone} · tone
                   </span>
-                  <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1">
+                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
                     {filters.aiUsage} · AI
                   </span>
                 </div>
@@ -324,7 +323,7 @@ export default function IdeaGenerator({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10"
+                  className="rounded-full border border-ink/25 bg-paper-dim text-ink hover:bg-ink/5"
                   onClick={() => resetFilters()}
                   disabled={loading}
                 >
@@ -333,7 +332,7 @@ export default function IdeaGenerator({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10"
+                  className="rounded-full border border-ink/25 bg-paper-dim text-ink hover:bg-ink/5"
                   onClick={() => setFiltersCollapsed((prev) => !prev)}
                   disabled={loading}
                 >
@@ -343,7 +342,7 @@ export default function IdeaGenerator({
                   onClick={generateIdeas}
                   disabled={loading}
                   size="sm"
-                  className="rounded-full border border-white/20 bg-white/10 text-white hover:bg-white/20"
+                  className="rounded-full border border-ink/30 bg-ink/5 text-ink hover:bg-ink/10"
                 >
                   {loading ? (
                     <span className="inline-flex items-center gap-2">
@@ -360,7 +359,7 @@ export default function IdeaGenerator({
             {!filtersCollapsed && (
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
                     Developer level
                   </p>
                   <div className="grid gap-2">
@@ -371,14 +370,14 @@ export default function IdeaGenerator({
                         className={cn(
                           "w-full rounded-xl border px-3 py-3 text-left transition",
                           filters.skillLevel === option.value
-                            ? "border-white/40 bg-white/10 shadow-[0_12px_36px_rgba(5,8,45,0.4)]"
-                            : "border-white/10 bg-white/5 hover:border-white/25"
+                            ? "border-ink bg-ink/5"
+                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
                         )}
                       >
-                        <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
                           {option.label}
                         </p>
-                        <p className="mt-1 text-sm text-white/80">
+                        <p className="mt-1 text-sm text-ink">
                           {option.description}
                         </p>
                       </button>
@@ -387,7 +386,7 @@ export default function IdeaGenerator({
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
                     Stack focus
                   </p>
                   <div className="grid gap-2">
@@ -398,14 +397,14 @@ export default function IdeaGenerator({
                         className={cn(
                           "w-full rounded-xl border px-3 py-3 text-left transition",
                           filters.stackFocus === option.value
-                            ? "border-white/40 bg-white/10 shadow-[0_12px_36px_rgba(5,8,45,0.4)]"
-                            : "border-white/10 bg-white/5 hover:border-white/25"
+                            ? "border-ink bg-ink/5"
+                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
                         )}
                       >
-                        <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
                           {option.label}
                         </p>
-                        <p className="mt-1 text-sm text-white/80">
+                        <p className="mt-1 text-sm text-ink">
                           {option.description}
                         </p>
                       </button>
@@ -414,7 +413,7 @@ export default function IdeaGenerator({
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
                     Tone
                   </p>
                   <div className="grid gap-2">
@@ -425,14 +424,14 @@ export default function IdeaGenerator({
                         className={cn(
                           "w-full rounded-xl border px-3 py-3 text-left transition",
                           filters.tone === option.value
-                            ? "border-white/40 bg-white/10 shadow-[0_12px_36px_rgba(5,8,45,0.4)]"
-                            : "border-white/10 bg-white/5 hover:border-white/25"
+                            ? "border-ink bg-ink/5"
+                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
                         )}
                       >
-                        <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
                           {option.label}
                         </p>
-                        <p className="mt-1 text-sm text-white/80">
+                        <p className="mt-1 text-sm text-ink">
                           {option.description}
                         </p>
                       </button>
@@ -441,7 +440,7 @@ export default function IdeaGenerator({
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
                     AI usage
                   </p>
                   <div className="grid gap-2">
@@ -452,14 +451,14 @@ export default function IdeaGenerator({
                         className={cn(
                           "w-full rounded-xl border px-3 py-3 text-left transition",
                           filters.aiUsage === option.value
-                            ? "border-white/40 bg-white/10 shadow-[0_12px_36px_rgba(5,8,45,0.4)]"
-                            : "border-white/10 bg-white/5 hover:border-white/25"
+                            ? "border-ink bg-ink/5"
+                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
                         )}
                       >
-                        <p className="text-xs uppercase tracking-[0.25em] text-white/60">
+                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
                           {option.label}
                         </p>
-                        <p className="mt-1 text-sm text-white/80">
+                        <p className="mt-1 text-sm text-ink">
                           {option.description}
                         </p>
                       </button>
@@ -475,17 +474,15 @@ export default function IdeaGenerator({
                 <Carousel
                 setApi={setCarouselApi}
                 opts={{ align: "start", loop: false }}
-                className="relative isolate rounded-2xl border border-white/10 bg-white/[0.03] px-2 py-2 shadow-[0_20px_60px_rgba(5,8,45,0.55)] sm:rounded-3xl sm:px-3 sm:py-3"
+                className="relative isolate rounded-2xl border border-ink/15 bg-paper-dim px-2 py-2 sm:rounded-3xl sm:px-3 sm:py-3"
               >
-                <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/5" />
                 <CarouselContent className="ml-0">
                   {ideas.map((idea, i) => (
                     <CarouselItem
                       key={i}
                       className="flex justify-center px-1.5 py-3 sm:px-2 sm:py-4"
                     >
-                      <Card className="relative flex h-[320px] w-full max-w-lg flex-col overflow-hidden rounded-[18px] border border-white/10 bg-[#0b1026] text-white shadow-[0_12px_36px_rgba(5,8,45,0.5)] sm:h-[340px] sm:rounded-[22px]">
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-purple-500/10" />
+                      <Card className="relative flex h-[320px] w-full max-w-lg flex-col overflow-hidden rounded-[18px] border border-ink bg-paper text-ink sm:h-[340px] sm:rounded-[22px]">
                         <CardHeader className="relative space-y-3 pb-2">
                           <div className="flex items-start justify-between gap-3">
                             <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
@@ -499,22 +496,22 @@ export default function IdeaGenerator({
                               onRemove={() => handleDeleteIdea(idea, i)}
                             />
                           </div>
-                          <div className="grid gap-2 text-[11px] uppercase tracking-[0.2em] text-white/60 sm:grid-cols-2">
-                            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                          <div className="grid gap-2 text-[11px] uppercase tracking-[0.2em] text-ink-soft sm:grid-cols-2">
+                            <div className="rounded-xl border border-ink/15 bg-paper-dim px-3 py-2">
                               <p>Feasibility</p>
-                              <p className="text-sm font-semibold text-white sm:text-base">
+                              <p className="text-sm font-semibold text-ink sm:text-base">
                                 {idea.feasibilityScore}/10
                               </p>
                             </div>
-                            <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2">
+                            <div className="rounded-xl border border-ink/15 bg-paper-dim px-3 py-2">
                               <p>Originality</p>
-                              <p className="text-sm font-semibold text-white sm:text-base">
+                              <p className="text-sm font-semibold text-ink sm:text-base">
                                 {idea.originalityScore}/10
                               </p>
                             </div>
                           </div>
                         </CardHeader>
-                        <CardContent className="relative flex-1 overflow-y-auto text-sm text-white/80">
+                        <CardContent className="relative flex-1 overflow-y-auto text-sm text-ink">
                           <TypingAnimation
                             duration={20}
                             className="text-sm leading-relaxed sm:text-base"
@@ -537,22 +534,22 @@ export default function IdeaGenerator({
                       aria-label={`Go to idea ${index + 1}`}
                       className={`h-2.5 w-2.5 rounded-full transition ${
                         index === currentIndex
-                          ? "bg-white"
-                          : "bg-white/30 hover:bg-white/60"
+                          ? "bg-ink"
+                          : "bg-ink/25 hover:bg-ink/50"
                       }`}
                     />
                   ))}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-[0.25em] text-white/60">
+                  <span className="text-xs uppercase tracking-[0.25em] text-ink-soft">
                     Idea {currentIndex + 1} of {ideas.length}
                   </span>
                   <div className="flex items-center gap-2">
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/10"
+                      className="rounded-full border border-ink/15 bg-paper-dim text-ink hover:bg-ink/5"
                       onClick={handlePrevious}
                       disabled={ideas.length <= 1}
                       aria-label="Previous idea"
@@ -562,7 +559,7 @@ export default function IdeaGenerator({
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/10"
+                      className="rounded-full border border-ink/15 bg-paper-dim text-ink hover:bg-ink/5"
                       onClick={handleNext}
                       disabled={ideas.length <= 1}
                       aria-label="Next idea"
@@ -574,7 +571,7 @@ export default function IdeaGenerator({
               </div>
             </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 px-4 py-6 text-sm text-white/70 sm:px-6">
+                <div className="rounded-2xl border border-dashed border-ink/15 bg-paper-dim px-4 py-6 text-sm text-ink-soft sm:px-6">
                   Pick your filters, generate, and we&#39;ll sort ideas by
                   feasibility and originality in this carousel.
                 </div>

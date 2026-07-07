@@ -1,19 +1,17 @@
 import { IdeasHistory } from "@/components/ideas-history"
-import { PageSurface } from "@/components/page-surface"
 
 export default function HistoryPage() {
   return (
-    <PageSurface className="space-y-6">
-      <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/60">
-          Personal log
-        </p>
-        <h1 className="text-3xl font-semibold text-white">My Ideas History</h1>
-        <p className="text-white/70">
-          Revisit and manage every concept you have generated so far.
-        </p>
-      </div>
+    <div className="rounded-lg border-2 border-ink bg-ink px-6 py-12 text-paper sm:px-10 sm:py-16">
+      <p className="mb-4 font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber-soft">
+        Ledger 04
+      </p>
+      <h1 className="mb-3 text-[38px] font-bold">Your Collection</h1>
+      <p className="mb-11 max-w-[60ch] text-paper/65">
+        Every idea you generated, saved, or shared with the world — filed in
+        order.
+      </p>
       <IdeasHistory />
-    </PageSurface>
+    </div>
   )
 }

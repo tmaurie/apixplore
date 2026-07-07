@@ -42,20 +42,21 @@ export function PublicToggle({
   }
 
   return (
-    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+    <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-paper/70">
       {isPublic ? (
         <>
-          <GlobeIcon className="h-4 w-4 text-primary" /> Public
+          <GlobeIcon className="h-3.5 w-3.5 text-amber-soft" /> Public
         </>
       ) : (
         <>
-          <LockIcon className="h-4 w-4" /> Private
+          <LockIcon className="h-3.5 w-3.5" /> Private
         </>
       )}
       <Switch
         checked={isPublic}
         onCheckedChange={toggle}
         disabled={isPending}
+        className="data-[state=checked]:bg-amber data-[state=unchecked]:bg-paper/20 [&>span]:bg-paper"
       />
     </div>
   )

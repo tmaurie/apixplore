@@ -4,7 +4,7 @@ import { Metadata } from "next"
 import NextTopLoader from "nextjs-toploader"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
+import { fontMono, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { Providers } from "@/app/providers/providers"
 
@@ -30,10 +30,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
+          fontMono.variable
         )}
       >
-        <NextTopLoader color="#fff" height={2} showSpinner={false} />
+        <NextTopLoader color="oklch(0.64 0.19 41)" height={2} showSpinner={false} />
         <Providers>{children}</Providers>
       </body>
     </html>
