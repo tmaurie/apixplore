@@ -56,7 +56,7 @@
     "eslint-config-next": "15.3.1",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react": "^7.32.2",
-    "postcss": "^8.4.24",
+    "postcss": "8.5.10",
     "prettier": "^2.8.8",
     "shadcn": "^3.6.0",
     "tailwindcss": "^4.1.5",
