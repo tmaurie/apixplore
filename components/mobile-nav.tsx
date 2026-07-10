@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation"
 import {
   Compass,
   FolderOpen,
-  Grid3x3,
   Heart,
   LayoutDashboard,
   LogIn,
@@ -46,8 +45,7 @@ export function MobileNav() {
 
   const navItems = [
     { href: "/public", icon: <Compass size={20} />, label: "Explore" },
-    { href: "/categories", icon: <Grid3x3 size={20} />, label: "Categories" },
-    { href: "/resources", icon: <FolderOpen size={20} />, label: "Resources" },
+    { href: "/resources", icon: <FolderOpen size={20} />, label: "Library" },
     isLoggedIn
       ? {
           href: "#",

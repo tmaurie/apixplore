@@ -54,69 +54,69 @@ const defaultFilters: IdeaFilters = {
 }
 
 const filterOptions: {
-  skillLevel: { value: IdeaFilters["skillLevel"]; label: string; description: string }[]
-  stackFocus: { value: IdeaFilters["stackFocus"]; label: string; description: string }[]
-  tone: { value: IdeaFilters["tone"]; label: string; description: string }[]
-  aiUsage: { value: IdeaFilters["aiUsage"]; label: string; description: string }[]
+  skillLevel: { value: IdeaFilters["skillLevel"]; label: string }[]
+  stackFocus: { value: IdeaFilters["stackFocus"]; label: string }[]
+  tone: { value: IdeaFilters["tone"]; label: string }[]
+  aiUsage: { value: IdeaFilters["aiUsage"]; label: string }[]
 } = {
   skillLevel: [
-    {
-      value: "beginner",
-      label: "Beginner",
-      description: "Keep scope small, reduce setup, and suggest clear starting steps.",
-    },
-    {
-      value: "experienced",
-      label: "Experienced",
-      description: "Lean into architecture choices, performance, and extensibility.",
-    },
+    { value: "beginner", label: "Beginner" },
+    { value: "experienced", label: "Experienced" },
   ],
   stackFocus: [
-    {
-      value: "fullstack",
-      label: "Fullstack",
-      description: "End-to-end flows that mix UI polish with backend orchestration.",
-    },
-    {
-      value: "frontend",
-      label: "Frontend",
-      description: "Data-driven visuals, dashboards, and UX-heavy experiences.",
-    },
-    {
-      value: "backend",
-      label: "Backend",
-      description: "APIs, automation, services, or CLI-first workflows.",
-    },
+    { value: "fullstack", label: "Fullstack" },
+    { value: "frontend", label: "Frontend" },
+    { value: "backend", label: "Backend" },
   ],
   tone: [
-    {
-      value: "serious",
-      label: "Serious",
-      description: "Professional, outcome-focused, and delivery-oriented.",
-    },
-    {
-      value: "playful",
-      label: "Playful",
-      description: "Casual, surprising, and geared toward exploration or fun.",
-    },
+    { value: "serious", label: "Serious" },
+    { value: "playful", label: "Playful" },
   ],
   aiUsage: [
-    {
-      value: "optional",
-      label: "AI optional",
-      description: "Include AI only if it clearly helps, otherwise keep it lean.",
-    },
-    {
-      value: "required",
-      label: "AI required",
-      description: "Each idea should feature an AI-powered element.",
-    },
-    {
-      value: "avoid",
-      label: "AI-free",
-      description: "No AI features; focus on conventional engineering.",
-    },
+    { value: "optional", label: "AI optional" },
+    { value: "required", label: "AI required" },
+    { value: "avoid", label: "AI-free" },
   ],
+}
+
+function FilterGroup<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+  disabled,
+}: {
+  label: string
+  options: { value: T; label: string }[]
+  value: T
+  onChange: (value: T) => void
+  disabled?: boolean
+}) {
+  return (
+    <div className="flex flex-wrap items-center gap-2.5">
+      <span className="w-16 shrink-0 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
+        {label}
+      </span>
+      <div className="flex flex-wrap gap-1.5">
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onChange(option.value)}
+            disabled={disabled}
+            className={cn(
+              "rounded-md border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.05em] transition-colors disabled:pointer-events-none disabled:opacity-50",
+              value === option.value
+                ? "border-ink bg-ink text-paper"
+                : "border-ink/30 text-ink-soft hover:border-ink hover:text-ink"
+            )}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default function IdeaGenerator({
@@ -133,7 +133,6 @@ export default function IdeaGenerator({
   const [ideas, setIdeas] = useState<IdeaWithStatus[]>([])
   const [filters, setFilters] = useState<IdeaFilters>(defaultFilters)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [filtersCollapsed, setFiltersCollapsed] = useState(false)
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
 
   const updateFilter = <K extends keyof IdeaFilters>(
@@ -178,7 +177,6 @@ export default function IdeaGenerator({
       setIdeas(ideasWithStatus)
       setCurrentIndex(0)
       carouselApi?.scrollTo(0)
-      setFiltersCollapsed(true)
 
       toast.success(
         "Ideas generated successfully! Click on the bookmark icon to save them."
@@ -261,10 +259,6 @@ export default function IdeaGenerator({
     }
   }, [carouselApi])
 
-  useEffect(() => {
-    if (open) setFiltersCollapsed(false)
-  }, [open])
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -288,185 +282,68 @@ export default function IdeaGenerator({
             Project ideas fueled by {api}
           </DialogTitle>
           <p className="text-sm text-ink-soft">
-            Set the brief first, then generate sparks that match scope, tone,
-            and stack focus. You can reopen filters anytime.
+            Tune the brief, then generate ideas scored for feasibility and
+            originality.
           </p>
         </DialogHeader>
         <ScrollArea className="h-[70vh]">
           <div className="space-y-4 pr-1 sm:pr-2">
-            <div className="space-y-4 rounded-2xl border border-ink/15 bg-paper-dim p-4 sm:p-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                  <p className="text-xs uppercase tracking-[0.3em] text-ink-soft">
-                    Filters before generation
-                </p>
-                <p className="text-sm text-ink-soft">
-                  Choose experience level, stack focus, tone, and AI stance to
-                  steer the ideas.
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2 text-xs text-ink">
-                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
-                    {filters.skillLevel} · level
-                  </span>
-                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
-                    {filters.stackFocus} · focus
-                  </span>
-                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
-                    {filters.tone} · tone
-                  </span>
-                  <span className="rounded-full border border-ink/25 bg-paper-dim px-3 py-1">
-                    {filters.aiUsage} · AI
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="rounded-full border border-ink/25 bg-paper-dim text-ink hover:bg-ink/5"
-                  onClick={() => resetFilters()}
+            <div className="space-y-3 rounded-lg border border-ink/25 bg-paper-dim p-4 sm:p-5">
+              <FilterGroup
+                label="Level"
+                options={filterOptions.skillLevel}
+                value={filters.skillLevel}
+                onChange={(v) => updateFilter("skillLevel", v)}
+                disabled={loading}
+              />
+              <FilterGroup
+                label="Focus"
+                options={filterOptions.stackFocus}
+                value={filters.stackFocus}
+                onChange={(v) => updateFilter("stackFocus", v)}
+                disabled={loading}
+              />
+              <FilterGroup
+                label="Tone"
+                options={filterOptions.tone}
+                value={filters.tone}
+                onChange={(v) => updateFilter("tone", v)}
+                disabled={loading}
+              />
+              <FilterGroup
+                label="AI"
+                options={filterOptions.aiUsage}
+                value={filters.aiUsage}
+                onChange={(v) => updateFilter("aiUsage", v)}
+                disabled={loading}
+              />
+
+              <div className="flex items-center justify-between gap-3 border-t border-ink/15 pt-3">
+                <button
+                  type="button"
+                  onClick={resetFilters}
                   disabled={loading}
+                  className="font-mono text-xs uppercase tracking-[0.1em] text-ink-soft transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50"
                 >
                   Reset
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="rounded-full border border-ink/25 bg-paper-dim text-ink hover:bg-ink/5"
-                  onClick={() => setFiltersCollapsed((prev) => !prev)}
-                  disabled={loading}
-                >
-                  {filtersCollapsed ? "Show filters" : "Hide filters"}
-                </Button>
+                </button>
                 <Button
                   onClick={generateIdeas}
                   disabled={loading}
-                  size="sm"
-                  className="rounded-full border border-ink/30 bg-ink/5 text-ink hover:bg-ink/10"
+                  className="rounded-md bg-ink px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-paper hover:bg-ink/90"
                 >
                   {loading ? (
                     <span className="inline-flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Generating...
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      Generating…
                     </span>
+                  ) : ideas.length > 0 ? (
+                    "Regenerate"
                   ) : (
-                    "Generate with these filters"
+                    "Generate ideas"
                   )}
                 </Button>
               </div>
-            </div>
-
-            {!filtersCollapsed && (
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
-                    Developer level
-                  </p>
-                  <div className="grid gap-2">
-                    {filterOptions.skillLevel.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => updateFilter("skillLevel", option.value)}
-                        className={cn(
-                          "w-full rounded-xl border px-3 py-3 text-left transition",
-                          filters.skillLevel === option.value
-                            ? "border-ink bg-ink/5"
-                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
-                        )}
-                      >
-                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
-                          {option.label}
-                        </p>
-                        <p className="mt-1 text-sm text-ink">
-                          {option.description}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
-                    Stack focus
-                  </p>
-                  <div className="grid gap-2">
-                    {filterOptions.stackFocus.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => updateFilter("stackFocus", option.value)}
-                        className={cn(
-                          "w-full rounded-xl border px-3 py-3 text-left transition",
-                          filters.stackFocus === option.value
-                            ? "border-ink bg-ink/5"
-                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
-                        )}
-                      >
-                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
-                          {option.label}
-                        </p>
-                        <p className="mt-1 text-sm text-ink">
-                          {option.description}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
-                    Tone
-                  </p>
-                  <div className="grid gap-2">
-                    {filterOptions.tone.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => updateFilter("tone", option.value)}
-                        className={cn(
-                          "w-full rounded-xl border px-3 py-3 text-left transition",
-                          filters.tone === option.value
-                            ? "border-ink bg-ink/5"
-                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
-                        )}
-                      >
-                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
-                          {option.label}
-                        </p>
-                        <p className="mt-1 text-sm text-ink">
-                          {option.description}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-ink-soft">
-                    AI usage
-                  </p>
-                  <div className="grid gap-2">
-                    {filterOptions.aiUsage.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => updateFilter("aiUsage", option.value)}
-                        className={cn(
-                          "w-full rounded-xl border px-3 py-3 text-left transition",
-                          filters.aiUsage === option.value
-                            ? "border-ink bg-ink/5"
-                            : "border-ink/15 bg-paper-dim hover:border-ink/40"
-                        )}
-                      >
-                        <p className="text-xs uppercase tracking-[0.25em] text-ink-soft">
-                          {option.label}
-                        </p>
-                        <p className="mt-1 text-sm text-ink">
-                          {option.description}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
             </div>
 
             {ideas.length > 0 ? (
@@ -474,7 +351,7 @@ export default function IdeaGenerator({
                 <Carousel
                 setApi={setCarouselApi}
                 opts={{ align: "start", loop: false }}
-                className="relative isolate rounded-2xl border border-ink/15 bg-paper-dim px-2 py-2 sm:rounded-3xl sm:px-3 sm:py-3"
+                className="relative isolate rounded-lg border border-ink/25 bg-paper-dim px-2 py-2 sm:px-3 sm:py-3"
               >
                 <CarouselContent className="ml-0">
                   {ideas.map((idea, i) => (
@@ -482,8 +359,11 @@ export default function IdeaGenerator({
                       key={i}
                       className="flex justify-center px-1.5 py-3 sm:px-2 sm:py-4"
                     >
-                      <Card className="relative flex h-[320px] w-full max-w-lg flex-col overflow-hidden rounded-[18px] border border-ink bg-paper text-ink sm:h-[340px] sm:rounded-[22px]">
-                        <CardHeader className="relative space-y-3 pb-2">
+                      <Card className="relative flex h-[320px] w-full max-w-lg flex-col overflow-hidden rounded-lg border border-ink bg-paper text-ink sm:h-[340px]">
+                        <span className="absolute -top-px left-5 rounded-b-[5px] bg-amber px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-[0.1em] text-paper">
+                          №{String(i + 1).padStart(3, "0")}
+                        </span>
+                        <CardHeader className="relative space-y-3 pb-2 pt-8">
                           <div className="flex items-start justify-between gap-3">
                             <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
                               {idea.title}
@@ -496,16 +376,20 @@ export default function IdeaGenerator({
                               onRemove={() => handleDeleteIdea(idea, i)}
                             />
                           </div>
-                          <div className="grid gap-2 text-[11px] uppercase tracking-[0.2em] text-ink-soft sm:grid-cols-2">
-                            <div className="rounded-xl border border-ink/15 bg-paper-dim px-3 py-2">
-                              <p>Feasibility</p>
-                              <p className="text-sm font-semibold text-ink sm:text-base">
+                          <div className="grid grid-cols-2 gap-2 rounded-md border border-dashed border-ink/30 p-3 font-mono">
+                            <div>
+                              <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+                                Feasibility
+                              </p>
+                              <p className="text-[13px] font-semibold">
                                 {idea.feasibilityScore}/10
                               </p>
                             </div>
-                            <div className="rounded-xl border border-ink/15 bg-paper-dim px-3 py-2">
-                              <p>Originality</p>
-                              <p className="text-sm font-semibold text-ink sm:text-base">
+                            <div>
+                              <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+                                Originality
+                              </p>
+                              <p className="text-[13px] font-semibold">
                                 {idea.originalityScore}/10
                               </p>
                             </div>
@@ -532,24 +416,25 @@ export default function IdeaGenerator({
                       key={index}
                       onClick={() => handleDotClick(index)}
                       aria-label={`Go to idea ${index + 1}`}
-                      className={`h-2.5 w-2.5 rounded-full transition ${
+                      className={cn(
+                        "h-2.5 w-2.5 rounded-full transition-colors",
                         index === currentIndex
                           ? "bg-ink"
                           : "bg-ink/25 hover:bg-ink/50"
-                      }`}
+                      )}
                     />
                   ))}
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs uppercase tracking-[0.25em] text-ink-soft">
+                  <span className="font-mono text-xs uppercase tracking-[0.15em] text-ink-soft">
                     Idea {currentIndex + 1} of {ideas.length}
                   </span>
                   <div className="flex items-center gap-2">
                     <Button
                       size="icon"
-                      variant="ghost"
-                      className="rounded-full border border-ink/15 bg-paper-dim text-ink hover:bg-ink/5"
+                      variant="outline"
+                      className="rounded-md border-ink/40 text-ink hover:bg-ink hover:text-paper"
                       onClick={handlePrevious}
                       disabled={ideas.length <= 1}
                       aria-label="Previous idea"
@@ -558,8 +443,8 @@ export default function IdeaGenerator({
                     </Button>
                     <Button
                       size="icon"
-                      variant="ghost"
-                      className="rounded-full border border-ink/15 bg-paper-dim text-ink hover:bg-ink/5"
+                      variant="outline"
+                      className="rounded-md border-ink/40 text-ink hover:bg-ink hover:text-paper"
                       onClick={handleNext}
                       disabled={ideas.length <= 1}
                       aria-label="Next idea"
@@ -571,9 +456,9 @@ export default function IdeaGenerator({
               </div>
             </div>
               ) : (
-                <div className="rounded-2xl border border-dashed border-ink/15 bg-paper-dim px-4 py-6 text-sm text-ink-soft sm:px-6">
+                <div className="rounded-lg border border-dashed border-ink/30 bg-paper-dim px-4 py-6 text-sm text-ink-soft sm:px-6">
                   Pick your filters, generate, and we&#39;ll sort ideas by
-                  feasibility and originality in this carousel.
+                  feasibility and originality.
                 </div>
               )}
           </div>
