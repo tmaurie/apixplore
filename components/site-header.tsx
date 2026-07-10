@@ -1,22 +1,16 @@
 "use client"
 
-import Link from "next/link"
-
 import { siteConfig } from "@/config/site"
 import AuthButton from "@/components/auth-button"
-import { DynamicIcon } from "@/components/icons"
 import { MainNav } from "@/components/main-nav"
-import { ThemeToggle } from "@/components/theme-toggle"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#040615cc] backdrop-blur-3xl">
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-10">
+    <header className="sticky top-0 z-50 border-b-2 border-ink bg-paper">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-end gap-3 px-6 sm:px-8">
         <MainNav items={siteConfig.mainNav} />
-        <div className="flex items-center gap-2">
-          <div className="hidden md:block">
-            <AuthButton />
-          </div>
+        <div className="ml-auto hidden shrink-0 pb-2.5 md:block">
+          <AuthButton />
         </div>
       </div>
     </header>

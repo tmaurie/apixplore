@@ -7,15 +7,7 @@ import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { IdeaCard } from "@/components/idea-card"
 import { PublicToggle } from "@/components/public-toggle"
 import { ShareIdeaButton } from "@/components/share-idea-button"
@@ -105,7 +97,9 @@ export function UserHub({ user }: { user: UserSummary }) {
 
   const handleVisibilityChange = (ideaId: string, isPublic: boolean) => {
     setIdeas((prev) =>
-      prev.map((idea) => (idea.id === ideaId ? { ...idea, is_public: isPublic } : idea))
+      prev.map((idea) =>
+        idea.id === ideaId ? { ...idea, is_public: isPublic } : idea
+      )
     )
   }
 
@@ -132,70 +126,64 @@ export function UserHub({ user }: { user: UserSummary }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-4 rounded-3xl border border-white/10 bg-linear-to-br from-[#0b1533] via-[#0f1c3f] to-[#142654] p-6 text-white shadow-[0_30px_80px_rgba(6,8,36,0.6)] sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-6 rounded-lg border-2 border-ink bg-ink p-6 text-paper sm:p-8">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white">
-            <Avatar className="h-8 w-8 ring-2 ring-white/20">
-              <AvatarImage src={user?.image ?? ""} alt="User Avatar" />
-              <AvatarFallback>
-                {user?.name?.charAt(0).toUpperCase() ?? (
-                  <UserCircle className="h-4 w-4" />
-                )}
-              </AvatarFallback>
-            </Avatar>
-          </div>
+          <Avatar className="h-12 w-12 ring-2 ring-amber/30">
+            <AvatarImage src={user?.image ?? ""} alt="User Avatar" />
+            <AvatarFallback>
+              {user?.name?.charAt(0).toUpperCase() ?? (
+                <UserCircle className="h-4 w-4" />
+              )}
+            </AvatarFallback>
+          </Avatar>
           <div className="space-y-1">
-            <p className="text-xs uppercase tracking-[0.25em] text-white/60">
-              Personal hub
+            <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber-soft">
+              Personal Hub
             </p>
-            <h1 className="text-2xl font-semibold sm:text-3xl">
+            <h1 className="text-2xl font-bold sm:text-3xl">
               {user.name || "Your workspace"}
             </h1>
-            <p className="text-sm text-white/70">
+            <p className="text-sm text-paper/70">
               {user.email}
               {user.githubUsername ? ` · @${user.githubUsername}` : ""}
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <div className="grid grid-cols-3 gap-2 font-mono sm:gap-3">
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="min-w-24 rounded-2xl border border-white/15 bg-white/10 px-3 py-2 text-left"
+              className="min-w-24 rounded-md border border-paper/20 px-3 py-2 text-left"
             >
-              <p className="text-[11px] uppercase tracking-[0.2em] text-white/60">
+              <p className="text-[11px] uppercase tracking-[0.15em] text-paper/60">
                 {stat.label}
               </p>
-              <p className="text-xl font-semibold text-white">{stat.value}</p>
-              <p className="text-[12px] text-white/60">{stat.helper}</p>
+              <p className="text-xl font-bold">{stat.value}</p>
+              <p className="text-[12px] text-paper/60">{stat.helper}</p>
             </div>
           ))}
         </div>
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-white/60">
+        <div className="flex items-center gap-2 font-mono text-ink-soft">
           <Loader2 className="h-4 w-4 animate-spin" />
           Loading your data...
         </div>
       ) : (
         <>
           <section className="space-y-3">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-[11px] uppercase tracking-[0.25em] text-white/60">
-                  Favorites
-                </p>
-                <h2 className="text-xl font-semibold text-white">
-                  Liked ideas
-                </h2>
-                <p className="text-sm text-white/70">
-                  Inspirations you saved for later.
-                </p>
-              </div>
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber">
+                Favorites
+              </p>
+              <h2 className="text-xl font-bold">Liked ideas</h2>
+              <p className="text-sm text-ink-soft">
+                Inspirations you saved for later.
+              </p>
             </div>
             {likes.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-6 text-sm text-white/70">
+              <div className="rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
                 Nothing liked yet. Browse the public feed and tap like to keep
                 ideas here.
               </div>
@@ -216,61 +204,51 @@ export function UserHub({ user }: { user: UserSummary }) {
           <section className="space-y-3">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-[11px] uppercase tracking-[0.25em] text-white/60">
-                  My builds
+                <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber">
+                  My Builds
                 </p>
-                <h2 className="text-xl font-semibold text-white">
-                  Generated ideas
-                </h2>
-                <p className="text-sm text-white/70">
+                <h2 className="text-xl font-bold">Generated ideas</h2>
+                <p className="text-sm text-ink-soft">
                   Latest sparks you created. Manage visibility or remove them.
                 </p>
               </div>
               <Button
                 asChild
                 variant="outline"
-                className="border-white/20 text-white hover:bg-white/10"
+                className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
               >
                 <Link href="/history">View all</Link>
               </Button>
             </div>
 
             {ideas.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-6 text-sm text-white/70">
+              <div className="rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
                 No ideas generated yet. Use the explorer to spark your first
                 one.
               </div>
             ) : (
               <div className="grid gap-3 md:grid-cols-2">
                 {ideas.slice(0, 4).map((idea) => (
-                  <Card
+                  <div
                     key={idea.id}
-                    className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f25] text-white shadow-[0_18px_48px_rgba(5,6,34,0.45)]"
+                    className="rounded-md border border-ink bg-ink p-4 text-paper"
                   >
-                    <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/5 via-transparent to-purple-500/10" />
-                    <CardHeader className="relative space-y-2 pb-2">
-                      <div className="flex items-start justify-between gap-2">
-                        <CardTitle className="text-base font-semibold leading-tight">
-                          {idea.generated_idea.title}
-                        </CardTitle>
-                        <Badge
-                          variant="outline"
-                          className="border-white/25 bg-white/5 text-[11px] uppercase tracking-[0.2em] text-white/70"
-                        >
-                          {idea.api_name}
-                        </Badge>
-                      </div>
-                      <p className="text-[12px] text-white/60">
-                        {new Date(idea.created_at).toLocaleDateString()} ·{" "}
-                        {new Date(idea.created_at).toLocaleTimeString()}
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <p className="text-base font-bold leading-tight">
+                        {idea.generated_idea.title}
                       </p>
-                    </CardHeader>
-                    <CardContent className="relative pb-2">
-                      <p className="text-sm text-white/80">
-                        {idea.generated_idea.description}
-                      </p>
-                    </CardContent>
-                    <CardFooter className="relative flex items-center justify-between gap-2 border-t border-white/5 pt-3">
+                      <span className="whitespace-nowrap rounded-full border border-paper/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.15em] text-paper/70">
+                        {idea.api_name}
+                      </span>
+                    </div>
+                    <p className="mb-3 font-mono text-[12px] text-paper/60">
+                      {new Date(idea.created_at).toLocaleDateString()} ·{" "}
+                      {new Date(idea.created_at).toLocaleTimeString()}
+                    </p>
+                    <p className="mb-4 text-sm text-paper/80">
+                      {idea.generated_idea.description}
+                    </p>
+                    <div className="flex items-center justify-between gap-2 border-t border-paper/15 pt-3">
                       <div className="flex flex-wrap items-center gap-2">
                         <PublicToggle
                           ideaId={idea.id}
@@ -284,21 +262,23 @@ export function UserHub({ user }: { user: UserSummary }) {
                             ideaId={idea.id}
                             title={idea.generated_idea.title}
                             source="user_hub"
-                            className="border-white/20 text-white hover:bg-white/10"
+                            size="sm"
+                            variant="outline"
+                            className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
                           />
                         ) : null}
                       </div>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="text-red-300 hover:text-red-100"
+                        className="font-mono text-xs uppercase tracking-[0.06em] text-red-300 hover:bg-paper/10 hover:text-red-200"
                         onClick={() => handleDeleteIdea(idea.id)}
                         disabled={deletingId === idea.id}
                       >
                         {deletingId === idea.id ? "Deleting..." : "Delete"}
                       </Button>
-                    </CardFooter>
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </div>
             )}

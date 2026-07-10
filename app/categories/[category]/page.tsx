@@ -90,20 +90,20 @@ export default function CategoryPage() {
     <div className="space-y-8">
       <PageSurface className="space-y-6">
         <Breadcrumb>
-          <BreadcrumbList>
+          <BreadcrumbList className="font-mono text-xs uppercase tracking-[0.1em]">
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 text-white">
+                <DropdownMenuTrigger className="flex items-center gap-1 text-ink">
                   Categories
                   <ChevronDownIcon className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="start"
-                  className="max-h-96 w-56 overflow-y-auto border border-white/10 bg-[#050816] text-white"
+                  className="max-h-96 w-56 overflow-y-auto border-ink bg-paper font-mono text-xs"
                 >
                   {categories.map((cat) => (
                     <DropdownMenuItem key={cat.slug}>
@@ -120,7 +120,7 @@ export default function CategoryPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-white">
+              <BreadcrumbPage className="text-ink">
                 {categoryName || "Loading..."}
               </BreadcrumbPage>
             </BreadcrumbItem>
@@ -130,17 +130,17 @@ export default function CategoryPage() {
         <div className="flex flex-wrap items-center gap-4">
           {(["https", "cors", "auth"] as const).map((key) => (
             <div className="flex items-center gap-2" key={key}>
-              <span className="text-xs uppercase tracking-[0.3em] text-white/60">
+              <span className="font-mono text-xs uppercase tracking-[0.15em] text-ink-soft">
                 {key}
               </span>
               <Select
                 value={filters[key]}
                 onValueChange={(v) => setFilters((f) => ({ ...f, [key]: v }))}
               >
-                <SelectTrigger className="w-[110px] border-white/15 bg-transparent text-white">
+                <SelectTrigger className="h-auto w-[110px] rounded-md border-ink/40 bg-paper px-3 py-2 font-mono text-xs">
                   <SelectValue placeholder="Any" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#050816] text-white">
+                <SelectContent className="border-ink bg-paper font-mono text-xs">
                   <SelectItem value="any">Any</SelectItem>
                   <SelectItem value="yes">Yes</SelectItem>
                   <SelectItem value="no">No</SelectItem>
@@ -152,11 +152,11 @@ export default function CategoryPage() {
             variant="ghost"
             size="sm"
             onClick={resetFilters}
-            className="text-white/80 hover:text-white"
+            className="font-mono text-xs uppercase tracking-[0.08em] text-ink-soft hover:text-ink"
           >
             Reset filters
           </Button>
-          <span className="text-sm text-white/60">
+          <span className="font-mono text-sm text-ink-soft">
             {visibleResources.length} API
             {visibleResources.length !== 1 && "s"} listed
           </span>
@@ -169,7 +169,7 @@ export default function CategoryPage() {
             {Array.from({ length: 12 }).map((_, i) => (
               <Skeleton
                 key={i}
-                className="h-[200px] w-full rounded-3xl border border-white/10 bg-white/10"
+                className="h-[200px] w-full rounded-lg border border-ink/20"
               />
             ))}
           </div>

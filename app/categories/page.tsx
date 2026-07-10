@@ -38,15 +38,13 @@ export default function Page() {
       <PageSurface>
         <div className="space-y-4">
           <div className="space-y-3">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-              Catalog
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
+              Index 03
             </p>
-            <h1 className="text-3xl font-semibold md:text-4xl">
-              Explore by Category
-            </h1>
-            <p className="text-white/70">
-              Scan the entire API universe, sort by popularity, and jump into
-              the collections that excite you.
+            <h1 className="text-[38px] font-bold">Explore by Category</h1>
+            <p className="max-w-[60ch] text-ink-soft">
+              Scan the full API universe, sorted by popularity, filed by
+              subject.
             </p>
           </div>
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -56,13 +54,13 @@ export default function Page() {
                 placeholder="Search categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="max-w-sm border-white/20 bg-black/30 text-white placeholder:text-white/50"
+                className="max-w-sm rounded-md border-ink bg-paper font-mono text-sm"
               />
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[170px] border-white/20 bg-transparent text-white/80">
+                <SelectTrigger className="h-auto w-[170px] rounded-md border-ink/40 bg-paper px-4 py-2.5 font-mono text-xs uppercase tracking-[0.08em]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
-                <SelectContent className="bg-[#050816] text-white">
+                <SelectContent className="border-ink bg-paper font-mono text-xs">
                   <SelectItem value="alpha">A - Z</SelectItem>
                   <SelectItem value="resources">Most entries</SelectItem>
                 </SelectContent>
@@ -70,25 +68,27 @@ export default function Page() {
             </div>
             <div className="flex items-center gap-2">
               <Button
-                variant={viewMode === "grid" ? "default" : "ghost"}
+                variant="outline"
                 size="icon"
                 onClick={() => setViewMode("grid")}
                 className={cn(
+                  "rounded-md border-ink/40",
                   viewMode === "grid"
-                    ? "bg-white text-slate-900"
-                    : "text-white/70 hover:text-white"
+                    ? "border-ink bg-ink text-paper"
+                    : "text-ink-soft hover:border-ink"
                 )}
               >
                 <Grid3x3 className="size-4" />
               </Button>
               <Button
-                variant={viewMode === "list" ? "default" : "ghost"}
+                variant="outline"
                 size="icon"
                 onClick={() => setViewMode("list")}
                 className={cn(
+                  "rounded-md border-ink/40",
                   viewMode === "list"
-                    ? "bg-white text-slate-900"
-                    : "text-white/70 hover:text-white"
+                    ? "border-ink bg-ink text-paper"
+                    : "text-ink-soft hover:border-ink"
                 )}
               >
                 <List className="size-4" />
@@ -104,7 +104,7 @@ export default function Page() {
             {Array.from({ length: 12 }).map((_, i) => (
               <Skeleton
                 key={i}
-                className="h-28 w-full rounded-3xl border border-white/10 bg-white/10"
+                className="h-28 w-full rounded-md border border-ink/20"
               />
             ))}
           </div>
@@ -130,7 +130,7 @@ export default function Page() {
                   />
                 ))
               ) : (
-                <p className="text-white/70">No categories found.</p>
+                <p className="text-ink-soft">No categories found.</p>
               )}
             </div>
           </>

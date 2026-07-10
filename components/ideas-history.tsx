@@ -5,15 +5,7 @@ import { Sparkles, TrashIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   Dialog,
   DialogClose,
@@ -66,164 +58,133 @@ export function IdeasHistory() {
 
   const handleVisibilityChange = (ideaId: string, isPublic: boolean) => {
     setIdeas((prev) =>
-      prev.map((idea) => (idea.id === ideaId ? { ...idea, is_public: isPublic } : idea))
+      prev.map((idea) =>
+        idea.id === ideaId ? { ...idea, is_public: isPublic } : idea
+      )
     )
   }
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <div>
-            <p className="text-lg font-semibold text-white">Idea history</p>
-            <p className="text-sm text-white/60">Loading your saved sparks…</p>
-          </div>
-          <Badge variant="outline" className="border-white/20 text-white/80">
-            ...
-          </Badge>
+      <div className="space-y-3">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <Skeleton
+            key={index}
+            className="h-[110px] w-full rounded-md border border-paper/15 bg-paper/5"
+          />
+        ))}
+      </div>
+    )
+  }
+
+  if (ideas.length === 0) {
+    return (
+      <div className="flex items-center gap-3 rounded-md border border-dashed border-paper/20 px-4 py-6 text-paper/70">
+        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-paper/15 text-paper">
+          <Sparkles className="h-5 w-5" />
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Skeleton
-              key={index}
-              className="h-[180px] w-full rounded-2xl border border-white/10 bg-white/10"
-            />
-          ))}
+        <div>
+          <p className="text-sm font-medium text-paper">No ideas yet</p>
+          <p className="text-sm text-paper/60">
+            Generate new ideas to see them appear here.
+          </p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <div>
-          <p className="text-lg font-semibold text-white">Idea history</p>
-          <p className="text-sm text-white/60">
-            Everything you generated, ready to refine or publish.
-          </p>
-        </div>
-        <Badge variant="outline" className="border-white/20 text-white/80">
-          {ideas.length} idea{ideas.length === 1 ? "" : "s"}
-        </Badge>
-      </div>
-
-      {ideas.length === 0 ? (
-        <div className="flex items-center gap-3 rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-6 text-white/70">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white">
-            <Sparkles className="h-5 w-5" />
-          </div>
+    <div>
+      {ideas.map((idea, index) => (
+        <div
+          key={idea.id}
+          className="grid grid-cols-[40px_1fr] gap-4 border-t border-paper/15 py-6 first:border-t-0 sm:grid-cols-[56px_1fr_auto] sm:items-start sm:gap-6"
+        >
+          <span className="font-mono text-xl font-bold text-amber-soft">
+            {String(index + 1).padStart(2, "0")}
+          </span>
           <div>
-            <p className="text-sm font-medium text-white">No ideas yet</p>
-            <p className="text-sm text-white/60">
-              Generate new ideas to see them appear here.
+            <div className="mb-2 flex flex-wrap items-center gap-2.5">
+              <span className="rounded-full border border-paper/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-paper/75">
+                {idea.api_name}
+              </span>
+              <span className="font-mono text-xs text-paper/50">
+                {new Date(idea.created_at).toLocaleDateString()}
+              </span>
+            </div>
+            <h3 className="mb-2 text-lg font-bold leading-tight">
+              {idea.generated_idea.title}
+            </h3>
+            <p className="max-w-[60ch] text-sm leading-[1.55] text-paper/65">
+              {idea.generated_idea.description}
             </p>
           </div>
-        </div>
-      ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
-          {ideas.map((idea) => (
-            <Card
-              key={idea.id}
-              className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0f25] text-white shadow-[0_18px_48px_rgba(5,6,34,0.45)] transition hover:-translate-y-1 hover:border-white/30"
-            >
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-sky-500/10 opacity-80" />
-              <CardHeader className="relative space-y-3 pb-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1">
-                    <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
-                      {idea.generated_idea.title}
-                    </CardTitle>
-                    <p className="text-xs text-white/60">
-                      {new Date(idea.created_at).toLocaleDateString()} ·{" "}
-                      {new Date(idea.created_at).toLocaleTimeString()} via{" "}
-                      <span className="font-medium text-white">
-                        {idea.api_name}
-                      </span>
-                    </p>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="border-white/30 bg-white/5 text-[11px] uppercase tracking-[0.25em] text-white/80"
+          <div className="col-span-2 mt-1 flex flex-wrap items-center gap-2.5 sm:col-span-1 sm:mt-0 sm:flex-col sm:items-end">
+            <PublicToggle
+              ideaId={idea.id}
+              initialValue={idea.is_public}
+              onVisibilityChange={(value) =>
+                handleVisibilityChange(idea.id, value)
+              }
+            />
+            <div className="flex items-center gap-2">
+              {idea.is_public ? (
+                <ShareIdeaButton
+                  ideaId={idea.id}
+                  title={idea.generated_idea.title}
+                  source="history"
+                  size="sm"
+                  variant="outline"
+                  className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+                />
+              ) : null}
+              <Dialog
+                onOpenChange={(open) => !open && setConfirmDeleteId(null)}
+              >
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="rounded-md font-mono text-xs uppercase tracking-[0.06em] text-red-300 hover:bg-paper/10 hover:text-red-200"
+                    onClick={() => setConfirmDeleteId(idea.id)}
+                    disabled={deletingId === idea.id}
                   >
-                    Saved
-                  </Badge>
-                </div>
-              </CardHeader>
-
-              <CardContent className="relative pb-3">
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white/80">
-                  {idea.generated_idea.description}
-                </div>
-              </CardContent>
-
-              <CardFooter className="relative flex items-center justify-between gap-2 border-t border-white/5 pt-3">
-                <div className="flex flex-wrap items-center gap-2">
-                  <PublicToggle
-                    ideaId={idea.id}
-                    initialValue={idea.is_public}
-                    onVisibilityChange={(value) =>
-                      handleVisibilityChange(idea.id, value)
-                    }
-                  />
-                  {idea.is_public ? (
-                    <ShareIdeaButton
-                      ideaId={idea.id}
-                      title={idea.generated_idea.title}
-                      source="history"
-                      className="border-white/20 text-white hover:bg-white/10"
-                    />
-                  ) : null}
-                </div>
-
-                <Dialog
-                  onOpenChange={(open) => !open && setConfirmDeleteId(null)}
-                >
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-red-300 hover:text-red-100"
-                      onClick={() => setConfirmDeleteId(idea.id)}
-                      disabled={deletingId === idea.id}
-                    >
-                      <TrashIcon className="mr-2 h-4 w-4" />
-                      Delete
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[420px]">
-                    <DialogHeader>
-                      <DialogTitle>Delete idea</DialogTitle>
-                      <DialogDescription>
-                        This will remove the idea permanently. You can&apos;t
-                        undo this action.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter className="gap-2 sm:gap-0">
-                      <DialogClose asChild>
-                        <Button
-                          variant="outline"
-                          disabled={deletingId === confirmDeleteId}
-                          onClick={() => setConfirmDeleteId(null)}
-                        >
-                          Cancel
-                        </Button>
-                      </DialogClose>
+                    <TrashIcon className="mr-1.5 h-3.5 w-3.5" />
+                    Delete
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="border-ink sm:max-w-[420px]">
+                  <DialogHeader>
+                    <DialogTitle>Delete idea</DialogTitle>
+                    <DialogDescription>
+                      This will remove the idea permanently. You can&apos;t
+                      undo this action.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="gap-2 sm:gap-0">
+                    <DialogClose asChild>
                       <Button
-                        variant="destructive"
-                        onClick={handleDelete}
+                        variant="outline"
                         disabled={deletingId === confirmDeleteId}
+                        onClick={() => setConfirmDeleteId(null)}
                       >
-                        Yes, delete permanently
+                        Cancel
                       </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </CardFooter>
-            </Card>
-          ))}
+                    </DialogClose>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDelete}
+                      disabled={deletingId === confirmDeleteId}
+                    >
+                      Yes, delete permanently
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
         </div>
-      )}
+      ))}
     </div>
   )
 }

@@ -48,18 +48,18 @@ export default function LikedIdeasPage() {
   return (
     <PageSurface className="space-y-6">
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.35em] text-white/60">
+        <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
           Favorites
         </p>
-        <h1 className="text-3xl font-semibold text-white">My Liked Ideas</h1>
-        <p className="text-white/70">
+        <h1 className="text-3xl font-bold">My Liked Ideas</h1>
+        <p className="text-ink-soft">
           Save the sparks you want to build later and revisit them anytime.
         </p>
       </div>
 
-      {loading && <p className="text-white/60">Loading...</p>}
+      {loading && <p className="text-ink-soft">Loading...</p>}
       {!loading && ideas.length === 0 && (
-        <p className="text-white/70">You haven&apos;t liked any ideas yet.</p>
+        <p className="text-ink-soft">You haven&apos;t liked any ideas yet.</p>
       )}
 
       <div className="space-y-6">

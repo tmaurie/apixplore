@@ -38,30 +38,27 @@ export default function PublicIdeasPage() {
     }, 0) ?? 0
 
   return (
-    <PageSurface className="space-y-8">
-      <div className="overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-[#0b1533] via-[#0f1c3f] to-[#142654] p-6 text-white shadow-[0_30px_80px_rgba(6,8,36,0.6)] sm:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className="space-y-8">
+      <PageSurface>
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="space-y-3">
-            <p className="text-[11px] uppercase tracking-[0.35em] text-white/60">
-              Community feed
+            <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
+              Community Feed
             </p>
-            <h1 className="text-3xl font-semibold sm:text-4xl">
-              Public ideas
-            </h1>
-            <p className="max-w-3xl text-sm text-white/70 sm:text-base">
+            <h1 className="text-[38px] font-bold">Public Ideas</h1>
+            <p className="max-w-[60ch] text-ink-soft">
               Discover what everyone is building with your favorite APIs. Save,
               like, and draw inspiration from real projects in motion.
             </p>
           </div>
-          <div className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white/80">
-            <span className="text-2xl font-semibold text-white">{totalIdeas}</span>
-            <div className="leading-tight text-white/60">
-              <p className="text-xs uppercase tracking-[0.2em]">Ideas</p>
-              <p className="text-[13px]">shared by the community</p>
-            </div>
+          <div className="font-mono">
+            <p className="mb-1 text-[11px] uppercase tracking-[0.15em] text-ink-soft">
+              Ideas shared
+            </p>
+            <p className="text-[26px] font-bold">{totalIdeas}</p>
           </div>
         </div>
-      </div>
+      </PageSurface>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-2">
         {data?.pages.map((page, i) =>
@@ -71,11 +68,11 @@ export default function PublicIdeasPage() {
 
       <div ref={ref} className="h-10" />
       {isFetchingNextPage && (
-        <div className="flex items-center justify-center gap-2 text-sm text-white/70">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-white/80" />
+        <div className="flex items-center justify-center gap-2 font-mono text-sm text-ink-soft">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-amber" />
           Loading more ideas...
         </div>
       )}
-    </PageSurface>
+    </div>
   )
 }

@@ -1,15 +1,6 @@
 import Link from "next/link"
-import { motion } from "framer-motion"
 
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { DynamicIcon } from "@/components/icons"
+import { cn } from "@/lib/utils"
 
 interface Props {
   name: string
@@ -26,47 +17,31 @@ export function CategoryCardItem({
   viewMode,
   index = 0,
 }: Props) {
+  const code = String(index + 1).padStart(2, "0")
+
   return (
     <Link
       href={`/categories/${slug}`}
-      className={viewMode === "grid" ? "" : "block w-full"}
+      className={cn(
+        "relative block overflow-hidden rounded-md border border-ink bg-paper-dim px-5 pb-5 pt-[22px]",
+        viewMode === "list" && "w-full"
+      )}
     >
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.8,
-          ease: "easeOut",
-          delay: index * 0.05,
-        }}
-      >
-        <Card
-          className={`h-full rounded-3xl border border-white/10 bg-white/5 text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:shadow-[0_25px_60px_rgba(8,7,45,0.35)] ${
-            viewMode === "grid" ? "hover:scale-[1.02]" : ""
-          }`}
-        >
-          <CardHeader className="space-y-2">
-            <div className="flex items-center gap-2">
-              <DynamicIcon name={slug} className="size-6" />
-              <CardTitle className="text-lg font-bold leading-tight">
-                {name}
-              </CardTitle>
-            </div>
-            <CardDescription className="text-white/70">
-              Discover APIs related to {name.toLowerCase()}.
-            </CardDescription>
-          </CardHeader>
-
-          <CardFooter className="flex items-center justify-between">
-            <Badge className="border-white/15 bg-white/10 text-xs text-white">
-              {count} resources
-            </Badge>
-            <span className="text-sm font-semibold text-white/70">
-              Browse {"->"}
-            </span>
-          </CardFooter>
-        </Card>
-      </motion.div>
+      <span
+        className="absolute right-0 top-0 h-[34px] w-[34px] bg-ink"
+        style={{ clipPath: "polygon(100% 0, 0 0, 100% 100%)" }}
+      />
+      <p className="mb-2.5 font-mono text-xl font-bold text-amber">{code}</p>
+      <h3 className="mb-2 text-lg font-bold leading-tight">{name}</h3>
+      <p className="mb-[18px] text-[13px] text-ink-soft">
+        Discover APIs related to {name.toLowerCase()}.
+      </p>
+      <div className="flex items-center justify-between font-mono text-xs">
+        <span className="rounded-full border border-ink/40 px-2.5 py-1">
+          {count} entries
+        </span>
+        <span className="font-semibold">Browse →</span>
+      </div>
     </Link>
   )
 }
