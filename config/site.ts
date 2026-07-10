@@ -14,10 +14,6 @@ export const siteConfig = {
       href: "/resources",
     },
     {
-      title: "Categories",
-      href: "/categories",
-    },
-    {
       title: "Explore",
       href: "/public",
     },
@@ -28,6 +24,6 @@ export const siteConfig = {
   ],
   links: {
     github: "https://github.com/tmaurie/apixplore",
-    categories: "/categories",
+    categories: "/resources",
   },
 }
