@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { BookmarkToggle } from "@/components/bookmark-toggle"
+import { ExportBriefButton } from "@/components/export-brief-button"
 import { TypingAnimation } from "@/components/magicui/typing-animation"
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -323,7 +324,7 @@ export default function IdeaGenerator({
                   type="button"
                   onClick={resetFilters}
                   disabled={loading}
-                  className="font-mono text-xs uppercase tracking-[0.1em] text-ink-soft transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50"
+                  className="font-mono text-xs uppercase tracking-widest text-ink-soft transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50"
                 >
                   Reset
                 </button>
@@ -359,8 +360,8 @@ export default function IdeaGenerator({
                       key={i}
                       className="flex justify-center px-1.5 py-3 sm:px-2 sm:py-4"
                     >
-                      <Card className="relative flex h-[320px] w-full max-w-lg flex-col overflow-hidden rounded-lg border border-ink bg-paper text-ink sm:h-[340px]">
-                        <span className="absolute -top-px left-5 rounded-b-[5px] bg-amber px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-[0.1em] text-paper">
+                      <Card className="relative flex h-80 w-full max-w-lg flex-col overflow-hidden rounded-lg border border-ink bg-paper text-ink sm:h-85">
+                        <span className="absolute -top-px left-5 rounded-b-[5px] bg-amber px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-widest text-paper">
                           №{String(i + 1).padStart(3, "0")}
                         </span>
                         <CardHeader className="relative space-y-3 pb-2 pt-8">
@@ -378,7 +379,7 @@ export default function IdeaGenerator({
                           </div>
                           <div className="grid grid-cols-2 gap-2 rounded-md border border-dashed border-ink/30 p-3 font-mono">
                             <div>
-                              <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+                              <p className="mb-0.5 text-[10px] uppercase tracking-widest text-ink-soft">
                                 Feasibility
                               </p>
                               <p className="text-[13px] font-semibold">
@@ -386,7 +387,7 @@ export default function IdeaGenerator({
                               </p>
                             </div>
                             <div>
-                              <p className="mb-0.5 text-[10px] uppercase tracking-[0.1em] text-ink-soft">
+                              <p className="mb-0.5 text-[10px] uppercase tracking-widest text-ink-soft">
                                 Originality
                               </p>
                               <p className="text-[13px] font-semibold">
@@ -394,6 +395,22 @@ export default function IdeaGenerator({
                               </p>
                             </div>
                           </div>
+                          {idea.isSaved && (
+                            <div className="flex justify-end">
+                              <ExportBriefButton
+                                ideaId={idea.id}
+                                source="idea_generator"
+                                title={idea.title}
+                                description={idea.description}
+                                apiName={api}
+                                apiLink={apiLink}
+                                apiDescription={description}
+                                feasibilityScore={idea.feasibilityScore}
+                                originalityScore={idea.originalityScore}
+                                filters={filters}
+                              />
+                            </div>
+                          )}
                         </CardHeader>
                         <CardContent className="relative flex-1 overflow-y-auto text-sm text-ink">
                           <TypingAnimation

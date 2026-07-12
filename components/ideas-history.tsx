@@ -19,6 +19,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { PublicToggle } from "@/components/public-toggle"
 import { ShareIdeaButton } from "@/components/share-idea-button"
+import { ExportBriefButton } from "@/components/export-brief-button"
 
 export function IdeasHistory() {
   const [ideas, setIdeas] = useState<Idea[]>([])
@@ -128,6 +129,18 @@ export function IdeasHistory() {
               }
             />
             <div className="flex items-center gap-2">
+              <ExportBriefButton
+                ideaId={idea.id}
+                source="history"
+                title={idea.generated_idea.title}
+                description={idea.generated_idea.description}
+                apiName={idea.api_name}
+                apiLink={idea.api_link?.toString()}
+                createdAt={idea.created_at}
+                variant="outline"
+                size="sm"
+                className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+              />
               {idea.is_public ? (
                 <ShareIdeaButton
                   ideaId={idea.id}
