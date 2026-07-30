@@ -18,7 +18,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 - [ ] Ajouter des tests (au minimum : logique de quota, parsing de `/api/ideas/generate`)
 - [ ] Mettre en place une CI (`.github/workflows`) qui lance `lint` / `typecheck` / `build` sur les PRs
 - [ ] Rate limiting / middleware sur les routes API (rien ne protège au-delà du quota, lui-même buggé)
-- [ ] Ajouter `error.tsx` / `not-found.tsx` / `loading.tsx` à l'App Router
+- [x] Ajouter `error.tsx` / `not-found.tsx` / `loading.tsx` à l'App Router
 - [ ] Nettoyer les métadonnées scaffold de `package.json` (nom `next-template`, version `0.0.2`)
 - [ ] Réaligner les versions qui ont dérivé (TypeScript `^4.9.5`, ESLint 8 / `eslint-config-next` 15.3.1 vs Next 16 / React 19)
 - [ ] Ajouter `sitemap.xml` / `robots.txt` (pénalise l'indexation de `/idea/[id]` et du catalogue)
