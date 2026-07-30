@@ -26,7 +26,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 
 ## 🎨 UI/UX
 
-- [ ] Open Graph image sur les pages d'idées publiques (`generateMetadata` a déjà title/description, pas d'image)
+- [x] Open Graph image sur les pages d'idées publiques (`generateMetadata` a déjà title/description, pas d'image) *(`app/idea/[id]/opengraph-image.tsx`, généré via `next/og`, réutilisé automatiquement pour `twitter:image`)*
 - [ ] Vérifier/ajouter des états de chargement (`loading.tsx`, skeletons) sur le catalogue paginé et le dashboard
 - [ ] Persister les filtres de génération (`skillLevel`, `stackFocus`, `tone`, `aiUsage`) entre les sessions
 - [ ] Auditer les empty states (`/history`, `/dashboard` sans idée sauvegardée) — CTA clair vers le générateur
