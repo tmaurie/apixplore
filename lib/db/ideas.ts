@@ -30,17 +30,6 @@ export async function getUserIdeas(userId: string) {
   `
 }
 
-export async function getDailyUsage(userId: string): Promise<number> {
-  const today = new Date().toISOString().split("T")[0]
-
-  const [{ count }] = await sql`
-    SELECT COUNT(*) AS count FROM public.ideas
-    WHERE user_id = ${userId} AND created_at >= ${today}
-  `
-
-  return Number(count) || 0
-}
-
 export async function getPublicIdeas({
   limit = 20,
   offset = 0,

@@ -3,7 +3,7 @@ import { Session, getServerSession } from "next-auth"
 import OpenAI from "openai"
 
 import { authOptions } from "@/lib/auth"
-import { getDailyUsage } from "@/lib/db/ideas"
+import { getDailyGenerationCount, logGeneration } from "@/lib/db/generations"
 
 const openai = new OpenAI()
 const QUOTA_LIMIT = 30
@@ -135,7 +135,7 @@ API name: "${apiName}"
 API description: "${apiDescription}"
 `.trim()
 
-  const usageToday = await getDailyUsage(session.user.id)
+  const usageToday = await getDailyGenerationCount(session.user.id)
 
   if (usageToday >= QUOTA_LIMIT) {
     return NextResponse.json(
@@ -158,6 +158,8 @@ API description: "${apiDescription}"
       ],
       temperature: 0.7,
     })
+
+    await logGeneration(session.user.id)
 
     const content = chatCompletion.choices[0].message?.content || ""
     const cleaned = stripMarkdownFences(content)
