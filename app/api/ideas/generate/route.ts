@@ -3,10 +3,10 @@ import { Session, getServerSession } from "next-auth"
 import OpenAI from "openai"
 
 import { authOptions } from "@/lib/auth"
+import { QUOTA_LIMIT } from "@/lib/constants"
 import { getDailyGenerationCount, logGeneration } from "@/lib/db/generations"
 
 const openai = new OpenAI()
-const QUOTA_LIMIT = 30
 const MAX_INPUT_LENGTH = 500
 const skillLevels = ["beginner", "experienced"] as const
 const stackFocuses = ["fullstack", "backend", "frontend"] as const

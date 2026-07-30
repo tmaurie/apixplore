@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
+import { QUOTA_LIMIT } from "@/lib/constants"
 import { getDailyGenerationCount } from "@/lib/db/generations"
-
-const QUOTA_LIMIT = 30
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions)
