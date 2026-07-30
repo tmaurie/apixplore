@@ -22,7 +22,7 @@
 * [Shadcn UI](https://ui.shadcn.com/)
 * [Framer Motion](https://www.framer.com/motion/)
 * [OpenAI](https://openai.com/) – AI idea generation
-* [Supabase](https://supabase.com/) – user & data storage
+* [Neon](https://neon.tech/) – serverless Postgres storage
 * [NextAuth](https://next-auth.js.org/) – GitHub OAuth
 
 ## 📂 Project structure
@@ -39,7 +39,7 @@ components/
   mobile-nav.tsx              # Bottom navigation with dropdown menu
   landing-page.tsx            # Elegant animated hero section
 lib/
-  supabase/                   # DB interaction helpers
+  db/                          # DB interaction helpers (Neon/Postgres)
   auth.ts                     # Auth configuration (NextAuth)
 ```
 

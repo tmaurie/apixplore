@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
-import { getDailyUsage } from "@/lib/supabase/ideas"
+import { getDailyUsage } from "@/lib/db/ideas"
 
 const QUOTA_LIMIT = 30
 

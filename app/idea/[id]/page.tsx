@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import { ExternalLinkIcon, HeartIcon, SparklesIcon } from "lucide-react"
 
-import { getPublicIdeaById } from "@/lib/supabase/ideas"
+import { getPublicIdeaById } from "@/lib/db/ideas"
 import { PublicIdeaViewTracker } from "@/components/public-idea-view-tracker"
 import { ShareIdeaButton } from "@/components/share-idea-button"
 import { Button } from "@/components/ui/button"

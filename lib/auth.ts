@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth"
 import GitHubProvider from "next-auth/providers/github"
 
-import { getOrCreateUser } from "@/lib/supabase/users"
+import { getOrCreateUser } from "@/lib/db/users"
 
 declare module "next-auth" {
   interface Session {

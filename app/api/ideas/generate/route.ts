@@ -3,7 +3,7 @@ import { Session, getServerSession } from "next-auth"
 import OpenAI from "openai"
 
 import { authOptions } from "@/lib/auth"
-import { getDailyUsage } from "@/lib/supabase/ideas"
+import { getDailyUsage } from "@/lib/db/ideas"
 
 const openai = new OpenAI()
 const QUOTA_LIMIT = 30

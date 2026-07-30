@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
-import { supabaseServer } from "@/lib/supabase/server"
+import { deleteIdea, updateIdeaVisibility } from "@/lib/db/ideas"
 
 export async function DELETE(req: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -17,13 +17,11 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "ID manquant" }, { status: 400 })
   }
 
-  const { error } = await supabaseServer
-    .from("ideas")
-    .delete()
-    .match({ id, user_id: session.user.id }) // Ensure the user can only delete their own ideas
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  try {
+    // Ensure the user can only delete their own ideas
+    await deleteIdea(id, session.user.id)
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
@@ -48,14 +46,10 @@ export async function PATCH(req: NextRequest) {
     )
   }
 
-  const { error } = await supabaseServer
-    .from("ideas")
-    .update({ is_public })
-    .eq("id", ideaId)
-    .eq("user_id", userId)
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  try {
+    await updateIdeaVisibility(ideaId!, userId, is_public)
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
