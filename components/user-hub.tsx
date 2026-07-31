@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Loader2, UserCircle } from "lucide-react"
+import { UserCircle } from "lucide-react"
 import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
 import { IdeaCard } from "@/components/idea-card"
 import { PublicToggle } from "@/components/public-toggle"
 import { ShareIdeaButton } from "@/components/share-idea-button"
@@ -166,9 +167,32 @@ export function UserHub({ user }: { user: UserSummary }) {
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 font-mono text-ink-soft">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          Loading your data...
+        <div className="space-y-8">
+          <section className="space-y-3">
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-6 w-40" />
+              <Skeleton className="h-4 w-64" />
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {Array.from({ length: 2 }).map((_, index) => (
+                <Skeleton key={index} className="h-40 rounded-md" />
+              ))}
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-6 w-48" />
+              <Skeleton className="h-4 w-72" />
+            </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              {Array.from({ length: 2 }).map((_, index) => (
+                <Skeleton key={index} className="h-36 rounded-md" />
+              ))}
+            </div>
+          </section>
         </div>
       ) : (
         <>

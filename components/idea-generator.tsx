@@ -28,8 +28,15 @@ import {
 import { BookmarkToggle } from "@/components/bookmark-toggle"
 import { ExportBriefButton } from "@/components/export-brief-button"
 import { TypingAnimation } from "@/components/magicui/typing-animation"
+import {
+  IdeaFilters,
+  defaultFilters,
+  resolveFilters,
+} from "@/lib/ideaGeneration"
 import { cn } from "@/lib/utils"
 import { ScrollArea } from "@/components/ui/scroll-area"
+
+const FILTERS_STORAGE_KEY = "apixplore:idea-filters"
 
 interface Idea {
   title: string
@@ -39,20 +46,6 @@ interface Idea {
 }
 
 type IdeaWithStatus = Idea & { isSaved: boolean; id?: string }
-
-type IdeaFilters = {
-  skillLevel: "beginner" | "experienced"
-  stackFocus: "fullstack" | "backend" | "frontend"
-  tone: "serious" | "playful"
-  aiUsage: "optional" | "required" | "avoid"
-}
-
-const defaultFilters: IdeaFilters = {
-  skillLevel: "beginner",
-  stackFocus: "fullstack",
-  tone: "serious",
-  aiUsage: "optional",
-}
 
 const filterOptions: {
   skillLevel: { value: IdeaFilters["skillLevel"]; label: string }[]
@@ -135,6 +128,25 @@ export default function IdeaGenerator({
   const [filters, setFilters] = useState<IdeaFilters>(defaultFilters)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(FILTERS_STORAGE_KEY)
+      if (stored) {
+        setFilters(resolveFilters(JSON.parse(stored)))
+      }
+    } catch {
+      // ignore malformed or unavailable storage (e.g. private browsing)
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters))
+    } catch {
+      // ignore unavailable storage (e.g. private browsing quota)
+    }
+  }, [filters])
 
   const updateFilter = <K extends keyof IdeaFilters>(
     key: K,

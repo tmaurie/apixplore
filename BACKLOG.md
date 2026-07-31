@@ -29,8 +29,8 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 ## 🎨 UI/UX
 
 - [x] Open Graph image sur les pages d'idées publiques (`generateMetadata` a déjà title/description, pas d'image) *(`app/idea/[id]/opengraph-image.tsx`, généré via `next/og`, réutilisé automatiquement pour `twitter:image`)*
-- [ ] Vérifier/ajouter des états de chargement (`loading.tsx`, skeletons) sur le catalogue paginé et le dashboard
-- [ ] Persister les filtres de génération (`skillLevel`, `stackFocus`, `tone`, `aiUsage`) entre les sessions
+- [x] Vérifier/ajouter des états de chargement (`loading.tsx`, skeletons) sur le catalogue paginé et le dashboard *(catalogue et historique avaient déjà un skeleton ; ajouté sur `user-hub.tsx` — spinner texte remplacé par un skeleton fidèle à la mise en page réelle)*
+- [x] Persister les filtres de génération (`skillLevel`, `stackFocus`, `tone`, `aiUsage`) entre les sessions *(`localStorage`, clé `apixplore:idea-filters`, validés via `resolveFilters` au chargement)*
 - [ ] Auditer les empty states (`/history`, `/dashboard` sans idée sauvegardée) — CTA clair vers le générateur
 - [ ] Auditer le parcours mobile génération → review → save
 
