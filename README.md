@@ -67,6 +67,8 @@ npm install
 npm run dev
 ```
 
+Run the test suite with `npm run test` (or `npm run test:watch` while iterating).
+
 ### Environment variables
 
 Create a `.env.local` at the project root:

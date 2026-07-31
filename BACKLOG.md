@@ -15,7 +15,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 
 ## 🔧 Technique / chore
 
-- [ ] Ajouter des tests (au minimum : logique de quota, parsing de `/api/ideas/generate`)
+- [x] Ajouter des tests (au minimum : logique de quota, parsing de `/api/ideas/generate`) *(Vitest, `lib/ideaGeneration.test.ts` + `lib/db/generations.test.ts`, `npm run test`)*
 - [ ] Mettre en place une CI (`.github/workflows`) qui lance `lint` / `typecheck` / `build` sur les PRs
 - [ ] Rate limiting / middleware sur les routes API (rien ne protège au-delà du quota, lui-même buggé)
 - [x] Ajouter `error.tsx` / `not-found.tsx` / `loading.tsx` à l'App Router
