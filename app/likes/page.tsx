@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
+import { Button } from "@/components/ui/button"
 import { IdeaCard } from "@/components/idea-card"
 import { PageSurface } from "@/components/page-surface"
 
@@ -59,7 +61,18 @@ export default function LikedIdeasPage() {
 
       {loading && <p className="text-ink-soft">Loading...</p>}
       {!loading && ideas.length === 0 && (
-        <p className="text-ink-soft">You haven&apos;t liked any ideas yet.</p>
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-dashed border-ink/25 px-4 py-6">
+          <p className="text-ink-soft">
+            You haven&apos;t liked any ideas yet.
+          </p>
+          <Button
+            asChild
+            size="sm"
+            className="rounded-md bg-ink font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-ink/90"
+          >
+            <Link href="/public">Browse public feed</Link>
+          </Button>
+        </div>
       )}
 
       <div className="space-y-6">

@@ -207,9 +207,19 @@ export function UserHub({ user }: { user: UserSummary }) {
               </p>
             </div>
             {likes.length === 0 ? (
-              <div className="rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
-                Nothing liked yet. Browse the public feed and tap like to keep
-                ideas here.
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
+                <span>
+                  Nothing liked yet. Browse the public feed and tap like to
+                  keep ideas here.
+                </span>
+                <Button
+                  asChild
+                  size="sm"
+                  variant="outline"
+                  className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
+                >
+                  <Link href="/public">Browse public feed</Link>
+                </Button>
               </div>
             ) : (
               <div className="grid gap-4 md:grid-cols-2">
@@ -246,9 +256,18 @@ export function UserHub({ user }: { user: UserSummary }) {
             </div>
 
             {ideas.length === 0 ? (
-              <div className="rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
-                No ideas generated yet. Use the explorer to spark your first
-                one.
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
+                <span>
+                  No ideas generated yet. Use the explorer to spark your first
+                  one.
+                </span>
+                <Button
+                  asChild
+                  size="sm"
+                  className="rounded-md bg-ink font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-ink/90"
+                >
+                  <Link href="/resources">Browse the catalog</Link>
+                </Button>
               </div>
             ) : (
               <div className="grid gap-3 md:grid-cols-2">

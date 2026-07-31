@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Sparkles, TrashIcon } from "lucide-react"
 import { toast } from "sonner"
 
@@ -31,7 +32,7 @@ export function IdeasHistory() {
     const fetchIdeas = async () => {
       const res = await fetch("/api/ideas")
       const data = await res.json()
-      setIdeas(data.ideas)
+      setIdeas(data.ideas || [])
       setLoading(false)
     }
 
@@ -80,16 +81,24 @@ export function IdeasHistory() {
 
   if (ideas.length === 0) {
     return (
-      <div className="flex items-center gap-3 rounded-md border border-dashed border-paper/20 px-4 py-6 text-paper/70">
-        <div className="flex h-10 w-10 items-center justify-center rounded-md border border-paper/15 text-paper">
+      <div className="flex flex-wrap items-center gap-4 rounded-md border border-dashed border-paper/20 px-4 py-6 text-paper/70">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-paper/15 text-paper">
           <Sparkles className="h-5 w-5" />
         </div>
-        <div>
+        <div className="flex-1">
           <p className="text-sm font-medium text-paper">No ideas yet</p>
           <p className="text-sm text-paper/60">
             Generate new ideas to see them appear here.
           </p>
         </div>
+        <Button
+          asChild
+          size="sm"
+          className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+          variant="outline"
+        >
+          <Link href="/resources">Browse the catalog</Link>
+        </Button>
       </div>
     )
   }

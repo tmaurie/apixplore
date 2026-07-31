@@ -31,8 +31,9 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 - [x] Open Graph image sur les pages d'idées publiques (`generateMetadata` a déjà title/description, pas d'image) *(`app/idea/[id]/opengraph-image.tsx`, généré via `next/og`, réutilisé automatiquement pour `twitter:image`)*
 - [x] Vérifier/ajouter des états de chargement (`loading.tsx`, skeletons) sur le catalogue paginé et le dashboard *(catalogue et historique avaient déjà un skeleton ; ajouté sur `user-hub.tsx` — spinner texte remplacé par un skeleton fidèle à la mise en page réelle)*
 - [x] Persister les filtres de génération (`skillLevel`, `stackFocus`, `tone`, `aiUsage`) entre les sessions *(`localStorage`, clé `apixplore:idea-filters`, validés via `resolveFilters` au chargement)*
-- [ ] Auditer les empty states (`/history`, `/dashboard` sans idée sauvegardée) — CTA clair vers le générateur
-- [ ] Auditer le parcours mobile génération → review → save
+- [x] Auditer les empty states (`/history`, `/dashboard` sans idée sauvegardée) — CTA clair vers le générateur *(CTA ajoutés sur `/history`, `/likes`, et les 2 sections du dashboard ; bug trouvé au passage : `IdeasHistory` plantait pour un visiteur non connecté car `data.ideas` est `undefined` sur un 401 — corrigé)*
+- [x] Auditer le parcours mobile génération → review → save *(bug réel trouvé et corrigé : `ScrollArea` de Radix force `display:table` sur son contenu, ce qui cassait le `max-width`/`flex-wrap` et faisait déborder horizontalement les filtres et les cartes d'idées sur mobile — fix dans `components/ui/scroll-area.tsx`. Reste du parcours — trigger, filtres, carrousel, save, navigation entre idées — vérifié OK. Point mineur noté ci-dessous, pas corrigé)*
+- [x] Toast "Idea generated/saved" chevauche les boutons Prev/Next du carrousel sur mobile (position bottom du `Toaster` global) *(`mobileOffset={{ bottom: "130px" }}` sur le `Toaster`, ne touche pas au positionnement desktop ; chevauchement vérifié résolu par mesure DOM)*
 
 ---
 
