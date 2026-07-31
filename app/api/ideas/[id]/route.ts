@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
-import { deleteIdea, updateIdeaVisibility } from "@/lib/db/ideas"
+import { deleteIdea, setIdeaTags, updateIdeaVisibility } from "@/lib/db/ideas"
+import { sanitizeTags } from "@/lib/tags"
 
 export async function DELETE(req: NextRequest) {
   const session = await getServerSession(authOptions)
@@ -38,17 +39,30 @@ export async function PATCH(req: NextRequest) {
   const userId = session.user.id
 
   const body = await req.json()
-  const { is_public } = body
+  const { is_public, tags } = body
 
-  if (typeof is_public !== "boolean") {
+  if (is_public === undefined && tags === undefined) {
     return NextResponse.json(
-      { error: "Missing or invalid is_public" },
+      { error: "Nothing to update" },
+      { status: 400 }
+    )
+  }
+
+  if (is_public !== undefined && typeof is_public !== "boolean") {
+    return NextResponse.json(
+      { error: "Invalid is_public" },
       { status: 400 }
     )
   }
 
   try {
-    await updateIdeaVisibility(ideaId!, userId, is_public)
+    if (is_public !== undefined) {
+      await updateIdeaVisibility(ideaId!, userId, is_public)
+    }
+
+    if (tags !== undefined) {
+      await setIdeaTags(ideaId!, userId, sanitizeTags(tags))
+    }
   } catch (err) {
     const message = err instanceof Error ? err.message : "Failed to update idea"
     return NextResponse.json({ error: message }, { status: 500 })

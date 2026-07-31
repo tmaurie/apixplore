@@ -24,10 +24,39 @@ export async function saveIdea({
 
 export async function getUserIdeas(userId: string) {
   return sql`
-    SELECT * FROM public.ideas
-    WHERE user_id = ${userId}
-    ORDER BY created_at DESC
+    SELECT
+      i.*,
+      COALESCE(
+        json_agg(t.tag ORDER BY t.tag) FILTER (WHERE t.tag IS NOT NULL),
+        '[]'
+      ) AS tags
+    FROM public.ideas i
+    LEFT JOIN public.idea_tags t ON t.idea_id = i.id
+    WHERE i.user_id = ${userId}
+    GROUP BY i.id
+    ORDER BY i.created_at DESC
   `
+}
+
+export async function setIdeaTags(id: string, userId: string, tags: string[]) {
+  const [idea] = await sql`
+    SELECT id FROM public.ideas WHERE id = ${id} AND user_id = ${userId}
+  `
+
+  if (!idea) {
+    throw new Error("Idea not found")
+  }
+
+  await sql`DELETE FROM public.idea_tags WHERE idea_id = ${id}`
+
+  const uniqueTags = [...new Set(tags)]
+
+  if (uniqueTags.length > 0) {
+    await sql`
+      INSERT INTO public.idea_tags (idea_id, tag)
+      SELECT ${id}, tag FROM unnest(${uniqueTags}::text[]) AS tag
+    `
+  }
 }
 
 export async function getPublicIdeas({

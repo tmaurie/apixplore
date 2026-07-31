@@ -14,4 +14,5 @@ export interface Idea {
   author_id?: string
   author_name?: string | null
   author_github_username?: string | null
+  tags?: string[]
 }
