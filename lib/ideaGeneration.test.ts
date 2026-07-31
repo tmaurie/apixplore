@@ -4,6 +4,7 @@ import {
   IdeaFilters,
   MAX_INPUT_LENGTH,
   buildPrompt,
+  buildRefinePrompt,
   isValidIdea,
   pickValidOption,
   resolveFilters,
@@ -131,5 +132,30 @@ describe("buildPrompt", () => {
     expect(prompt).toContain("Service-oriented ideas")
     expect(prompt).toContain("Casual, surprising")
     expect(prompt).toContain("Each idea must feature an AI-powered element.")
+  })
+})
+
+describe("buildRefinePrompt", () => {
+  it("includes the current idea, the instruction, and filter guidance", () => {
+    const prompt = buildRefinePrompt(
+      "Cat Facts",
+      "Daily cat facts",
+      {
+        skillLevel: "beginner",
+        stackFocus: "frontend",
+        tone: "serious",
+        aiUsage: "avoid",
+      },
+      { title: "Cat Trivia App", description: "A quiz app about cats." },
+      "Make it more original"
+    )
+
+    expect(prompt).toContain('API name: "Cat Facts"')
+    expect(prompt).toContain('Title: "Cat Trivia App"')
+    expect(prompt).toContain('Description: "A quiz app about cats."')
+    expect(prompt).toContain('Refinement instruction: "Make it more original"')
+    expect(prompt).toContain("Interface-heavy ideas")
+    expect(prompt).toContain("Do not include AI features")
+    expect(prompt).toContain("one JSON object")
   })
 })

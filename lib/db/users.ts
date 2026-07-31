@@ -21,3 +21,19 @@ export async function getOrCreateUser(
 
   return newUser
 }
+
+export async function getPublicProfileUserIds() {
+  const rows = await sql`
+    SELECT DISTINCT user_id AS id FROM public.ideas WHERE is_public = true
+  `
+
+  return rows as { id: string }[]
+}
+
+export async function getPublicUserProfile(userId: string) {
+  const [user] = await sql`
+    SELECT id, name, github_username FROM public.users WHERE id = ${userId} LIMIT 1
+  `
+
+  return user as { id: string; name: string | null; github_username: string | null } | undefined
+}

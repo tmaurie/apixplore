@@ -95,6 +95,14 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
               <HeartIcon className="h-4 w-4" />
               {likeCount} like{likeCount === 1 ? "" : "s"}
             </span>
+            {idea.author_id && (
+              <Link
+                href={`/user/${idea.author_id}`}
+                className="rounded-full border border-ink/30 px-3 py-1 hover:border-ink hover:text-ink"
+              >
+                by {idea.author_name || idea.author_github_username || "a builder"}
+              </Link>
+            )}
           </div>
           {idea.api_link ? (
             <Button

@@ -4,6 +4,7 @@ import { checkRateLimit } from "@/lib/rateLimit"
 
 const limits: Record<string, { windowSeconds: number; max: number }> = {
   "/api/ideas/generate": { windowSeconds: 60, max: 5 },
+  "/api/ideas/refine": { windowSeconds: 60, max: 5 },
   "/api/events": { windowSeconds: 60, max: 20 },
 }
 
@@ -29,5 +30,5 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/ideas/generate", "/api/events"],
+  matcher: ["/api/ideas/generate", "/api/ideas/refine", "/api/events"],
 }

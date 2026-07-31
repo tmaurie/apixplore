@@ -108,3 +108,34 @@ Audience preferences to reflect in the ideas:
 API name: "${apiName}"
 API description: "${apiDescription}"
 `.trim()
+
+export const buildRefinePrompt = (
+  apiName: string,
+  apiDescription: string,
+  filters: IdeaFilters,
+  idea: { title: string; description: string },
+  instruction: string
+) =>
+  `
+Given the following public API, refine this single project idea according to the instruction below.
+- Output: one JSON object with keys "title", "description", "feasibilityScore", "originalityScore".
+- Title <= 80 characters. Description 1-2 sentences, practical and technically feasible.
+- feasibilityScore: integer 0-10 (10 = very easy to build). originalityScore: integer 0-10 (10 = most novel).
+- Do not include markdown, code fences, or extra text. JSON only.
+- Keep the core concept recognizable unless the instruction asks for a different direction.
+
+Audience preferences to keep respecting:
+- Developer level: ${skillLevelGuidance[filters.skillLevel]}
+- Build focus: ${stackGuidance[filters.stackFocus]}
+- Tone: ${toneGuidance[filters.tone]}
+- AI usage: ${aiGuidance[filters.aiUsage]}
+
+API name: "${apiName}"
+API description: "${apiDescription}"
+
+Current idea:
+- Title: "${idea.title}"
+- Description: "${idea.description}"
+
+Refinement instruction: "${instruction}"
+`.trim()

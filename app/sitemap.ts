@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next"
 
 import { getPublicIdeaIds } from "@/lib/db/ideas"
+import { getPublicProfileUserIds } from "@/lib/db/users"
 import { SITE_URL } from "@/lib/site"
 
 // Rendered per-request (not at build time) so newly published ideas show up
@@ -15,7 +16,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/categories`, changeFrequency: "weekly", priority: 0.5 },
   ]
 
-  const publicIdeas = await getPublicIdeaIds()
+  const [publicIdeas, profileUserIds] = await Promise.all([
+    getPublicIdeaIds(),
+    getPublicProfileUserIds(),
+  ])
 
   const ideaRoutes: MetadataRoute.Sitemap = publicIdeas.map((idea) => ({
     url: `${SITE_URL}/idea/${idea.id}`,
@@ -24,5 +28,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...staticRoutes, ...ideaRoutes]
+  const profileRoutes: MetadataRoute.Sitemap = profileUserIds.map((user) => ({
+    url: `${SITE_URL}/user/${user.id}`,
+    changeFrequency: "weekly",
+    priority: 0.4,
+  }))
+
+  return [...staticRoutes, ...ideaRoutes, ...profileRoutes]
 }

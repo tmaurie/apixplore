@@ -7,9 +7,9 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 ## 🎯 Métier / valeur ajoutée
 
 - [x] Corriger la logique du quota — il compte les idées *sauvegardées*, pas les générations (appels OpenAI). Un utilisateur peut spammer `/api/ideas/generate` sans jamais toucher la limite. *(nouvelle table `idea_generations`, comptage sur les appels réels)*
-- [ ] Régénérer / itérer sur une idée ("encore 3 idées" / "affine celle-ci") plutôt que de tout relancer depuis zéro
+- [x] Régénérer / itérer sur une idée ("encore 3 idées" / "affine celle-ci") plutôt que de tout relancer depuis zéro *("encore 3 idées" existait déjà via "Regenerate" ; ajouté "affiner celle-ci" — nouvelle route `/api/ideas/refine`, formulaire inline par carte avec instruction libre, protégée par le même quota + rate limit (5 req/60s) que la génération*
 - [ ] Organisation de l'historique — tags/catégories/collections sur les idées sauvegardées (`ideas-history.tsx` est une liste plate aujourd'hui)
-- [ ] Profils publics — `app/user/[id]` existe mais redirige si ce n'est pas soi-même ; ouvrir une vue publique (ses idées publiques)
+- [x] Profils publics — `app/user/[id]` existe mais redirige si ce n'est pas soi-même ; ouvrir une vue publique (ses idées publiques) *(vue publique accessible sans connexion pour tout id ≠ le sien, dashboard privé conservé pour soi-même ; nouveau composant `public-profile.tsx`, avatar dérivé du github_username, 404 si profil introuvable ; attribution auteur ajoutée sur les cartes d'idées du feed public et de la page idée individuelle, sinon la page profil n'était atteignable par personne ; ajouté au sitemap, retiré du disallow robots.txt)*
 - [ ] Exploiter les événements analytics — `/api/events` fait juste un `console.info`, rien n'est persisté ; stocker en base pour avoir une vraie vue sur les APIs/idées populaires
 - [x] Recherche floue globale sur le catalogue d'APIs (1500+ entrées) *(Fuse.js sur nom + description, tolérant aux fautes de frappe)*
 

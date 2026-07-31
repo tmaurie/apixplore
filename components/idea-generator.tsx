@@ -7,11 +7,14 @@ import {
   ChevronRight,
   Loader2,
   Sparkles,
+  Wand2,
+  X,
 } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import {
   Carousel,
   CarouselContent,
@@ -128,6 +131,9 @@ export default function IdeaGenerator({
   const [filters, setFilters] = useState<IdeaFilters>(defaultFilters)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
+  const [refiningIndex, setRefiningIndex] = useState<number | null>(null)
+  const [refineInstruction, setRefineInstruction] = useState("")
+  const [refineLoading, setRefineLoading] = useState(false)
 
   useEffect(() => {
     try {
@@ -238,6 +244,65 @@ export default function IdeaGenerator({
       toast.success("Idea saved successfully !")
     } else {
       toast.error("Error: " + (data.error || "Failed to save idea"))
+    }
+  }
+
+  const openRefine = (index: number) => {
+    setRefiningIndex(index)
+    setRefineInstruction("")
+  }
+
+  const closeRefine = () => {
+    setRefiningIndex(null)
+    setRefineInstruction("")
+  }
+
+  const handleRefineIdea = async (index: number) => {
+    const instruction = refineInstruction.trim()
+    if (!instruction || refineLoading) return
+
+    const target = ideas[index]
+    setRefineLoading(true)
+
+    try {
+      const response = await fetch("/api/ideas/refine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          api,
+          description,
+          filters,
+          idea: {
+            title: target.title,
+            description: target.description,
+            feasibilityScore: target.feasibilityScore,
+            originalityScore: target.originalityScore,
+          },
+          instruction,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        toast.error("Error refining idea: " + (data.error || "Unknown error"))
+        return
+      }
+
+      setIdeas((prev) =>
+        prev.map((idea, i) =>
+          i === index
+            ? { ...data.idea, isSaved: false, id: undefined }
+            : idea
+        )
+      )
+      closeRefine()
+      toast.success("Idea refined!")
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error"
+      toast.error("Network error: " + message)
+    } finally {
+      setRefineLoading(false)
     }
   }
 
@@ -382,12 +447,66 @@ export default function IdeaGenerator({
                             <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
                               {idea.title}
                             </CardTitle>
-                            <BookmarkToggle
-                              isSaved={idea.isSaved}
-                              onSave={() => handleSaveIdea(idea, i)}
-                              onRemove={() => handleDeleteIdea(idea, i)}
-                            />
+                            <div className="flex shrink-0 items-center gap-1">
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                title="Refine this idea"
+                                className="h-8 w-8 text-ink-soft hover:text-ink"
+                                onClick={() =>
+                                  refiningIndex === i ? closeRefine() : openRefine(i)
+                                }
+                              >
+                                <Wand2 className="h-4 w-4" />
+                              </Button>
+                              <BookmarkToggle
+                                isSaved={idea.isSaved}
+                                onSave={() => handleSaveIdea(idea, i)}
+                                onRemove={() => handleDeleteIdea(idea, i)}
+                              />
+                            </div>
                           </div>
+                          {refiningIndex === i && (
+                            <div className="flex items-center gap-1.5 rounded-md border border-ink/30 bg-paper-dim p-1.5">
+                              <Input
+                                autoFocus
+                                value={refineInstruction}
+                                onChange={(e) =>
+                                  setRefineInstruction(e.target.value)
+                                }
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") handleRefineIdea(i)
+                                }}
+                                placeholder="e.g. make it more beginner-friendly"
+                                disabled={refineLoading}
+                                className="h-8 border-none bg-transparent text-xs shadow-none focus-visible:ring-0"
+                              />
+                              <Button
+                                type="button"
+                                size="icon"
+                                className="h-8 w-8 shrink-0 rounded-md bg-ink text-paper hover:bg-ink/90"
+                                onClick={() => handleRefineIdea(i)}
+                                disabled={refineLoading || !refineInstruction.trim()}
+                              >
+                                {refineLoading ? (
+                                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                ) : (
+                                  <Wand2 className="h-3.5 w-3.5" />
+                                )}
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 shrink-0 text-ink-soft hover:text-ink"
+                                onClick={closeRefine}
+                                disabled={refineLoading}
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          )}
                           <div className="grid grid-cols-2 gap-2 rounded-md border border-dashed border-ink/30 p-3 font-mono">
                             <div>
                               <p className="mb-0.5 text-[10px] uppercase tracking-widest text-ink-soft">

@@ -50,7 +50,16 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
           <span className="rounded-full border border-ink/30 px-2 py-1">
             Public
           </span>
-          by community
+          {idea.author_id ? (
+            <Link
+              href={`/user/${idea.author_id}`}
+              className="hover:text-amber hover:underline"
+            >
+              by {idea.author_name || idea.author_github_username || "a builder"}
+            </Link>
+          ) : (
+            "by community"
+          )}
         </div>
         {onUnlike ? (
           <Button

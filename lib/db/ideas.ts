@@ -40,6 +40,7 @@ export async function getPublicIdeas({
   return sql`
     SELECT
       i.id, i.api_name, i.api_link, i.generated_idea, i.created_at,
+      i.user_id AS author_id, u.name AS author_name, u.github_username AS author_github_username,
       COALESCE(
         json_agg(json_build_object('idea_id', l.idea_id, 'user_id', l.user_id))
           FILTER (WHERE l.idea_id IS NOT NULL),
@@ -47,11 +48,40 @@ export async function getPublicIdeas({
       ) AS idea_like
     FROM public.ideas i
     LEFT JOIN public.idea_like l ON l.idea_id = i.id
+    LEFT JOIN public.users u ON u.id = i.user_id
     WHERE i.is_public = true
-    GROUP BY i.id
+    GROUP BY i.id, u.name, u.github_username
     ORDER BY i.created_at DESC
     LIMIT ${limit} OFFSET ${offset}
   `
+}
+
+export type PublicIdeaRow = {
+  id: string
+  api_name: string
+  api_link: string | null
+  generated_idea: { title: string; description: string }
+  created_at: string
+  idea_like: { idea_id: string; user_id: string }[]
+}
+
+export async function getPublicIdeasByUser(userId: string) {
+  const rows = await sql`
+    SELECT
+      i.id, i.api_name, i.api_link, i.generated_idea, i.created_at,
+      COALESCE(
+        json_agg(json_build_object('idea_id', l.idea_id, 'user_id', l.user_id))
+          FILTER (WHERE l.idea_id IS NOT NULL),
+        '[]'
+      ) AS idea_like
+    FROM public.ideas i
+    LEFT JOIN public.idea_like l ON l.idea_id = i.id
+    WHERE i.is_public = true AND i.user_id = ${userId}
+    GROUP BY i.id
+    ORDER BY i.created_at DESC
+  `
+
+  return rows as PublicIdeaRow[]
 }
 
 export async function getPublicIdeaIds() {
@@ -68,6 +98,7 @@ export async function getPublicIdeaById(ideaId: string) {
   const [data] = await sql`
     SELECT
       i.id, i.api_name, i.api_link, i.generated_idea, i.created_at, i.description, i.is_public,
+      i.user_id AS author_id, u.name AS author_name, u.github_username AS author_github_username,
       COALESCE(
         json_agg(json_build_object('idea_id', l.idea_id, 'user_id', l.user_id))
           FILTER (WHERE l.idea_id IS NOT NULL),
@@ -75,8 +106,9 @@ export async function getPublicIdeaById(ideaId: string) {
       ) AS idea_like
     FROM public.ideas i
     LEFT JOIN public.idea_like l ON l.idea_id = i.id
+    LEFT JOIN public.users u ON u.id = i.user_id
     WHERE i.id = ${ideaId} AND i.is_public = true
-    GROUP BY i.id
+    GROUP BY i.id, u.name, u.github_username
   `
 
   if (!data) {
