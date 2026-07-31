@@ -11,7 +11,7 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 - [ ] Organisation de l'historique — tags/catégories/collections sur les idées sauvegardées (`ideas-history.tsx` est une liste plate aujourd'hui)
 - [ ] Profils publics — `app/user/[id]` existe mais redirige si ce n'est pas soi-même ; ouvrir une vue publique (ses idées publiques)
 - [ ] Exploiter les événements analytics — `/api/events` fait juste un `console.info`, rien n'est persisté ; stocker en base pour avoir une vraie vue sur les APIs/idées populaires
-- [ ] Recherche floue globale sur le catalogue d'APIs (1500+ entrées)
+- [x] Recherche floue globale sur le catalogue d'APIs (1500+ entrées) *(Fuse.js sur nom + description, tolérant aux fautes de frappe)*
 
 ## 🔧 Technique / chore
 
@@ -34,4 +34,4 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 
 ---
 
-*Créé le 2026-07-30 avec Claude Code. Idées export CSV/JSON du catalogue et recherche floue déjà notées dans le [README](README.md#-upcoming).*
+*Créé le 2026-07-30 avec Claude Code. Idée export CSV/JSON du catalogue déjà notée dans le [README](README.md#-upcoming).*

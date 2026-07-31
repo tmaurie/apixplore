@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import Fuse from "fuse.js"
 
 import { useCatalog } from "@/lib/hooks/useCatalog"
 import { Button } from "@/components/ui/button"
@@ -59,7 +60,25 @@ function ResourcesPageContent() {
     [categories, activeCategory]
   )
 
-  const visibleResources = resources
+  const fuse = useMemo(
+    () =>
+      new Fuse(resources, {
+        keys: [
+          { name: "API", weight: 0.7 },
+          { name: "Description", weight: 0.3 },
+        ],
+        threshold: 0.35,
+        ignoreLocation: true,
+      }),
+    [resources]
+  )
+
+  const searchedResources = useMemo(
+    () => (search.trim() ? fuse.search(search).map((r) => r.item) : resources),
+    [fuse, search, resources]
+  )
+
+  const visibleResources = searchedResources
     .filter((r) => (activeCategoryName ? r.Category === activeCategoryName : true))
     .filter((r) => {
       if (filters.https === "yes" && !r.HTTPS) return false
@@ -70,8 +89,11 @@ function ResourcesPageContent() {
       if (filters.auth === "no" && r.Auth) return false
       return true
     })
-    .filter((r) => r.API.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => a.API.localeCompare(b.API))
+
+  // Preserve fuzzy relevance order while searching; alphabetize for plain browsing.
+  if (!search.trim()) {
+    visibleResources.sort((a, b) => a.API.localeCompare(b.API))
+  }
 
   const paginatedResources = visibleResources.slice(
     (page - 1) * pageSize,
@@ -120,7 +142,7 @@ function ResourcesPageContent() {
 
         <div className="mb-8 flex flex-wrap items-center gap-3 border-b border-ink/25 pb-6">
           <Input
-            placeholder="Search by name…"
+            placeholder="Search by name or what it does…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="min-w-[220px] flex-1 rounded-md border-ink bg-paper font-mono text-sm"

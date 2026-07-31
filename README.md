@@ -19,7 +19,7 @@
 
 ## ✨ Features
 
-* 🔍 **Browse public APIs** by category, with filters on core features
+* 🔍 **Browse public APIs** by category, with fuzzy search (name + description) and filters on core features
 * 🧠 **AI-generated project ideas** tailored to your skill level, stack focus, and tone
 * 💾 **Save & organize** the ideas you like into a personal history
 * ❤️ **Like and share** ideas publicly, or browse the community feed
@@ -87,7 +87,6 @@ DATABASE_URL=
 
 ## 🔮 Upcoming
 
-* 🔎 Global fuzzy search for all APIs
 * 📁 Export filtered APIs to CSV / JSON
 
 ---
