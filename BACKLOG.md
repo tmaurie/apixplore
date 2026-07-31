@@ -16,13 +16,13 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 ## 🔧 Technique / chore
 
 - [x] Ajouter des tests (au minimum : logique de quota, parsing de `/api/ideas/generate`) *(Vitest, `lib/ideaGeneration.test.ts` + `lib/db/generations.test.ts`, `npm run test`)*
-- [ ] Mettre en place une CI (`.github/workflows`) qui lance `lint` / `typecheck` / `build` sur les PRs
+- [x] Mettre en place une CI (`.github/workflows`) qui lance `lint` / `typecheck` / `build` sur les PRs *(+ `test` maintenant que Vitest existe ; `.github/workflows/ci.yml`)*
 - [ ] Rate limiting / middleware sur les routes API (rien ne protège au-delà du quota, lui-même buggé)
 - [x] Ajouter `error.tsx` / `not-found.tsx` / `loading.tsx` à l'App Router
 - [ ] Nettoyer les métadonnées scaffold de `package.json` (nom `next-template`, version `0.0.2`)
 - [ ] Réaligner les versions qui ont dérivé (TypeScript `^4.9.5`, ESLint 8 / `eslint-config-next` 15.3.1 vs Next 16 / React 19)
 - [ ] Ajouter `sitemap.xml` / `robots.txt` (pénalise l'indexation de `/idea/[id]` et du catalogue)
-- [ ] Réparer le script `npm run lint` — `next lint` n'est plus supporté sur Next 16, la commande échoue (`Invalid project directory`)
+- [x] Réparer le script `npm run lint` — `next lint` n'est plus supporté sur Next 16, la commande échoue (`Invalid project directory`) *(remplacé par `eslint .`, nécessaire pour que la CI ait un vrai step lint)*
 
 ## 🎨 UI/UX
 
