@@ -17,12 +17,14 @@ Légende : `[ ]` à faire · `[~]` en cours · `[x]` fait
 
 - [x] Ajouter des tests (au minimum : logique de quota, parsing de `/api/ideas/generate`) *(Vitest, `lib/ideaGeneration.test.ts` + `lib/db/generations.test.ts`, `npm run test`)*
 - [x] Mettre en place une CI (`.github/workflows`) qui lance `lint` / `typecheck` / `build` sur les PRs *(+ `test` maintenant que Vitest existe ; `.github/workflows/ci.yml`)*
-- [ ] Rate limiting / middleware sur les routes API (rien ne protège au-delà du quota, lui-même buggé)
+- [x] Rate limiting / middleware sur les routes API (rien ne protège au-delà du quota, lui-même buggé) *(`middleware.ts` + `lib/rateLimit.ts`, table `rate_limit_hits` ; 5 req/60s sur `/api/ideas/generate`, 20 req/60s sur `/api/events`)*
 - [x] Ajouter `error.tsx` / `not-found.tsx` / `loading.tsx` à l'App Router
-- [ ] Nettoyer les métadonnées scaffold de `package.json` (nom `next-template`, version `0.0.2`)
-- [ ] Réaligner les versions qui ont dérivé (TypeScript `^4.9.5`, ESLint 8 / `eslint-config-next` 15.3.1 vs Next 16 / React 19)
-- [ ] Ajouter `sitemap.xml` / `robots.txt` (pénalise l'indexation de `/idea/[id]` et du catalogue)
+- [x] Nettoyer les métadonnées scaffold de `package.json` (nom `next-template`, version `0.0.2`) *(nom → `apixplore`, version → `0.1.0`, ajout description/license/repository)*
+- [x] Réaligner les versions qui ont dérivé (TypeScript `^4.9.5`, ESLint 8 / `eslint-config-next` 15.3.1 vs Next 16 / React 19) *(TS → 5.9.3, ESLint → 9.39.5 + flat config `eslint.config.mjs`, eslint-config-next → 16.2.12, `class-variance-authority` → 0.7.1 pour lever un conflit de peer deps ; `middleware.ts` renommé `proxy.ts` (convention Next 16) ; nettoyage des `any`/imports inutiles remontés par le nouveau lint)*
+- [x] Ajouter `sitemap.xml` / `robots.txt` (pénalise l'indexation de `/idea/[id]` et du catalogue) *(`app/sitemap.ts` + `app/robots.ts`, pages statiques + toutes les idées publiques ; nécessite `NEXT_PUBLIC_SITE_URL` sur Vercel)*
 - [x] Réparer le script `npm run lint` — `next lint` n'est plus supporté sur Next 16, la commande échoue (`Invalid project directory`) *(remplacé par `eslint .`, nécessaire pour que la CI ait un vrai step lint)*
+
+- [ ] Revoir les 3 usages de `setState` synchrone dans un `useEffect` remontés par `react-hooks/set-state-in-effect` (downgradé en warning pour ne pas bloquer la CI) : reset de pagination dans `app/resources/page.tsx`, détection de `navigator.share` dans `share-idea-button.tsx`, sync avec Embla dans `ui/carousel.tsx`
 
 ## 🎨 UI/UX
 

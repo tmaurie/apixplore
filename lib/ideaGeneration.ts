@@ -67,18 +67,24 @@ export const sanitizeInput = (value: unknown, fallback: string) => {
 export const stripMarkdownFences = (text: string) =>
   text.replace(/```json|```/gi, "").trim()
 
-export const isValidIdea = (idea: any) =>
-  idea &&
-  typeof idea.title === "string" &&
-  idea.title.trim() &&
-  typeof idea.description === "string" &&
-  idea.description.trim() &&
-  typeof idea.feasibilityScore === "number" &&
-  idea.feasibilityScore >= 0 &&
-  idea.feasibilityScore <= 10 &&
-  typeof idea.originalityScore === "number" &&
-  idea.originalityScore >= 0 &&
-  idea.originalityScore <= 10
+export const isValidIdea = (idea: unknown): boolean => {
+  if (typeof idea !== "object" || idea === null) return false
+
+  const candidate = idea as Record<string, unknown>
+
+  return Boolean(
+    typeof candidate.title === "string" &&
+      candidate.title.trim() &&
+      typeof candidate.description === "string" &&
+      candidate.description.trim() &&
+      typeof candidate.feasibilityScore === "number" &&
+      candidate.feasibilityScore >= 0 &&
+      candidate.feasibilityScore <= 10 &&
+      typeof candidate.originalityScore === "number" &&
+      candidate.originalityScore >= 0 &&
+      candidate.originalityScore <= 10
+  )
+}
 
 export const buildPrompt = (
   apiName: string,

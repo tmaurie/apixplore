@@ -55,8 +55,8 @@ export function ShareIdeaButton({
         ideaId,
         source,
       })
-    } catch (error: any) {
-      if (error?.name === "AbortError") {
+    } catch (error) {
+      if (error instanceof Error && error.name === "AbortError") {
         return
       }
 

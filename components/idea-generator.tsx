@@ -182,8 +182,9 @@ export default function IdeaGenerator({
       toast.success(
         "Ideas generated successfully! Click on the bookmark icon to save them."
       )
-    } catch (err: any) {
-      toast.error("Network error : " + (err?.message || "Unknown error"))
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Unknown error"
+      toast.error("Network error : " + message)
     } finally {
       setLoading(false)
     }
@@ -371,8 +372,6 @@ export default function IdeaGenerator({
                             </CardTitle>
                             <BookmarkToggle
                               isSaved={idea.isSaved}
-                              idea={idea}
-                              index={i}
                               onSave={() => handleSaveIdea(idea, i)}
                               onRemove={() => handleDeleteIdea(idea, i)}
                             />

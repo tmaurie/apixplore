@@ -54,6 +54,16 @@ export async function getPublicIdeas({
   `
 }
 
+export async function getPublicIdeaIds() {
+  const rows = await sql`
+    SELECT id, created_at FROM public.ideas
+    WHERE is_public = true
+    ORDER BY created_at DESC
+  `
+
+  return rows as { id: string; created_at: string }[]
+}
+
 export async function getPublicIdeaById(ideaId: string) {
   const [data] = await sql`
     SELECT

@@ -73,8 +73,8 @@ export function UserHub({ user }: { user: UserSummary }) {
       if (!res.ok) throw new Error("Failed to remove like")
       setLikes((prev) => prev.filter((idea) => idea.id !== ideaId))
       toast.success("Removed from likes")
-    } catch (err: any) {
-      toast.error(err?.message || "Unable to remove like")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to remove like")
     } finally {
       setRemovingId(null)
     }
@@ -88,8 +88,8 @@ export function UserHub({ user }: { user: UserSummary }) {
       if (!res.ok) throw new Error("Failed to delete idea")
       setIdeas((prev) => prev.filter((idea) => idea.id !== ideaId))
       toast.success("Idea deleted")
-    } catch (err: any) {
-      toast.error(err?.message || "Unable to delete idea")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to delete idea")
     } finally {
       setDeletingId(null)
     }

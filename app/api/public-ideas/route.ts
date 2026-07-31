@@ -16,13 +16,16 @@ export async function GET(req: Request) {
     const enrichedIdeas = publicIdeas.map((idea) => ({
       ...idea,
       likeCount: idea.idea_like?.length ?? 0,
-      likedByUser: idea.idea_like?.some((like: any) => like.user_id === userId),
+      likedByUser: idea.idea_like?.some(
+        (like: { user_id: string }) => like.user_id === userId
+      ),
     }))
     return NextResponse.json({ ideas: enrichedIdeas }, { status: 200 })
-  } catch (error: any) {
+  } catch (error) {
     console.error("[/api/public-ideas] Error:", error)
+    const message = error instanceof Error ? error.message : "Unknown error"
     return NextResponse.json(
-      { error: "Failed to fetch public ideas", details: error.message },
+      { error: "Failed to fetch public ideas", details: message },
       { status: 500 }
     )
   }

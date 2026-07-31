@@ -38,8 +38,8 @@ export default function LikedIdeasPage() {
       }
       setIdeas((prev) => prev.filter((idea) => idea.id !== ideaId))
       toast.success("Removed from likes")
-    } catch (err: any) {
-      toast.error(err?.message || "Unable to remove like")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Unable to remove like")
     } finally {
       setRemovingId(null)
     }

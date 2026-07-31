@@ -17,11 +17,12 @@ export async function POST(req: NextRequest) {
 
   try {
     await likeIdea(idea_id, user_id)
-  } catch (err: any) {
-    if (err.code === "23505") {
+  } catch (err) {
+    if (err && typeof err === "object" && "code" in err && err.code === "23505") {
       return NextResponse.json({ message: "Already liked" }, { status: 200 })
     }
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    const message = err instanceof Error ? err.message : "Failed to like idea"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
@@ -38,8 +39,9 @@ export async function DELETE(req: NextRequest) {
 
   try {
     await unlikeIdea(idea_id, user_id)
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to unlike idea"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })

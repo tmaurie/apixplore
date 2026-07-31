@@ -3,14 +3,10 @@ import { BookmarkIcon, Loader2Icon } from "lucide-react"
 
 export function BookmarkToggle({
   isSaved,
-  idea,
-  index,
   onSave,
   onRemove,
 }: {
   isSaved: boolean
-  idea: any
-  index: number
   onSave: () => Promise<void>
   onRemove: () => Promise<void>
 }) {

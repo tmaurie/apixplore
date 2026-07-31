@@ -12,8 +12,20 @@ export async function unlikeIdea(ideaId: string, userId: string) {
   `
 }
 
+type LikedIdeaRow = {
+  idea_id: string
+  ideas: {
+    id: string
+    api_name: string
+    api_link: string | null
+    description: string | null
+    generated_idea: unknown
+    created_at: string
+  }
+}
+
 export async function getLikedIdeas(userId: string) {
-  const rows = await sql`
+  const rows = (await sql`
     SELECT
       l.idea_id,
       json_build_object(
@@ -28,9 +40,9 @@ export async function getLikedIdeas(userId: string) {
     JOIN public.ideas i ON i.id = l.idea_id
     WHERE l.user_id = ${userId}
     ORDER BY l.created_at DESC
-  `
+  `) as LikedIdeaRow[]
 
-  return rows.map((row: any) => ({
+  return rows.map((row) => ({
     ...row.ideas,
     likedByUser: true,
   }))

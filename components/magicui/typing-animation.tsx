@@ -23,9 +23,10 @@ export function TypingAnimation({
   startOnView = false,
   ...props
 }: TypingAnimationProps) {
-  const MotionComponent = motion.create(Component, {
-    forwardMotionProps: true,
-  })
+  // `Component` is a prop, so this wrapper has to be created per-instance;
+  // motion.create() is a cheap factory call, not an expensive one, so the
+  // per-render cost is negligible.
+  const MotionComponent = motion.create(Component, { forwardMotionProps: true })
 
   const [displayedText, setDisplayedText] = useState<string>("")
   const [started, setStarted] = useState(false)
@@ -77,6 +78,7 @@ export function TypingAnimation({
   }, [children, duration, started])
 
   return (
+    // eslint-disable-next-line react-hooks/static-components
     <MotionComponent
       ref={elementRef}
       className={cn(

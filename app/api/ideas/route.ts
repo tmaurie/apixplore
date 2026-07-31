@@ -27,12 +27,13 @@ export async function POST(req: NextRequest) {
     })
 
     return NextResponse.json({ idea: saved })
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to save idea"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.id) {
@@ -42,7 +43,8 @@ export async function GET(req: NextRequest) {
   try {
     const ideas = await getUserIdeas(session.user.id)
     return NextResponse.json({ ideas })
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load ideas"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

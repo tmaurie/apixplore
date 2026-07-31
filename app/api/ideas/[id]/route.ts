@@ -20,8 +20,9 @@ export async function DELETE(req: NextRequest) {
   try {
     // Ensure the user can only delete their own ideas
     await deleteIdea(id, session.user.id)
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to delete idea"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })
@@ -48,8 +49,9 @@ export async function PATCH(req: NextRequest) {
 
   try {
     await updateIdeaVisibility(ideaId!, userId, is_public)
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to update idea"
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })

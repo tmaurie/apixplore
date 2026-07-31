@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  IdeaFilters,
   MAX_INPUT_LENGTH,
   buildPrompt,
   isValidIdea,
@@ -44,9 +45,12 @@ describe("resolveFilters", () => {
   })
 
   it("keeps only the valid fields and falls back on the rest", () => {
-    expect(
-      resolveFilters({ skillLevel: "experienced", tone: "not-a-tone" as any })
-    ).toEqual({
+    const invalidInput = {
+      skillLevel: "experienced",
+      tone: "not-a-tone",
+    } as unknown as Partial<IdeaFilters>
+
+    expect(resolveFilters(invalidInput)).toEqual({
       skillLevel: "experienced",
       stackFocus: "fullstack",
       tone: "serious",
