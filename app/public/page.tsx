@@ -1,28 +1,40 @@
 "use client"
 
 import { useEffect } from "react"
+import Link from "next/link"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useInView } from "react-intersection-observer"
 
-import { PageSurface } from "@/components/page-surface"
-import { IdeaCard } from "@/components/idea-card"
 import { Idea } from "@/types/idea"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import { IdeaCard } from "@/components/idea-card"
+import { Reveal } from "@/components/reveal"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const fetchPublicIdeas = async ({ pageParam = 0 }) => {
   const res = await fetch(`/api/public-ideas?limit=20&offset=${pageParam}`)
+  if (!res.ok) throw new Error("Could not load the public feed")
   const data = await res.json()
-  return { ideas: data.ideas, nextOffset: pageParam + 20 }
+  return { ideas: (data.ideas ?? []) as Idea[], nextOffset: pageParam + 20 }
 }
 
 export default function PublicIdeasPage() {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["public-ideas"],
-      queryFn: fetchPublicIdeas,
-      getNextPageParam: (lastPage: { ideas: Idea[]; nextOffset: number }) =>
-        lastPage.ideas.length < 20 ? undefined : lastPage.nextOffset,
-      initialPageParam: 0,
-    })
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+    isError,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: ["public-ideas"],
+    queryFn: fetchPublicIdeas,
+    getNextPageParam: (lastPage) =>
+      lastPage.ideas.length < 20 ? undefined : lastPage.nextOffset,
+    initialPageParam: 0,
+  })
 
   const { ref, inView } = useInView()
 
@@ -32,46 +44,87 @@ export default function PublicIdeasPage() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
-  const totalIdeas =
-    data?.pages.reduce((acc: number, page: { ideas: Idea[] }) => {
-      return acc + (page.ideas?.length || 0)
-    }, 0) ?? 0
+  const ideas = data?.pages.flatMap((page) => page.ideas) ?? []
+  const isEmpty = !isPending && !isError && ideas.length === 0
 
   return (
-    <div className="space-y-8">
-      <PageSurface>
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div className="space-y-3">
-            <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
-              Community Feed
-            </p>
-            <h1 className="text-[38px] font-bold">Public Ideas</h1>
-            <p className="max-w-[60ch] text-ink-soft">
-              Discover what everyone is building with your favorite APIs. Save,
-              like, and draw inspiration from real projects in motion.
+    <div>
+      <header className="mb-10 flex flex-wrap items-end justify-between gap-6 border-b border-ink/10 pb-8">
+        <div className="max-w-[56ch] space-y-2">
+          <h1 className="text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
+            Shared ideas
+          </h1>
+          <p className="text-ink-soft">
+            Concepts other builders generated from the catalog and chose to
+            publish.
+          </p>
+        </div>
+        {ideas.length > 0 ? (
+          <div>
+            <p className="mb-1 text-xs text-ink-soft">Published</p>
+            <p className="font-mono text-2xl font-bold tabular-nums">
+              {ideas.length}
             </p>
           </div>
-          <div className="font-mono">
-            <p className="mb-1 text-[11px] uppercase tracking-[0.15em] text-ink-soft">
-              Ideas shared
+        ) : null}
+      </header>
+
+      {isPending ? (
+        <div className="grid gap-4 md:grid-cols-2">
+          {Array.from({ length: 4 }, (_, i) => (
+            <Skeleton key={i} className="h-[190px] rounded-md" />
+          ))}
+        </div>
+      ) : isError ? (
+        <div className="flex flex-col items-start gap-4 rounded-md border border-dashed border-ink/20 px-6 py-12">
+          <div className="space-y-1.5">
+            <p className="text-lg font-semibold">The feed did not load</p>
+            <p className="max-w-[46ch] text-sm text-ink-soft">
+              Something went wrong fetching published ideas.
             </p>
-            <p className="text-[26px] font-bold">{totalIdeas}</p>
           </div>
+          <button
+            onClick={() => refetch()}
+            className={cn(buttonVariants(), "bg-ink text-paper hover:bg-ink/90")}
+          >
+            Try again
+          </button>
         </div>
-      </PageSurface>
-
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-2">
-        {data?.pages.map((page, i) =>
-          page.ideas.map((idea: Idea) => <IdeaCard key={`${idea.id}-${i}`} idea={idea} />)
-        )}
-      </div>
-
-      <div ref={ref} className="h-10" />
-      {isFetchingNextPage && (
-        <div className="flex items-center justify-center gap-2 font-mono text-sm text-ink-soft">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-amber" />
-          Loading more ideas...
+      ) : isEmpty ? (
+        <div className="flex flex-col items-start gap-4 rounded-md border border-dashed border-ink/20 px-6 py-14">
+          <div className="space-y-1.5">
+            <p className="text-lg font-semibold">Nothing published yet</p>
+            <p className="max-w-[50ch] text-sm text-ink-soft">
+              Ideas show up here once someone marks one public. Generate one
+              from the catalog and it can be the first.
+            </p>
+          </div>
+          <Link
+            href="/resources"
+            className={cn(buttonVariants(), "bg-ink text-paper hover:bg-ink/90")}
+          >
+            Browse the catalog
+          </Link>
         </div>
+      ) : (
+        <>
+          <div className="grid gap-4 md:grid-cols-2">
+            {ideas.map((idea, i) => (
+              <Reveal key={idea.id} index={i % 4}>
+                <IdeaCard idea={idea} />
+              </Reveal>
+            ))}
+          </div>
+
+          <div ref={ref} className="h-10" />
+          {isFetchingNextPage ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              {Array.from({ length: 2 }, (_, i) => (
+                <Skeleton key={i} className="h-[190px] rounded-md" />
+              ))}
+            </div>
+          ) : null}
+        </>
       )}
     </div>
   )

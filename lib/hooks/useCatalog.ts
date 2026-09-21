@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
-import { fetchResources } from "@/lib/fetchResources"
 import { Resource } from "@/types/resource"
+import { fetchResources } from "@/lib/fetchResources"
 
 export interface CatalogCategory {
   name: string

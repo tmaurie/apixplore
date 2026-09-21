@@ -12,9 +12,14 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
+import {
+  IdeaFilters,
+  defaultFilters,
+  resolveFilters,
+} from "@/lib/ideaGeneration"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import {
   Carousel,
   CarouselContent,
@@ -28,16 +33,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { BookmarkToggle } from "@/components/bookmark-toggle"
 import { ExportBriefButton } from "@/components/export-brief-button"
 import { TypingAnimation } from "@/components/magicui/typing-animation"
-import {
-  IdeaFilters,
-  defaultFilters,
-  resolveFilters,
-} from "@/lib/ideaGeneration"
-import { cn } from "@/lib/utils"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 const FILTERS_STORAGE_KEY = "apixplore:idea-filters"
 
@@ -91,7 +91,7 @@ function FilterGroup<T extends string>({
 }) {
   return (
     <div className="flex flex-wrap items-center gap-2.5">
-      <span className="w-16 shrink-0 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
+      <span className="w-16 shrink-0 font-mono text-[11px] text-ink-soft">
         {label}
       </span>
       <div className="flex flex-wrap gap-1.5">
@@ -102,7 +102,7 @@ function FilterGroup<T extends string>({
             onClick={() => onChange(option.value)}
             disabled={disabled}
             className={cn(
-              "rounded-md border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.05em] transition-colors disabled:pointer-events-none disabled:opacity-50",
+              "rounded-md border px-3 py-1.5 font-mono text-xs transition-colors disabled:pointer-events-none disabled:opacity-50",
               value === option.value
                 ? "border-ink bg-ink text-paper"
                 : "border-ink/30 text-ink-soft hover:border-ink hover:text-ink"
@@ -291,9 +291,7 @@ export default function IdeaGenerator({
 
       setIdeas((prev) =>
         prev.map((idea, i) =>
-          i === index
-            ? { ...data.idea, isSaved: false, id: undefined }
-            : idea
+          i === index ? { ...data.idea, isSaved: false, id: undefined } : idea
         )
       )
       closeRefine()
@@ -343,7 +341,7 @@ export default function IdeaGenerator({
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="rounded-md bg-ink px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-paper transition hover:bg-ink/90 hover:text-paper"
+          className="rounded-md bg-ink px-5 py-2 font-mono text-xs font-semibold text-paper transition hover:bg-ink/90 hover:text-paper"
         >
           <span className="inline-flex items-center gap-2">
             <Sparkles className="h-3 w-3" />
@@ -367,7 +365,7 @@ export default function IdeaGenerator({
         </DialogHeader>
         <ScrollArea className="h-[70vh]">
           <div className="space-y-4 pr-1 sm:pr-2">
-            <div className="space-y-3 rounded-lg border border-ink/25 bg-paper-dim p-4 sm:p-5">
+            <div className="space-y-3 rounded-md border border-ink/25 bg-paper-dim p-4 sm:p-5">
               <FilterGroup
                 label="Level"
                 options={filterOptions.skillLevel}
@@ -402,14 +400,14 @@ export default function IdeaGenerator({
                   type="button"
                   onClick={resetFilters}
                   disabled={loading}
-                  className="font-mono text-xs uppercase tracking-widest text-ink-soft transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50"
+                  className="font-mono text-xs text-ink-soft transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50"
                 >
                   Reset
                 </button>
                 <Button
                   onClick={generateIdeas}
                   disabled={loading}
-                  className="rounded-md bg-ink px-5 py-2 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-paper hover:bg-ink/90"
+                  className="rounded-md bg-ink px-5 py-2 font-mono text-xs font-semibold text-paper hover:bg-ink/90"
                 >
                   {loading ? (
                     <span className="inline-flex items-center gap-2">
@@ -428,186 +426,190 @@ export default function IdeaGenerator({
             {ideas.length > 0 ? (
               <div className="space-y-3">
                 <Carousel
-                setApi={setCarouselApi}
-                opts={{ align: "start", loop: false }}
-                className="relative isolate rounded-lg border border-ink/25 bg-paper-dim px-2 py-2 sm:px-3 sm:py-3"
-              >
-                <CarouselContent className="ml-0">
-                  {ideas.map((idea, i) => (
-                    <CarouselItem
-                      key={i}
-                      className="flex justify-center px-1.5 py-3 sm:px-2 sm:py-4"
-                    >
-                      <Card className="relative flex h-80 w-full max-w-lg flex-col overflow-hidden rounded-lg border border-ink bg-paper text-ink sm:h-85">
-                        <span className="absolute -top-px left-5 rounded-b-[5px] bg-amber px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-widest text-paper">
-                          №{String(i + 1).padStart(3, "0")}
-                        </span>
-                        <CardHeader className="relative space-y-3 pb-2 pt-8">
-                          <div className="flex items-start justify-between gap-3">
-                            <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
-                              {idea.title}
-                            </CardTitle>
-                            <div className="flex shrink-0 items-center gap-1">
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                title="Refine this idea"
-                                className="h-8 w-8 text-ink-soft hover:text-ink"
-                                onClick={() =>
-                                  refiningIndex === i ? closeRefine() : openRefine(i)
-                                }
-                              >
-                                <Wand2 className="h-4 w-4" />
-                              </Button>
-                              <BookmarkToggle
-                                isSaved={idea.isSaved}
-                                onSave={() => handleSaveIdea(idea, i)}
-                                onRemove={() => handleDeleteIdea(idea, i)}
-                              />
+                  setApi={setCarouselApi}
+                  opts={{ align: "start", loop: false }}
+                  className="relative isolate rounded-md border border-ink/25 bg-paper-dim px-2 py-2 sm:px-3 sm:py-3"
+                >
+                  <CarouselContent className="ml-0">
+                    {ideas.map((idea, i) => (
+                      <CarouselItem
+                        key={i}
+                        className="flex justify-center px-1.5 py-3 sm:px-2 sm:py-4"
+                      >
+                        <Card className="relative flex h-80 w-full max-w-lg flex-col overflow-hidden rounded-md border border-ink bg-paper text-ink sm:h-85">
+                          <span className="absolute -top-px left-5 rounded-b-md bg-amber px-2.5 py-0.5 font-mono text-[11px] font-bold tracking-widest text-paper">
+                            №{String(i + 1).padStart(3, "0")}
+                          </span>
+                          <CardHeader className="relative space-y-3 pb-2 pt-8">
+                            <div className="flex items-start justify-between gap-3">
+                              <CardTitle className="text-base font-semibold leading-tight sm:text-lg">
+                                {idea.title}
+                              </CardTitle>
+                              <div className="flex shrink-0 items-center gap-1">
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  title="Refine this idea"
+                                  className="h-8 w-8 text-ink-soft hover:text-ink"
+                                  onClick={() =>
+                                    refiningIndex === i
+                                      ? closeRefine()
+                                      : openRefine(i)
+                                  }
+                                >
+                                  <Wand2 className="h-4 w-4" />
+                                </Button>
+                                <BookmarkToggle
+                                  isSaved={idea.isSaved}
+                                  onSave={() => handleSaveIdea(idea, i)}
+                                  onRemove={() => handleDeleteIdea(idea, i)}
+                                />
+                              </div>
                             </div>
-                          </div>
-                          {refiningIndex === i && (
-                            <div className="flex items-center gap-1.5 rounded-md border border-ink/30 bg-paper-dim p-1.5">
-                              <Input
-                                autoFocus
-                                value={refineInstruction}
-                                onChange={(e) =>
-                                  setRefineInstruction(e.target.value)
-                                }
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") handleRefineIdea(i)
-                                }}
-                                placeholder="e.g. make it more beginner-friendly"
-                                disabled={refineLoading}
-                                className="h-8 border-none bg-transparent text-xs shadow-none focus-visible:ring-0"
-                              />
-                              <Button
-                                type="button"
-                                size="icon"
-                                className="h-8 w-8 shrink-0 rounded-md bg-ink text-paper hover:bg-ink/90"
-                                onClick={() => handleRefineIdea(i)}
-                                disabled={refineLoading || !refineInstruction.trim()}
-                              >
-                                {refineLoading ? (
-                                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                                ) : (
-                                  <Wand2 className="h-3.5 w-3.5" />
-                                )}
-                              </Button>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 shrink-0 text-ink-soft hover:text-ink"
-                                onClick={closeRefine}
-                                disabled={refineLoading}
-                              >
-                                <X className="h-3.5 w-3.5" />
-                              </Button>
+                            {refiningIndex === i && (
+                              <div className="flex items-center gap-1.5 rounded-md border border-ink/30 bg-paper-dim p-1.5">
+                                <Input
+                                  autoFocus
+                                  value={refineInstruction}
+                                  onChange={(e) =>
+                                    setRefineInstruction(e.target.value)
+                                  }
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleRefineIdea(i)
+                                  }}
+                                  placeholder="e.g. make it more beginner-friendly"
+                                  disabled={refineLoading}
+                                  className="h-8 border-none bg-transparent text-xs shadow-none focus-visible:ring-0"
+                                />
+                                <Button
+                                  type="button"
+                                  size="icon"
+                                  className="h-8 w-8 shrink-0 rounded-md bg-ink text-paper hover:bg-ink/90"
+                                  onClick={() => handleRefineIdea(i)}
+                                  disabled={
+                                    refineLoading || !refineInstruction.trim()
+                                  }
+                                >
+                                  {refineLoading ? (
+                                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                  ) : (
+                                    <Wand2 className="h-3.5 w-3.5" />
+                                  )}
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-8 w-8 shrink-0 text-ink-soft hover:text-ink"
+                                  onClick={closeRefine}
+                                  disabled={refineLoading}
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            )}
+                            <div className="grid grid-cols-2 gap-2 rounded-md border border-dashed border-ink/30 p-3 font-mono">
+                              <div>
+                                <p className="mb-0.5 text-[10px] text-ink-soft">
+                                  Feasibility
+                                </p>
+                                <p className="text-[13px] font-semibold">
+                                  {idea.feasibilityScore}/10
+                                </p>
+                              </div>
+                              <div>
+                                <p className="mb-0.5 text-[10px] text-ink-soft">
+                                  Originality
+                                </p>
+                                <p className="text-[13px] font-semibold">
+                                  {idea.originalityScore}/10
+                                </p>
+                              </div>
                             </div>
-                          )}
-                          <div className="grid grid-cols-2 gap-2 rounded-md border border-dashed border-ink/30 p-3 font-mono">
-                            <div>
-                              <p className="mb-0.5 text-[10px] uppercase tracking-widest text-ink-soft">
-                                Feasibility
-                              </p>
-                              <p className="text-[13px] font-semibold">
-                                {idea.feasibilityScore}/10
-                              </p>
-                            </div>
-                            <div>
-                              <p className="mb-0.5 text-[10px] uppercase tracking-widest text-ink-soft">
-                                Originality
-                              </p>
-                              <p className="text-[13px] font-semibold">
-                                {idea.originalityScore}/10
-                              </p>
-                            </div>
-                          </div>
-                          {idea.isSaved && (
-                            <div className="flex justify-end">
-                              <ExportBriefButton
-                                ideaId={idea.id}
-                                source="idea_generator"
-                                title={idea.title}
-                                description={idea.description}
-                                apiName={api}
-                                apiLink={apiLink}
-                                apiDescription={description}
-                                feasibilityScore={idea.feasibilityScore}
-                                originalityScore={idea.originalityScore}
-                                filters={filters}
-                              />
-                            </div>
-                          )}
-                        </CardHeader>
-                        <CardContent className="relative flex-1 overflow-y-auto text-sm text-ink">
-                          <TypingAnimation
-                            duration={20}
-                            className="text-sm leading-relaxed sm:text-base"
-                          >
-                            {idea.description}
-                          </TypingAnimation>
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
+                            {idea.isSaved && (
+                              <div className="flex justify-end">
+                                <ExportBriefButton
+                                  ideaId={idea.id}
+                                  source="idea_generator"
+                                  title={idea.title}
+                                  description={idea.description}
+                                  apiName={api}
+                                  apiLink={apiLink}
+                                  apiDescription={description}
+                                  feasibilityScore={idea.feasibilityScore}
+                                  originalityScore={idea.originalityScore}
+                                  filters={filters}
+                                />
+                              </div>
+                            )}
+                          </CardHeader>
+                          <CardContent className="relative flex-1 overflow-y-auto text-sm text-ink">
+                            <TypingAnimation
+                              duration={20}
+                              className="text-sm leading-relaxed sm:text-base"
+                            >
+                              {idea.description}
+                            </TypingAnimation>
+                          </CardContent>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
-                <div className="flex items-center gap-2">
-                  {ideas.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleDotClick(index)}
-                      aria-label={`Go to idea ${index + 1}`}
-                      className={cn(
-                        "h-2.5 w-2.5 rounded-full transition-colors",
-                        index === currentIndex
-                          ? "bg-ink"
-                          : "bg-ink/25 hover:bg-ink/50"
-                      )}
-                    />
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs uppercase tracking-[0.15em] text-ink-soft">
-                    Idea {currentIndex + 1} of {ideas.length}
-                  </span>
+                <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4">
                   <div className="flex items-center gap-2">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="rounded-md border-ink/40 text-ink hover:bg-ink hover:text-paper"
-                      onClick={handlePrevious}
-                      disabled={ideas.length <= 1}
-                      aria-label="Previous idea"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="rounded-md border-ink/40 text-ink hover:bg-ink hover:text-paper"
-                      onClick={handleNext}
-                      disabled={ideas.length <= 1}
-                      aria-label="Next idea"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </Button>
+                    {ideas.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleDotClick(index)}
+                        aria-label={`Go to idea ${index + 1}`}
+                        className={cn(
+                          "h-2.5 w-2.5 rounded-full transition-colors",
+                          index === currentIndex
+                            ? "bg-ink"
+                            : "bg-ink/25 hover:bg-ink/50"
+                        )}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs text-ink-soft">
+                      Idea {currentIndex + 1} of {ideas.length}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="rounded-md border-ink/40 text-ink hover:bg-ink hover:text-paper"
+                        onClick={handlePrevious}
+                        disabled={ideas.length <= 1}
+                        aria-label="Previous idea"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="rounded-md border-ink/40 text-ink hover:bg-ink hover:text-paper"
+                        onClick={handleNext}
+                        disabled={ideas.length <= 1}
+                        aria-label="Next idea"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-              ) : (
-                <div className="rounded-lg border border-dashed border-ink/30 bg-paper-dim px-4 py-6 text-sm text-ink-soft sm:px-6">
-                  Pick your filters, generate, and we&#39;ll sort ideas by
-                  feasibility and originality.
-                </div>
-              )}
+            ) : (
+              <div className="rounded-md border border-dashed border-ink/30 bg-paper-dim px-4 py-6 text-sm text-ink-soft sm:px-6">
+                Pick your filters, generate, and we&#39;ll sort ideas by
+                feasibility and originality.
+              </div>
+            )}
           </div>
         </ScrollArea>
       </DialogContent>

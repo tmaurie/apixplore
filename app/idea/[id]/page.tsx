@@ -1,13 +1,13 @@
+import { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Metadata } from "next"
 import { ExternalLinkIcon, HeartIcon, SparklesIcon } from "lucide-react"
 
 import { getPublicIdeaById } from "@/lib/db/ideas"
-import { PublicIdeaViewTracker } from "@/components/public-idea-view-tracker"
-import { ShareIdeaButton } from "@/components/share-idea-button"
 import { Button } from "@/components/ui/button"
 import { PageSurface } from "@/components/page-surface"
+import { PublicIdeaViewTracker } from "@/components/public-idea-view-tracker"
+import { ShareIdeaButton } from "@/components/share-idea-button"
 
 type IdeaPageProps = {
   params: Promise<{ id: string }>
@@ -51,13 +51,10 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
       <PageSurface>
         <div className="flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-2xl space-y-4">
-            <span className="inline-block rounded-full border border-ink/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
+            <span className="inline-block rounded-full border border-ink/30 px-2.5 py-1 font-mono text-[11px] text-ink-soft">
               {idea.api_name}
             </span>
             <div className="space-y-3">
-              <p className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
-                Shared Idea
-              </p>
               <h1 className="text-3xl font-bold sm:text-4xl">
                 {idea.generated_idea.title}
               </h1>
@@ -72,12 +69,12 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
               ideaId={idea.id}
               title={idea.generated_idea.title}
               source="public_page"
-              className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
+              className="rounded-md border-ink font-mono text-xs hover:bg-ink hover:text-paper"
             />
             <Button
               asChild
               variant="ghost"
-              className="justify-start font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
+              className="justify-start font-mono text-xs text-ink-soft hover:text-ink"
             >
               <Link href="/public">Browse more ideas</Link>
             </Button>
@@ -100,7 +97,8 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
                 href={`/user/${idea.author_id}`}
                 className="rounded-full border border-ink/30 px-3 py-1 hover:border-ink hover:text-ink"
               >
-                by {idea.author_name || idea.author_github_username || "a builder"}
+                by{" "}
+                {idea.author_name || idea.author_github_username || "a builder"}
               </Link>
             )}
           </div>
@@ -108,7 +106,7 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
             <Button
               asChild
               variant="outline"
-              className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
+              className="rounded-md border-ink font-mono text-xs hover:bg-ink hover:text-paper"
             >
               <Link href={idea.api_link} target="_blank" rel="noreferrer">
                 API docs
@@ -120,9 +118,7 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
 
         <div className="space-y-6">
           <div className="rounded-md border border-dashed border-ink/30 p-4">
-            <p className="font-mono text-xs uppercase tracking-[0.25em] text-ink-soft">
-              Build angle
-            </p>
+            <p className="font-mono text-xs text-ink-soft">Build angle</p>
             <p className="mt-3 text-base leading-7">
               {idea.description ||
                 "A focused product concept generated from this API, ready to refine into a prototype or launch plan."}
@@ -139,22 +135,22 @@ export default async function PublicIdeaDetailPage({ params }: IdeaPageProps) {
                   Want more ideas like this?
                 </p>
                 <p className="text-sm text-ink-soft">
-                  Explore public builds or open the API catalog to generate
-                  your own variations.
+                  Explore public builds or open the API catalog to generate your
+                  own variations.
                 </p>
                 <div className="flex flex-wrap gap-3 pt-1">
                   <Button
                     asChild
                     variant="outline"
                     size="sm"
-                    className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
+                    className="rounded-md border-ink font-mono text-xs hover:bg-ink hover:text-paper"
                   >
                     <Link href="/public">Community feed</Link>
                   </Button>
                   <Button
                     asChild
                     size="sm"
-                    className="rounded-md bg-ink font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-ink/90"
+                    className="rounded-md bg-ink font-mono text-xs text-paper hover:bg-ink/90"
                   >
                     <Link href="/resources">Generate from APIs</Link>
                   </Button>

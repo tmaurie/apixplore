@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest"
 
-import { MAX_TAG_LENGTH, MAX_TAGS_PER_IDEA, normalizeTag, sanitizeTags } from "./tags"
+import {
+  MAX_TAGS_PER_IDEA,
+  MAX_TAG_LENGTH,
+  normalizeTag,
+  sanitizeTags,
+} from "./tags"
 
 describe("normalizeTag", () => {
   it("trims, lowercases, and collapses whitespace", () => {
@@ -28,7 +33,10 @@ describe("sanitizeTags", () => {
   })
 
   it("caps the number of tags at MAX_TAGS_PER_IDEA", () => {
-    const many = Array.from({ length: MAX_TAGS_PER_IDEA + 5 }, (_, i) => `tag${i}`)
+    const many = Array.from(
+      { length: MAX_TAGS_PER_IDEA + 5 },
+      (_, i) => `tag${i}`
+    )
     expect(sanitizeTags(many)).toHaveLength(MAX_TAGS_PER_IDEA)
   })
 })

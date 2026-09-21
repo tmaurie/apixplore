@@ -110,7 +110,7 @@ export function UserHub({ user }: { user: UserSummary }) {
       value:
         quota?.limit != null && quota?.used != null
           ? `${quota.limit - quota.used}/${quota.limit}`
-          : "—",
+          : "0",
       helper: "Ideas remaining today",
     },
     {
@@ -127,7 +127,7 @@ export function UserHub({ user }: { user: UserSummary }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-start justify-between gap-6 rounded-lg border-2 border-ink bg-ink p-6 text-paper sm:p-8">
+      <div className="flex flex-wrap items-start justify-between gap-6 rounded-md bg-ink p-6 text-paper sm:p-8">
         <div className="flex items-start gap-4">
           <Avatar className="h-12 w-12 ring-2 ring-amber/30">
             <AvatarImage src={user?.image ?? ""} alt="User Avatar" />
@@ -138,9 +138,6 @@ export function UserHub({ user }: { user: UserSummary }) {
             </AvatarFallback>
           </Avatar>
           <div className="space-y-1">
-            <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber-soft">
-              Personal Hub
-            </p>
             <h1 className="text-2xl font-bold sm:text-3xl">
               {user.name || "Your workspace"}
             </h1>
@@ -156,9 +153,7 @@ export function UserHub({ user }: { user: UserSummary }) {
               key={stat.label}
               className="min-w-24 rounded-md border border-paper/20 px-3 py-2 text-left"
             >
-              <p className="text-[11px] uppercase tracking-[0.15em] text-paper/60">
-                {stat.label}
-              </p>
+              <p className="text-[11px] text-paper/60">{stat.label}</p>
               <p className="text-xl font-bold">{stat.value}</p>
               <p className="text-[12px] text-paper/60">{stat.helper}</p>
             </div>
@@ -198,9 +193,6 @@ export function UserHub({ user }: { user: UserSummary }) {
         <>
           <section className="space-y-3">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber">
-                Favorites
-              </p>
               <h2 className="text-xl font-bold">Liked ideas</h2>
               <p className="text-sm text-ink-soft">
                 Inspirations you saved for later.
@@ -209,14 +201,14 @@ export function UserHub({ user }: { user: UserSummary }) {
             {likes.length === 0 ? (
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-dashed border-ink/25 px-4 py-6 text-sm text-ink-soft">
                 <span>
-                  Nothing liked yet. Browse the public feed and tap like to
-                  keep ideas here.
+                  Nothing liked yet. Browse the public feed and tap like to keep
+                  ideas here.
                 </span>
                 <Button
                   asChild
                   size="sm"
                   variant="outline"
-                  className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
+                  className="rounded-md border-ink font-mono text-xs hover:bg-ink hover:text-paper"
                 >
                   <Link href="/public">Browse public feed</Link>
                 </Button>
@@ -238,9 +230,6 @@ export function UserHub({ user }: { user: UserSummary }) {
           <section className="space-y-3">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber">
-                  My Builds
-                </p>
                 <h2 className="text-xl font-bold">Generated ideas</h2>
                 <p className="text-sm text-ink-soft">
                   Latest sparks you created. Manage visibility or remove them.
@@ -249,7 +238,7 @@ export function UserHub({ user }: { user: UserSummary }) {
               <Button
                 asChild
                 variant="outline"
-                className="rounded-md border-ink font-mono text-xs uppercase tracking-[0.06em] hover:bg-ink hover:text-paper"
+                className="rounded-md border-ink font-mono text-xs hover:bg-ink hover:text-paper"
               >
                 <Link href="/history">View all</Link>
               </Button>
@@ -264,7 +253,7 @@ export function UserHub({ user }: { user: UserSummary }) {
                 <Button
                   asChild
                   size="sm"
-                  className="rounded-md bg-ink font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-ink/90"
+                  className="rounded-md bg-ink font-mono text-xs text-paper hover:bg-ink/90"
                 >
                   <Link href="/resources">Browse the catalog</Link>
                 </Button>
@@ -280,7 +269,7 @@ export function UserHub({ user }: { user: UserSummary }) {
                       <p className="text-base font-bold leading-tight">
                         {idea.generated_idea.title}
                       </p>
-                      <span className="whitespace-nowrap rounded-full border border-paper/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.15em] text-paper/70">
+                      <span className="whitespace-nowrap rounded-full border border-paper/30 px-2.5 py-1 font-mono text-[11px] text-paper/70">
                         {idea.api_name}
                       </span>
                     </div>
@@ -307,14 +296,14 @@ export function UserHub({ user }: { user: UserSummary }) {
                             source="user_hub"
                             size="sm"
                             variant="outline"
-                            className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+                            className="rounded-md border-paper/30 font-mono text-xs text-paper hover:bg-paper/10"
                           />
                         ) : null}
                       </div>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="font-mono text-xs uppercase tracking-[0.06em] text-red-300 hover:bg-paper/10 hover:text-red-200"
+                        className="font-mono text-xs text-red-300 hover:bg-paper/10 hover:text-red-200"
                         onClick={() => handleDeleteIdea(idea.id)}
                         disabled={deletingId === idea.id}
                       >

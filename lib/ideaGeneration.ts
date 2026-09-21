@@ -26,9 +26,11 @@ const skillLevelGuidance: Record<IdeaFilters["skillLevel"], string> = {
 }
 
 const stackGuidance: Record<IdeaFilters["stackFocus"], string> = {
-  fullstack: "End-to-end product ideas mixing UI polish and backend orchestration.",
+  fullstack:
+    "End-to-end product ideas mixing UI polish and backend orchestration.",
   backend: "Service-oriented ideas, automation, APIs, or workflow engines.",
-  frontend: "Interface-heavy ideas with visualization, interactivity, and UX polish.",
+  frontend:
+    "Interface-heavy ideas with visualization, interactivity, and UX polish.",
 }
 
 const toneGuidance: Record<IdeaFilters["tone"], string> = {
@@ -37,7 +39,8 @@ const toneGuidance: Record<IdeaFilters["tone"], string> = {
 }
 
 const aiGuidance: Record<IdeaFilters["aiUsage"], string> = {
-  optional: "AI is optional: include only if it clearly improves the experience.",
+  optional:
+    "AI is optional: include only if it clearly improves the experience.",
   required: "Each idea must feature an AI-powered element.",
   avoid: "Do not include AI features; stick to conventional engineering.",
 }
@@ -51,9 +54,19 @@ export const pickValidOption = <T extends string>(
     ? (value as T)
     : fallback
 
-export const resolveFilters = (filters?: Partial<IdeaFilters>): IdeaFilters => ({
-  skillLevel: pickValidOption(filters?.skillLevel, skillLevels, defaultFilters.skillLevel),
-  stackFocus: pickValidOption(filters?.stackFocus, stackFocuses, defaultFilters.stackFocus),
+export const resolveFilters = (
+  filters?: Partial<IdeaFilters>
+): IdeaFilters => ({
+  skillLevel: pickValidOption(
+    filters?.skillLevel,
+    skillLevels,
+    defaultFilters.skillLevel
+  ),
+  stackFocus: pickValidOption(
+    filters?.stackFocus,
+    stackFocuses,
+    defaultFilters.stackFocus
+  ),
   tone: pickValidOption(filters?.tone, tones, defaultFilters.tone),
   aiUsage: pickValidOption(filters?.aiUsage, aiUsages, defaultFilters.aiUsage),
 })

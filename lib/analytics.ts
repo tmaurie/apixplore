@@ -1,6 +1,9 @@
 "use client"
 
-type AnalyticsPayload = Record<string, string | number | boolean | null | undefined>
+type AnalyticsPayload = Record<
+  string,
+  string | number | boolean | null | undefined
+>
 
 export async function trackEvent(
   event: string,

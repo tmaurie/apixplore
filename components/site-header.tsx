@@ -6,10 +6,10 @@ import { MainNav } from "@/components/main-nav"
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b-2 border-ink bg-paper">
-      <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-end gap-3 px-6 sm:px-8">
+    <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/85 backdrop-blur-sm">
+      <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center gap-3 px-4 sm:px-8">
         <MainNav items={siteConfig.mainNav} />
-        <div className="ml-auto hidden shrink-0 pb-2.5 md:block">
+        <div className="ml-auto hidden shrink-0 md:block">
           <AuthButton />
         </div>
       </div>

@@ -42,7 +42,7 @@ export function PublicToggle({
   }
 
   return (
-    <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-paper/70">
+    <div className="flex items-center gap-2 font-mono text-xs text-paper/70">
       {isPublic ? (
         <>
           <GlobeIcon className="h-3.5 w-3.5 text-amber-soft" /> Public

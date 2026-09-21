@@ -35,5 +35,7 @@ export async function getPublicUserProfile(userId: string) {
     SELECT id, name, github_username FROM public.users WHERE id = ${userId} LIMIT 1
   `
 
-  return user as { id: string; name: string | null; github_username: string | null } | undefined
+  return user as
+    | { id: string; name: string | null; github_username: string | null }
+    | undefined
 }

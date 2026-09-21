@@ -11,7 +11,7 @@ export function PageSurface({ children, className }: PageSurfaceProps) {
   return (
     <section
       className={cn(
-        "rounded-lg border border-ink bg-paper-dim p-6 text-ink sm:p-8",
+        "rounded-md border border-ink/12 bg-paper-dim p-6 text-ink sm:p-8",
         className
       )}
     >

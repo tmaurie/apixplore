@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import Link from "next/link"
 import { QueryClient } from "@tanstack/query-core"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { SessionProvider } from "next-auth/react"
@@ -19,47 +20,54 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
         <ThemeProvider attribute="class" forcedTheme="light">
-          <div className="min-h-screen bg-paper text-ink">
-            <div className="flex min-h-screen flex-col">
-              <Toaster richColors />
-              <SiteHeader />
-              <main className="flex-1 pb-24 pt-10 md:pb-0">
-                <div className="mx-auto w-full max-w-[1200px] px-6 sm:px-8">
-                  {children}
-                </div>
-              </main>
-              <footer className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-10 sm:px-8">
-                <div className="flex items-center gap-2.5">
-                  <span className="inline-flex h-6 w-6 items-center justify-center rounded border-2 border-ink font-mono text-[11px] font-bold">
+          <div className="flex min-h-screen flex-col bg-paper text-ink">
+            <Toaster richColors />
+            <SiteHeader />
+
+            <main className="flex-1 pt-6 md:pt-8">
+              <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-8">
+                {children}
+              </div>
+            </main>
+
+            <footer className="mt-20 border-t border-ink/10">
+              <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-between gap-5 px-4 py-10 pb-28 sm:px-8 md:pb-10">
+                <Link
+                  href="/"
+                  className="flex items-center gap-2.5 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+                >
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-amber font-mono text-[10px] font-bold text-paper">
                     {"{ }"}
                   </span>
-                  <span className="font-mono text-xs tracking-[0.1em] text-ink-soft">
-                    {siteConfig.name.toUpperCase()} — FIELD GUIDE
+                  <span className="font-mono text-xs font-bold tracking-[0.15em] text-ink-soft">
+                    {siteConfig.name.toUpperCase()}
                   </span>
-                </div>
-                <p className="font-mono text-xs text-ink-soft">
-                  Built by{" "}
+                </Link>
+
+                <p className="text-sm text-ink-soft">
+                  Open source, built by{" "}
                   <a
                     href="https://github.com/tmaurie"
                     target="_blank"
                     rel="noreferrer"
-                    className="font-semibold text-ink hover:text-amber"
+                    className="font-medium text-ink underline-offset-4 hover:underline"
                   >
                     @tmaurie
-                  </a>{" "}
-                  · Open source ·{" "}
+                  </a>
+                  .{" "}
                   <a
                     href={siteConfig.links.github}
                     target="_blank"
                     rel="noreferrer"
-                    className="font-semibold text-ink hover:text-amber"
+                    className="font-medium text-ink underline-offset-4 hover:underline"
                   >
-                    GitHub
+                    Source on GitHub
                   </a>
                 </p>
-              </footer>
-              <MobileNav />
-            </div>
+              </div>
+            </footer>
+
+            <MobileNav />
           </div>
           <TailwindIndicator />
         </ThemeProvider>

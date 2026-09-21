@@ -1,7 +1,7 @@
 "use client"
 
-import { cn } from "@/lib/utils"
 import { CatalogCategory } from "@/lib/hooks/useCatalog"
+import { cn } from "@/lib/utils"
 
 interface CategoryRailProps {
   categories: CatalogCategory[]
@@ -18,11 +18,14 @@ export function CategoryRail({
 }: CategoryRailProps) {
   return (
     <>
-      <nav className="hidden shrink-0 lg:sticky lg:top-[104px] lg:block lg:h-fit lg:max-h-[calc(100vh-128px)] lg:w-[220px] lg:overflow-y-auto lg:pr-1">
-        <p className="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-ink-soft">
-          Index
+      <nav
+        aria-label="Categories"
+        className="hidden shrink-0 lg:sticky lg:top-24 lg:block lg:h-fit lg:max-h-[calc(100vh-8rem)] lg:w-[210px] lg:overflow-y-auto lg:pr-1"
+      >
+        <p className="mb-3 px-3 text-xs font-semibold text-ink-soft">
+          Categories
         </p>
-        <ul className="space-y-1">
+        <ul className="space-y-0.5">
           <RailItem
             label="All APIs"
             count={total}
@@ -77,17 +80,18 @@ function RailItem({
     <li>
       <button
         onClick={onClick}
+        aria-current={isActive ? "true" : undefined}
         className={cn(
-          "flex w-full items-center justify-between gap-2 rounded-md border border-transparent px-3 py-2 text-left font-mono text-[13px] transition-colors",
+          "flex w-full items-center justify-between gap-2 rounded-md px-3 py-1.5 text-left text-sm transition-colors duration-150",
           isActive
-            ? "border-ink bg-ink text-paper"
-            : "text-ink-soft hover:border-ink/30 hover:text-ink"
+            ? "bg-ink font-medium text-paper"
+            : "text-ink-soft hover:bg-paper-dim hover:text-ink"
         )}
       >
         <span className="truncate">{label}</span>
         <span
           className={cn(
-            "shrink-0 text-[11px]",
+            "shrink-0 font-mono text-[11px] tabular-nums",
             isActive ? "text-paper/70" : "text-ink-soft/70"
           )}
         >
@@ -112,14 +116,18 @@ function CategoryChip({
   return (
     <button
       onClick={onClick}
+      aria-current={isActive ? "true" : undefined}
       className={cn(
-        "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 font-mono text-xs uppercase tracking-[0.06em] transition-colors",
+        "shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm transition-colors duration-150",
         isActive
           ? "border-ink bg-ink text-paper"
-          : "border-ink/30 text-ink-soft hover:border-ink hover:text-ink"
+          : "border-ink/20 text-ink-soft hover:border-ink hover:text-ink"
       )}
     >
-      {label} <span className="opacity-60">· {count}</span>
+      {label}{" "}
+      <span className="font-mono text-[11px] tabular-nums opacity-60">
+        {count}
+      </span>
     </button>
   )
 }

@@ -41,7 +41,7 @@ export function BookmarkToggle({
       ) : (
         <BookmarkIcon
           className={`h-5 w-5 transition-transform ${
-            isSaved ? "fill-current text-amber scale-110" : "text-muted-foreground"
+            isSaved ? "fill-current text-amber-deep scale-110" : "text-ink-soft"
           }`}
         />
       )}

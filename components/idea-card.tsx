@@ -15,13 +15,13 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
   const createdDate = new Date(idea.created_at)
 
   return (
-    <div className="rounded-md border border-ink bg-paper p-5">
+    <article className="flex h-full flex-col rounded-md border border-ink/12 bg-paper p-5 transition-colors duration-200 hover:border-ink/30">
       <div className="mb-3 flex items-start justify-between gap-3">
-        <div className="space-y-1.5">
-          <span className="inline-block rounded-full border border-ink/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">
+        <div className="min-w-0 space-y-2">
+          <span className="inline-block rounded-full border border-ink/15 bg-paper-dim px-2.5 py-0.5 font-mono text-[11px] text-ink-soft">
             {idea.api_name}
           </span>
-          <h2 className="text-lg font-bold leading-tight sm:text-xl">
+          <h2 className="text-lg font-bold leading-snug sm:text-xl">
             {idea.generated_idea.title}
           </h2>
         </div>
@@ -30,63 +30,64 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
             href={idea.api_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap font-mono text-xs text-ink-soft underline-offset-4 hover:text-amber hover:underline"
+            className="shrink-0 whitespace-nowrap text-xs text-ink-soft underline-offset-4 transition-colors duration-150 hover:text-ink hover:underline"
           >
             API docs
           </Link>
         )}
       </div>
 
-      <p className="mb-3 font-mono text-xs text-ink-soft">
-        {createdDate.toLocaleDateString()} {createdDate.toLocaleTimeString()}
+      <p className="mb-4 text-sm leading-relaxed text-ink-soft">
+        {idea.generated_idea.description}
       </p>
 
-      <div className="mb-4 rounded-md border border-dashed border-ink/30 p-3 text-sm text-ink-soft">
-        {idea.generated_idea.description}
-      </div>
-
-      <div className="flex items-center justify-between gap-3 border-t border-ink/15 pt-3.5">
-        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-ink-soft">
-          <span className="rounded-full border border-ink/30 px-2 py-1">
-            Public
-          </span>
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-ink/10 pt-3.5">
+        <p className="text-xs text-ink-soft">
           {idea.author_id ? (
             <Link
               href={`/user/${idea.author_id}`}
-              className="hover:text-amber hover:underline"
+              className="underline-offset-4 transition-colors duration-150 hover:text-ink hover:underline"
             >
-              by {idea.author_name || idea.author_github_username || "a builder"}
+              {idea.author_name || idea.author_github_username || "A builder"}
             </Link>
           ) : (
-            "by community"
+            "Community"
           )}
-        </div>
+          <span className="mx-1.5 opacity-40">/</span>
+          <time
+            dateTime={createdDate.toISOString()}
+            className="font-mono tabular-nums"
+          >
+            {createdDate.toLocaleDateString()}
+          </time>
+        </p>
+
         {onUnlike ? (
           <Button
             size="sm"
             variant="ghost"
-            className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
+            className="text-xs text-ink-soft hover:text-ink"
             onClick={onUnlike}
             disabled={isRemoving}
           >
-            {isRemoving ? "Removing..." : "Remove from likes"}
+            {isRemoving ? "Removing" : "Remove from likes"}
           </Button>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Button
               asChild
               size="sm"
               variant="ghost"
-              className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
+              className="text-xs text-ink-soft hover:text-ink"
             >
-              <Link href={`/idea/${idea.id}`}>Open idea</Link>
+              <Link href={`/idea/${idea.id}`}>Open</Link>
             </Button>
             <ShareIdeaButton
               ideaId={idea.id}
               title={idea.generated_idea.title}
               source="public_feed"
               variant="ghost"
-              className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft hover:text-ink"
+              className="text-xs text-ink-soft hover:text-ink"
             />
             <LikeButton
               ideaId={idea.id}
@@ -96,6 +97,6 @@ export function IdeaCard({ idea, onUnlike, isRemoving }: IdeaCardProps) {
           </div>
         )}
       </div>
-    </div>
+    </article>
   )
 }

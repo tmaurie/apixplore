@@ -1,166 +1,230 @@
 import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
+import { Resource } from "@/types/resource"
 import { fetchResources } from "@/lib/fetchResources"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { ApiLogoWall } from "@/components/api-logo-wall"
+import { CatalogPreview } from "@/components/catalog-preview"
+import { HeroStagger, Reveal } from "@/components/reveal"
 
-const contents = [
+// No per-row CTA label: the whole row is the link and the arrow is the
+// affordance. Inline labels here would give the catalog and the feed a second
+// and third name, which the page already covers once each in the hero.
+const moves = [
   {
     index: "01",
-    title: "Discover — find APIs worth building around",
+    title: "Find APIs worth building around",
     description:
-      "Browse a curated catalog with the filters that matter: auth, HTTPS, CORS.",
+      "Browse the catalog with the filters that actually matter: auth, HTTPS, CORS.",
     href: "/resources",
   },
   {
     index: "02",
-    title: "Prototype — turn an API into a product angle",
+    title: "Turn an API into a product angle",
     description:
-      "Generate sharper concepts, compare directions, keep what deserves a second pass.",
-    href: "/history",
+      "Generate concepts, compare directions, keep the ones that deserve a second pass.",
+    note: "Needs a GitHub sign-in.",
+    href: "/resources",
   },
   {
     index: "03",
-    title: "Share — give the strongest ideas a page of their own",
+    title: "Give the best ideas their own page",
     description:
-      "Public ideas travel beyond your dashboard — easier to discuss, easier to amplify.",
+      "Published ideas get a shareable URL, so they travel further than your dashboard.",
     href: "/public",
   },
 ]
 
-const specimens = [
-  "№12 Voice weather assistant · OpenWeather",
-  "№47 Avatar generator · DiceBear",
-  "№03 World culture quiz · REST Countries",
-  "№91 Mood playlist · Spotify",
-  "№22 Movie recommender · OMDb",
-  "№58 Climate visualizer · NASA",
-]
-
 export default async function LandingPage() {
-  const resources = await fetchResources("resources")
-  const totalCount = resources.entries.length
+  const resources: { entries: Resource[] } = await fetchResources("resources")
+  const entries = resources.entries
+
+  // Every number on this page is computed from the live catalog.
+  const totalCount = entries.length
+  const categoryCount = new Set(entries.map((entry) => entry.Category)).size
+  const noAuthCount = entries.filter((entry) => !entry.Auth).length
 
   return (
-    <div>
-      {/* ===== Hero ===== */}
-      <section className="pb-24 pt-16">
-        <p className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.3em] text-amber">
-          Field Guide No. 001 — Public APIs
-        </p>
-        <h1 className="mb-7 max-w-[15ch] text-[40px] font-bold leading-[1.02] tracking-[-0.02em] sm:text-6xl lg:text-[76px]">
-          Find the API.
-          <br />
-          Frame the idea.
-          <br />
-          <span className="text-amber">Ship the page.</span>
-        </h1>
-        <p className="mb-9 max-w-[46ch] text-lg leading-relaxed text-ink-soft sm:text-xl">
-          A working catalog for makers — browse {totalCount.toLocaleString()}+
-          public APIs, generate a real product angle with AI, and publish the
-          concepts worth sharing.
-        </p>
-        <div className="mb-16 flex flex-wrap gap-3.5">
-          <Link
-            href="/resources"
-            className={cn(
-              buttonVariants({ size: "lg" }),
-              "rounded-md bg-ink px-7 py-6 font-mono text-sm font-semibold tracking-[0.05em] text-paper hover:bg-ink/90"
-            )}
-          >
-            Browse the catalog →
-          </Link>
-          <Link
-            href="/public"
-            className={cn(
-              buttonVariants({ variant: "outline", size: "lg" }),
-              "rounded-md border-ink px-7 py-6 font-mono text-sm font-semibold tracking-[0.05em] text-ink hover:bg-ink hover:text-paper"
-            )}
-          >
-            See shared ideas
-          </Link>
-        </div>
+    <div className="pb-8">
+      {/* 1. Hero: full-width headline over an asymmetric copy / product split.
+          The headline spans the container so it sets in 2 lines at full scale. */}
+      <section className="pb-20 pt-6 sm:pt-10 lg:pb-28">
+        <HeroStagger index={0}>
+          <h1 className="mb-9 text-[2.25rem] font-bold leading-[1.06] tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
+            Find the API. Frame the idea.
+            <br />
+            <span className="text-amber">Ship the page.</span>
+          </h1>
+        </HeroStagger>
 
-        {/* ledger stats */}
-        <div className="mb-16 grid gap-3.5 border-y border-ink/20 py-5">
-          <LedgerRow label="APIs catalogued" value={totalCount.toLocaleString()} />
-          <LedgerRow label="Idea sparks to remix" value="150+" />
-          <LedgerRow
-            label="Public sharing loop"
-            value="● Live"
-            valueClassName="text-live"
-          />
-        </div>
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
+            <HeroStagger index={1}>
+              <p className="mb-8 max-w-[42ch] text-lg leading-relaxed text-ink-soft">
+                Browse {totalCount.toLocaleString()} public APIs, turn one into
+                a real product concept with AI, then publish what is worth
+                sharing.
+              </p>
+            </HeroStagger>
 
-        {/* contents / three moves */}
-        <div className="mb-16">
-          <p className="mb-2 font-mono text-xs uppercase tracking-[0.25em] text-ink-soft">
-            Contents
-          </p>
-          <h2 className="mb-8 text-[28px] font-bold">Three moves, one loop.</h2>
-
-          {contents.map((item, i) => (
-            <Link
-              key={item.index}
-              href={item.href}
-              className={cn(
-                "grid grid-cols-[40px_1fr_auto] items-center gap-6 border-t border-ink/20 py-6 sm:grid-cols-[60px_1fr_auto]",
-                i === contents.length - 1 && "border-b"
-              )}
-            >
-              <span className="font-mono text-xl font-bold text-amber sm:text-2xl">
-                {item.index}
-              </span>
-              <div>
-                <p className="mb-1.5 text-lg font-semibold sm:text-xl">
-                  {item.title}
-                </p>
-                <p className="max-w-[60ch] text-sm text-ink-soft">
-                  {item.description}
-                </p>
+            <HeroStagger index={2}>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/resources"
+                  className={cn(
+                    buttonVariants({ size: "lg" }),
+                    "group gap-2 bg-ink px-6 text-paper hover:bg-ink/90"
+                  )}
+                >
+                  Browse the catalog
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                    strokeWidth={2}
+                  />
+                </Link>
+                <Link
+                  href="/public"
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "lg" }),
+                    "border-ink/25 px-6 text-ink hover:bg-ink hover:text-paper"
+                  )}
+                >
+                  See shared ideas
+                </Link>
               </div>
-              <span className="hidden font-mono text-sm sm:inline">→</span>
-            </Link>
-          ))}
-        </div>
+            </HeroStagger>
+          </div>
 
-        {/* specimen chips */}
-        <div>
-          <p className="mb-5 font-mono text-xs uppercase tracking-[0.25em] text-ink-soft">
-            Specimens — ideas in the wild
+          <HeroStagger index={3} className="lg:col-span-7 xl:-mr-16">
+            <CatalogPreview entries={entries} />
+          </HeroStagger>
+        </div>
+      </section>
+
+      {/* 2. Logo wall: real marks, real catalog entries, sits under the hero. */}
+      <section className="border-t border-ink/10 py-16">
+        <Reveal>
+          <p className="mb-10 text-sm text-ink-soft">
+            Including the APIs you already know.
           </p>
-          <div className="flex flex-wrap gap-2.5">
-            {specimens.map((text) => (
-              <span
-                key={text}
-                className="rounded-full border border-ink/30 px-3.5 py-2 font-mono text-[13px]"
-              >
-                {text}
-              </span>
+          <ApiLogoWall />
+        </Reveal>
+      </section>
+
+      {/* 3. Ledger: the signature dotted-leader rows, inverted onto ink. */}
+      <section className="py-4">
+        <Reveal>
+          <div className="rounded-md bg-ink px-6 py-10 text-paper sm:px-10 sm:py-12">
+            <h2 className="mb-8 max-w-[18ch] text-2xl font-bold leading-tight sm:text-3xl">
+              A catalog you can actually filter.
+            </h2>
+            <div className="grid gap-4">
+              <LedgerRow
+                label="APIs catalogued"
+                value={totalCount.toLocaleString()}
+              />
+              <LedgerRow label="Categories" value={String(categoryCount)} />
+              <LedgerRow
+                label="Usable without an API key"
+                value={noAuthCount.toLocaleString()}
+              />
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* 4. Three moves: sticky heading left, the loop's steps right. */}
+      <section className="py-20 lg:py-28">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-4">
+            <Reveal>
+              <h2 className="text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl lg:sticky lg:top-28">
+                Three moves,
+                <br />
+                one loop.
+              </h2>
+            </Reveal>
+          </div>
+
+          <div className="lg:col-span-8">
+            {moves.map((move, i) => (
+              <Reveal key={move.index} index={i}>
+                <Link
+                  href={move.href}
+                  className={cn(
+                    "group grid grid-cols-[2.5rem_1fr_auto] items-center gap-x-5 border-t border-ink/12 py-7 transition-colors duration-200 hover:bg-paper-dim/60 sm:grid-cols-[3.5rem_1fr_auto] sm:px-3",
+                    i === moves.length - 1 && "border-b"
+                  )}
+                >
+                  <span className="self-start font-mono text-lg font-bold text-amber-deep sm:text-xl">
+                    {move.index}
+                  </span>
+                  <div>
+                    <p className="mb-2 text-xl font-semibold sm:text-2xl">
+                      {move.title}
+                    </p>
+                    <p className="max-w-[54ch] text-ink-soft">
+                      {move.description}
+                    </p>
+                    {move.note ? (
+                      <p className="mt-2 text-sm text-ink-soft">{move.note}</p>
+                    ) : null}
+                  </div>
+                  <ArrowRight
+                    className="h-5 w-5 shrink-0 text-ink-soft transition-transform duration-200 group-hover:translate-x-1 group-hover:text-ink"
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
+      </section>
+
+      {/* 5. Close. */}
+      <section className="pb-8">
+        <Reveal>
+          <div className="flex flex-col items-center gap-6 rounded-md border border-ink/12 bg-paper-dim px-6 py-14 text-center sm:py-16">
+            <h2 className="max-w-[20ch] text-3xl font-bold leading-tight tracking-[-0.02em] sm:text-4xl">
+              Pick an API and see where it goes.
+            </h2>
+            <p className="max-w-[48ch] text-ink-soft">
+              Browsing is open to everyone. Sign in with GitHub when you want to
+              generate and publish.
+            </p>
+            <Link
+              href="/resources"
+              className={cn(
+                buttonVariants({ size: "lg" }),
+                "group gap-2 bg-ink px-6 text-paper hover:bg-ink/90"
+              )}
+            >
+              Browse the catalog
+              <ArrowRight
+                className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                strokeWidth={2}
+              />
+            </Link>
+          </div>
+        </Reveal>
       </section>
     </div>
   )
 }
 
-function LedgerRow({
-  label,
-  value,
-  valueClassName,
-}: {
-  label: string
-  value: string
-  valueClassName?: string
-}) {
+function LedgerRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline gap-3 font-mono text-sm">
-      <span className="whitespace-nowrap uppercase tracking-[0.1em] text-ink-soft">
+    <div className="flex items-baseline gap-3">
+      <span className="whitespace-nowrap text-sm text-paper/60 sm:text-base">
         {label}
       </span>
-      <span className="-translate-y-1 flex-1 border-b border-dotted border-ink/35" />
-      <span className={cn("text-xl font-bold", valueClassName)}>{value}</span>
+      <span className="-translate-y-1 flex-1 border-b border-dotted border-paper/25" />
+      <span className="font-mono text-xl font-bold tabular-nums sm:text-2xl">
+        {value}
+      </span>
     </div>
   )
 }

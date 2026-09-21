@@ -15,7 +15,9 @@ export async function saveIdea({
 }) {
   const [data] = await sql`
     INSERT INTO public.ideas (user_id, api_name, api_link, description, generated_idea)
-    VALUES (${userId}, ${api}, ${apiLink ?? null}, ${description ?? null}, ${JSON.stringify(idea)}::jsonb)
+    VALUES (${userId}, ${api}, ${apiLink ?? null}, ${
+    description ?? null
+  }, ${JSON.stringify(idea)}::jsonb)
     RETURNING *
   `
 

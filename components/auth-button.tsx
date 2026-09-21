@@ -18,7 +18,7 @@ export default function AuthButton() {
         variant="ghost"
         size="sm"
         onClick={() => signIn("github")}
-        className="rounded-md border border-ink px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink hover:bg-ink hover:text-paper"
+        className="rounded-md border border-ink px-4 py-2 font-mono text-xs font-semibold text-ink hover:bg-ink hover:text-paper"
       >
         Sign in <LogIn className="ml-2 h-3.5 w-3.5" />
       </Button>
@@ -42,7 +42,7 @@ export default function AuthButton() {
                 )}
               </AvatarFallback>
             </Avatar>
-            <div className="hidden text-left font-mono text-xs uppercase tracking-[0.2em] text-ink-soft sm:block">
+            <div className="hidden text-left font-mono text-xs text-ink-soft sm:block">
               <p className="text-ink">
                 {session.user?.name || session.user?.email}
               </p>

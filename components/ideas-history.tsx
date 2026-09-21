@@ -6,6 +6,7 @@ import { Plus, Sparkles, TrashIcon, X } from "lucide-react"
 import { toast } from "sonner"
 
 import { Idea } from "@/types/idea"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -19,10 +20,9 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ExportBriefButton } from "@/components/export-brief-button"
 import { PublicToggle } from "@/components/public-toggle"
 import { ShareIdeaButton } from "@/components/share-idea-button"
-import { ExportBriefButton } from "@/components/export-brief-button"
-import { cn } from "@/lib/utils"
 
 export function IdeasHistory() {
   const [ideas, setIdeas] = useState<Idea[]>([])
@@ -144,7 +144,7 @@ export function IdeasHistory() {
         <Button
           asChild
           size="sm"
-          className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+          className="rounded-md border-paper/30 font-mono text-xs text-paper hover:bg-paper/10"
           variant="outline"
         >
           <Link href="/resources">Browse the catalog</Link>
@@ -157,16 +157,14 @@ export function IdeasHistory() {
     <div>
       {allTags.length > 0 && (
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <span className="font-mono text-[11px] uppercase tracking-[0.15em] text-paper/50">
-            Filter
-          </span>
+          <span className="font-mono text-[11px] text-paper/50">Filter</span>
           {allTags.map((tag) => (
             <button
               key={tag}
               type="button"
               onClick={() => setActiveTag(activeTag === tag ? null : tag)}
               className={cn(
-                "rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors",
+                "rounded-full border px-2.5 py-1 font-mono text-[11px] transition-colors",
                 activeTag === tag
                   ? "border-amber-soft bg-amber-soft/20 text-amber-soft"
                   : "border-paper/25 text-paper/60 hover:border-paper/50 hover:text-paper"
@@ -179,7 +177,7 @@ export function IdeasHistory() {
             <button
               type="button"
               onClick={() => setActiveTag(null)}
-              className="font-mono text-[11px] uppercase tracking-[0.1em] text-paper/50 underline-offset-2 hover:text-paper hover:underline"
+              className="font-mono text-[11px] text-paper/50 underline-offset-2 hover:text-paper hover:underline"
             >
               Clear
             </button>
@@ -203,7 +201,7 @@ export function IdeasHistory() {
           </span>
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-2.5">
-              <span className="rounded-full border border-paper/30 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-paper/75">
+              <span className="rounded-full border border-paper/30 px-2.5 py-1 font-mono text-[11px] text-paper/75">
                 {idea.api_name}
               </span>
               <span className="font-mono text-xs text-paper/50">
@@ -220,7 +218,7 @@ export function IdeasHistory() {
               {(idea.tags || []).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1 rounded-full border border-amber-soft/40 bg-amber-soft/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-amber-soft"
+                  className="inline-flex items-center gap-1 rounded-full border border-amber-soft/40 bg-amber-soft/10 px-2 py-0.5 font-mono text-[10px] text-amber-soft"
                 >
                   {tag}
                   <button
@@ -257,7 +255,7 @@ export function IdeasHistory() {
                 <button
                   type="button"
                   onClick={() => setAddingTagFor(idea.id)}
-                  className="inline-flex items-center gap-0.5 rounded-full border border-dashed border-paper/25 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-paper/50 hover:border-paper/50 hover:text-paper"
+                  className="inline-flex items-center gap-0.5 rounded-full border border-dashed border-paper/25 px-2 py-0.5 font-mono text-[10px] text-paper/50 hover:border-paper/50 hover:text-paper"
                 >
                   <Plus className="h-2.5 w-2.5" />
                   Tag
@@ -284,7 +282,7 @@ export function IdeasHistory() {
                 createdAt={idea.created_at}
                 variant="outline"
                 size="sm"
-                className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+                className="rounded-md border-paper/30 font-mono text-xs text-paper hover:bg-paper/10"
               />
               {idea.is_public ? (
                 <ShareIdeaButton
@@ -293,7 +291,7 @@ export function IdeasHistory() {
                   source="history"
                   size="sm"
                   variant="outline"
-                  className="rounded-md border-paper/30 font-mono text-xs uppercase tracking-[0.06em] text-paper hover:bg-paper/10"
+                  className="rounded-md border-paper/30 font-mono text-xs text-paper hover:bg-paper/10"
                 />
               ) : null}
               <Dialog
@@ -303,7 +301,7 @@ export function IdeasHistory() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="rounded-md font-mono text-xs uppercase tracking-[0.06em] text-red-300 hover:bg-paper/10 hover:text-red-200"
+                    className="rounded-md font-mono text-xs text-red-300 hover:bg-paper/10 hover:text-red-200"
                     onClick={() => setConfirmDeleteId(idea.id)}
                     disabled={deletingId === idea.id}
                   >
@@ -315,8 +313,8 @@ export function IdeasHistory() {
                   <DialogHeader>
                     <DialogTitle>Delete idea</DialogTitle>
                     <DialogDescription>
-                      This will remove the idea permanently. You can&apos;t
-                      undo this action.
+                      This will remove the idea permanently. You can&apos;t undo
+                      this action.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter className="gap-2 sm:gap-0">

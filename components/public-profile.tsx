@@ -23,7 +23,7 @@ export function PublicProfile({
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-center gap-4 rounded-lg border-2 border-ink bg-ink p-6 text-paper sm:p-8">
+      <div className="flex flex-wrap items-center gap-4 rounded-md bg-ink p-6 text-paper sm:p-8">
         <Avatar className="h-12 w-12 ring-2 ring-amber/30">
           <AvatarImage src={avatarUrl} alt={displayName} />
           <AvatarFallback>
@@ -33,9 +33,6 @@ export function PublicProfile({
           </AvatarFallback>
         </Avatar>
         <div className="space-y-1">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber-soft">
-            Builder Profile
-          </p>
           <h1 className="text-2xl font-bold sm:text-3xl">{displayName}</h1>
           {user.githubUsername && (
             <p className="text-sm text-paper/70">@{user.githubUsername}</p>
@@ -45,9 +42,6 @@ export function PublicProfile({
 
       <section className="space-y-3">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-amber">
-            Public Builds
-          </p>
           <h2 className="text-xl font-bold">
             {ideas.length} shared idea{ideas.length === 1 ? "" : "s"}
           </h2>

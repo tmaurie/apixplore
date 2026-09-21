@@ -3,7 +3,11 @@
 import { FileDownIcon } from "lucide-react"
 
 import { trackEvent } from "@/lib/analytics"
-import { buildProjectBriefMarkdown, slugify, ProjectBriefInput } from "@/lib/projectBrief"
+import {
+  ProjectBriefInput,
+  buildProjectBriefMarkdown,
+  slugify,
+} from "@/lib/projectBrief"
 import { Button } from "@/components/ui/button"
 
 interface ExportBriefButtonProps extends ProjectBriefInput {

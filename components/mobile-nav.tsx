@@ -7,12 +7,15 @@ import {
   Compass,
   FolderOpen,
   Heart,
+  Home,
   LayoutDashboard,
   LogIn,
   LogOut,
+  type LucideIcon,
 } from "lucide-react"
 import { signIn, signOut, useSession } from "next-auth/react"
 
+import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -23,6 +26,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
+/**
+ * Icons keyed by route, so the labels themselves always come from siteConfig.
+ * The bottom bar and the desktop nav can no longer drift apart.
+ */
+const iconByHref: Record<string, LucideIcon> = {
+  "/": Home,
+  "/resources": FolderOpen,
+  "/public": Compass,
+  "/history": LayoutDashboard,
+}
 
 export function MobileNav() {
   const pathname = usePathname()
@@ -35,52 +49,77 @@ export function MobileNav() {
   })
 
   useEffect(() => {
+    if (!session) return
+    let cancelled = false
     const fetchQuota = async () => {
-      const res = await fetch("/api/quota")
-      const data = await res.json()
-      setQuota(data)
+      try {
+        const res = await fetch("/api/quota")
+        if (!res.ok) return
+        const data = await res.json()
+        if (!cancelled) setQuota(data)
+      } catch {
+        // Quota is a nicety here; a failure should not break navigation.
+      }
     }
-    if (session) fetchQuota()
+    fetchQuota()
+    return () => {
+      cancelled = true
+    }
   }, [session])
 
-  const navItems = [
-    { href: "/public", icon: <Compass size={20} />, label: "Explore" },
-    { href: "/resources", icon: <FolderOpen size={20} />, label: "Library" },
-    isLoggedIn
-      ? {
-          href: "#",
-          icon: (
+  return (
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-ink/10 bg-paper/95 backdrop-blur-sm md:hidden">
+      <ul className="flex items-stretch justify-around px-1 pb-[env(safe-area-inset-bottom)]">
+        {siteConfig.mainNav.map((item) => {
+          const Icon = iconByHref[item.href] ?? Compass
+          const isActive = pathname === item.href
+          return (
+            <li key={item.href} className="flex-1">
+              <Link
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "flex flex-col items-center gap-1 rounded-md px-1 py-2 transition-colors duration-150",
+                  isActive ? "text-ink" : "text-ink-soft"
+                )}
+              >
+                <Icon size={19} strokeWidth={isActive ? 2.25 : 1.75} />
+                <span
+                  className={cn(
+                    "text-[11px] leading-none",
+                    isActive && "font-semibold"
+                  )}
+                >
+                  {item.title}
+                </span>
+              </Link>
+            </li>
+          )
+        })}
+
+        <li className="flex-1">
+          {isLoggedIn ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar className="h-7 w-7">
-                  <AvatarImage src={session.user?.image} alt="User Avatar" />
-                  <AvatarFallback>
+              <DropdownMenuTrigger className="flex w-full flex-col items-center gap-1 rounded-md px-1 py-2 text-ink-soft">
+                <Avatar className="h-[19px] w-[19px]">
+                  <AvatarImage src={session.user?.image ?? ""} alt="" />
+                  <AvatarFallback className="text-[9px]">
                     {session.user?.name?.charAt(0).toUpperCase() ?? "U"}
                   </AvatarFallback>
                 </Avatar>
+                <span className="text-[11px] leading-none">Account</span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuContent align="end" className="mb-2 w-48">
                 <DropdownMenuLabel className="text-xs">
-                  {session.user?.name ?? "User"}
+                  {session.user?.name ?? "Account"}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  asChild
-                  className="cursor-pointer w-full flex items-center justify-between text-sm font-medium"
-                >
-                  <Link href="/history">
-                    Dashboard <LayoutDashboard className="ml-2 h-4 w-4" />
-                  </Link>
+                <DropdownMenuItem disabled className="font-mono text-xs">
+                  {quota.limit - quota.used}/{quota.limit} ideas left today
                 </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  Remaining: {quota.limit - quota.used}/{quota.limit}
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Link
-                    href="/likes"
-                    className="w-full flex items-center justify-between text-sm font-medium"
-                  >
-                    Liked Ideas <Heart className="ml-2 h-4 w-4" />
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/likes" className="flex w-full justify-between">
+                    Liked ideas <Heart className="ml-2 h-4 w-4" />
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -88,54 +127,22 @@ export function MobileNav() {
                   className="cursor-pointer"
                   onClick={() => signOut()}
                 >
-                  <span className="w-full flex items-center justify-between text-sm font-medium">
-                    Logout <LogOut className="ml-2 h-4 w-4" />
+                  <span className="flex w-full justify-between">
+                    Sign out <LogOut className="ml-2 h-4 w-4" />
                   </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ),
-          label: "Profile",
-        }
-      : {
-          href: "#",
-          icon: <LogIn size={20} />,
-          label: "Login",
-          onClick: () => signIn("github"),
-        },
-  ]
-
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background shadow-md md:hidden">
-      <ul className="flex justify-around items-center py-2">
-        {navItems.map((item) => {
-          const isActive = pathname === item.href
-          return (
-            <li key={item.label}>
-              {item.onClick ? (
-                <button
-                  onClick={item.onClick}
-                  className="flex flex-col items-center text-xs text-muted-foreground hover:text-foreground transition"
-                >
-                  {item.icon}
-                  <span className="text-[11px] mt-1">{item.label}</span>
-                </button>
-              ) : (
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "flex flex-col items-center text-xs text-muted-foreground hover:text-foreground transition",
-                    isActive &&
-                      "text-primary font-semibold relative after:absolute after:-bottom-1 after:h-1 after:w-1 after:rounded-full after:bg-primary after:content-['']"
-                  )}
-                >
-                  {item.icon}
-                  <span className="text-[11px] mt-1">{item.label}</span>
-                </Link>
-              )}
-            </li>
-          )
-        })}
+          ) : (
+            <button
+              onClick={() => signIn("github")}
+              className="flex w-full flex-col items-center gap-1 rounded-md px-1 py-2 text-ink-soft transition-colors duration-150 hover:text-ink"
+            >
+              <LogIn size={19} strokeWidth={1.75} />
+              <span className="text-[11px] leading-none">Sign in</span>
+            </button>
+          )}
+        </li>
       </ul>
     </nav>
   )

@@ -14,24 +14,24 @@ import {
 
 describe("pickValidOption", () => {
   it("keeps the value when it is in the allowed list", () => {
-    expect(pickValidOption("backend", ["frontend", "backend"] as const, "frontend")).toBe(
-      "backend"
-    )
+    expect(
+      pickValidOption("backend", ["frontend", "backend"] as const, "frontend")
+    ).toBe("backend")
   })
 
   it("falls back when the value is not in the allowed list", () => {
-    expect(pickValidOption("nonsense", ["frontend", "backend"] as const, "frontend")).toBe(
-      "frontend"
-    )
+    expect(
+      pickValidOption("nonsense", ["frontend", "backend"] as const, "frontend")
+    ).toBe("frontend")
   })
 
   it("falls back for non-string input", () => {
-    expect(pickValidOption(42, ["frontend", "backend"] as const, "frontend")).toBe(
-      "frontend"
-    )
-    expect(pickValidOption(undefined, ["frontend", "backend"] as const, "frontend")).toBe(
-      "frontend"
-    )
+    expect(
+      pickValidOption(42, ["frontend", "backend"] as const, "frontend")
+    ).toBe("frontend")
+    expect(
+      pickValidOption(undefined, ["frontend", "backend"] as const, "frontend")
+    ).toBe("frontend")
   })
 })
 

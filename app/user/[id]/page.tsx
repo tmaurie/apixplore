@@ -3,10 +3,10 @@
 import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
 
+import { Idea } from "@/types/idea"
 import { authOptions } from "@/lib/auth"
 import { getPublicIdeasByUser } from "@/lib/db/ideas"
 import { getPublicUserProfile } from "@/lib/db/users"
-import { Idea } from "@/types/idea"
 import { PageSurface } from "@/components/page-surface"
 import { PublicProfile } from "@/components/public-profile"
 import { UserHub } from "@/components/user-hub"

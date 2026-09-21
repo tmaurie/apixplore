@@ -1,35 +1,16 @@
 import { ImageResponse } from "next/og"
 
-import { getPublicIdeaById } from "@/lib/db/ideas"
-
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
-export const alt = "Apixplore shared project idea"
+export const alt =
+  "Apixplore: browse public APIs, frame a product idea, publish it."
 
 const paper = "#fafaf9"
 const ink = "#11110f"
 const inkSoft = "#696966"
 const amber = "#e65812"
-const amberDeep = "#c83b00"
 
-export default async function OpengraphImage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
-
-  let title = "A project idea worth building"
-  let apiName = "Apixplore"
-
-  try {
-    const idea = await getPublicIdeaById(id)
-    title = idea.generated_idea?.title ?? title
-    apiName = idea.api_name ?? apiName
-  } catch {
-    // fall back to generic branding below
-  }
-
+export default function OpengraphImage() {
   return new ImageResponse(
     (
       <div
@@ -74,33 +55,24 @@ export default async function OpengraphImage({
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 24,
-              fontWeight: 600,
-              color: amberDeep,
-            }}
-          >
-            Built on {apiName}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 60,
-              fontWeight: 700,
-              color: ink,
-              lineHeight: 1.15,
-              letterSpacing: -1,
-            }}
-          >
-            {title}
-          </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            fontSize: 68,
+            fontWeight: 700,
+            color: ink,
+            lineHeight: 1.1,
+            letterSpacing: -2,
+          }}
+        >
+          <div style={{ display: "flex" }}>Find the API. Frame the idea.</div>
+          <div style={{ display: "flex", color: amber }}>Ship the page.</div>
         </div>
 
-        <div style={{ display: "flex", fontSize: 22, color: inkSoft }}>
-          apixplore.vercel.app
+        <div style={{ display: "flex", fontSize: 24, color: inkSoft }}>
+          A catalog of public APIs, with an AI step that turns one into a
+          product concept.
         </div>
       </div>
     ),
